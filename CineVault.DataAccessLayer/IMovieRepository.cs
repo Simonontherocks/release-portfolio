@@ -16,6 +16,7 @@ namespace CineVault.DataAccessLayer
         public void RemoveMovieByBarcode(string barcode);
 
         // Here you should be able to filter on the films that have been seen and those that have not been seen.
+        public void ShowAllMoviesAUserContains();
         public void ShowAllMoviesThatHaveBeenSeen();
         public void ShowAllMoviesThatHaveNotBeenSeen();
 

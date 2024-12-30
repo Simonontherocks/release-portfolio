@@ -9,45 +9,110 @@ namespace CineVault.DataAccessLayer
 {
     public class MovieRepository : IMovieRepository
     {
-        public MovieRepository() 
-        {
-            //Default constructor
-        }
+        private readonly List<Movie> _lstMovies = new List<Movie>();
+        private readonly List<Actor> _lstActors = new List<Actor>();
+        private readonly List<Director> _lstDirectors = new List<Director>();
 
         #region Adding or removing movies
 
         public void AddMovieByMovie(Movie movie)
         {
-            
+            _lstMovies.Add(movie);
         }
 
         public void AddMovieByBarcode(string barcode)
         {
-            throw new NotImplementedException();
+            bool blMovieFound;
+
+            blMovieFound = false;
+
+            foreach (Movie movie in _lstMovies)
+            {
+                if (movie.Barcode == barcode)
+                {
+                    _lstMovies.Add(movie);
+                    blMovieFound = true;
+                }
+
+            }
+
+            if (blMovieFound == false)
+            {
+
+                throw new ArgumentException("Movie with given barcode not found.");
+            }
+
         }
 
         public void RemoveMovieByMovie(Movie movie)
         {
-            throw new NotImplementedException();
+            _lstMovies.Remove(movie);
         }
 
         public void RemoveMovieByBarcode(string barcode)
         {
-            throw new NotImplementedException();
+            bool bMovieFound;
+
+            bMovieFound = false;
+
+
+            foreach (Movie movie in _lstMovies)
+            {
+                if (movie.Barcode == barcode)
+                {
+                    _lstMovies.Remove(movie);
+                    bMovieFound = true;
+                }
+
+            }
+
+            if (bMovieFound == false)
+            {
+                throw new ArgumentException("Movie with given barcode not found.");
+            }
+        }
+
+        #endregion
+
+        #region Showing all movies a user contains
+
+        public void ShowAllMoviesAUserContains()
+        {
+            foreach (Movie movie in _lstMovies)
+            {
+                Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+            }
         }
 
         #endregion
 
         #region Filter by seen or not seen
 
+
+
         public void ShowAllMoviesThatHaveBeenSeen()
         {
-            throw new NotImplementedException();
+            foreach(Movie movie in _lstMovies)
+            {
+                if (movie.Seen)
+                {
+                    Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+                }
+
+            }
+
         }
 
         public void ShowAllMoviesThatHaveNotBeenSeen()
         {
-            throw new NotImplementedException();
+            foreach (Movie movie in _lstMovies)
+            {
+                if (!movie.Seen)
+                {
+                    Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+                }
+
+            }
         }
 
         #endregion
@@ -56,17 +121,21 @@ namespace CineVault.DataAccessLayer
 
         public void ShowAllActorsFromMovie(Movie movie)
         {
-            throw new NotImplementedException();
+            foreach (Actor actor in movie.Actors)
+            {
+                Console.WriteLine($"Actor: {actor.Name}");
+            }
+
         }
 
         public void ShowDirectorFromMovie(Movie movie)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"director: {movie.Director.Name}");
         }
 
         public void ShowYearFromMovie(Movie movie)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"Year: {movie.Year}");
         }
 
         #endregion
@@ -75,17 +144,41 @@ namespace CineVault.DataAccessLayer
 
         public void ShowMoviesFromTheSameActor(Actor actor)
         {
-            throw new NotImplementedException();
+            foreach(Movie movie in _lstMovies)
+            {
+                if(movie.Actors.Contains(actor))
+                {
+                    Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+                }
+
+            }
+
         }
 
         public void ShowMoviesFromTheSameDirector(Director director)
         {
-            throw new NotImplementedException();
+            foreach(Movie movie in _lstMovies)
+            {
+                if(movie.Director.Equals(director))
+                {
+                    Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+                }
+
+            }
+
         }
 
         public void ShowAllMoviesFromTheSameYear(string strYear)
         {
-            throw new NotImplementedException();
+            foreach(Movie movie in _lstMovies)
+            {
+                if(movie.Year.Equals(strYear))
+                {
+                    Console.WriteLine($"Title: {movie.Title}, Director: {movie.Director.Name}");
+                }
+
+            }
+
         }
 
         #endregion

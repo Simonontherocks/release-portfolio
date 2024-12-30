@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.BusinessLogic", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.BusinessLogicTests", "CineVault.BusinessLogicTests\CineVault.BusinessLogicTests.csproj", "{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PresentationLayer", "PresentationLayer", "{82CC0356-C46D-484B-A802-1148C5051CAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.PresentationLayor.Desktop", "CineVault.PresentationLayor.Desktop\CineVault.PresentationLayor.Desktop.csproj", "{F3CEAB58-1E91-4E86-B876-EC0534769568}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,10 @@ Global
 		{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3CEAB58-1E91-4E86-B876-EC0534769568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3CEAB58-1E91-4E86-B876-EC0534769568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3CEAB58-1E91-4E86-B876-EC0534769568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3CEAB58-1E91-4E86-B876-EC0534769568}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,5 +54,6 @@ Global
 		{31876169-F795-42F7-98A8-7F41BE9E5290} = {4D0EC3D4-1A21-4A6A-B5EE-8FB130F671DB}
 		{29F61C89-26B5-4059-81DB-85768D9BAAE4} = {0E47EA07-D281-401E-AD78-3675F4990932}
 		{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1} = {0E47EA07-D281-401E-AD78-3675F4990932}
+		{F3CEAB58-1E91-4E86-B876-EC0534769568} = {82CC0356-C46D-484B-A802-1148C5051CAB}
 	EndGlobalSection
 EndGlobal

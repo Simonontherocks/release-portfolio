@@ -11,12 +11,15 @@ namespace CineVault.BusinessLogic.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Barcode { get; set; }
-        public string Director { get; set; }
-        public List<string> Actors { get; set; } = new List<string>();
-        public string IMDBUrl { get; set; }
-        public bool Owned { get; set; }
+        public Director Director { get; set; }
+        public List<Actor> Actors { get; set; } = new List<Actor>();
+        public IMDBEntry IMDBEntry { get; set; }
+
+        //public bool Owned { get; set; }
+        
         public bool Seen { get; set; }
         public int Score { get; set; } // 0 - 10
+        public string Year { get; set; }
     }
 
 }

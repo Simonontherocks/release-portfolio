@@ -12,4 +12,5 @@ namespace CineVault.BusinessLogic.Models
         public string Name { get; set; }
         public IMDBEntry IMDBEntry { get; set; }
     }
+
 }

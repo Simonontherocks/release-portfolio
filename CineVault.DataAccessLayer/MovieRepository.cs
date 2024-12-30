@@ -9,11 +9,16 @@ namespace CineVault.DataAccessLayer
 {
     public class MovieRepository : IMovieRepository
     {
+        public MovieRepository() 
+        {
+            //Default constructor
+        }
+
         #region Adding or removing movies
 
         public void AddMovieByMovie(Movie movie)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddMovieByBarcode(string barcode)

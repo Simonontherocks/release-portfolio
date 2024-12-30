@@ -10,7 +10,8 @@ namespace CineVault.BusinessLogic.Models
     {
         Movie,
         Actor,
-        Director
+        Director,
+        Year
     }
 
 }

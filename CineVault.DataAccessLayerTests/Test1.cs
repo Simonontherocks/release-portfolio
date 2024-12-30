@@ -1,4 +1,6 @@
-﻿namespace CineVault.DataAccessLayerTests
+﻿using CineVault.DataAccessLayer;
+
+namespace CineVault.DataAccessLayerTests
 {
     [TestClass]
     public sealed class Test1

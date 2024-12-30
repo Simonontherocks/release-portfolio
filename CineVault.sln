@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174 d17.12
+VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.DataAccessLayer", "CineVault.DataAccessLayer\CineVault.DataAccessLayer.csproj", "{550388BE-8651-45E1-8A32-A40C5FD20EB1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccessLayer", "DataAccessLayer", "{4D0EC3D4-1A21-4A6A-B5EE-8FB130F671DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.DataAccessLayerTests", "CineVault.DataAccessLayerTests\CineVault.DataAccessLayerTests.csproj", "{31876169-F795-42F7-98A8-7F41BE9E5290}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessLogicLayer", "BusinessLogicLayer", "{0E47EA07-D281-401E-AD78-3675F4990932}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.BusinessLogic", "CineVault.BusinessLogic\CineVault.BusinessLogic.csproj", "{29F61C89-26B5-4059-81DB-85768D9BAAE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.BusinessLogicTests", "CineVault.BusinessLogicTests\CineVault.BusinessLogicTests.csproj", "{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +25,26 @@ Global
 		{550388BE-8651-45E1-8A32-A40C5FD20EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{550388BE-8651-45E1-8A32-A40C5FD20EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{550388BE-8651-45E1-8A32-A40C5FD20EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31876169-F795-42F7-98A8-7F41BE9E5290}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31876169-F795-42F7-98A8-7F41BE9E5290}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31876169-F795-42F7-98A8-7F41BE9E5290}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31876169-F795-42F7-98A8-7F41BE9E5290}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29F61C89-26B5-4059-81DB-85768D9BAAE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29F61C89-26B5-4059-81DB-85768D9BAAE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29F61C89-26B5-4059-81DB-85768D9BAAE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29F61C89-26B5-4059-81DB-85768D9BAAE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{550388BE-8651-45E1-8A32-A40C5FD20EB1} = {4D0EC3D4-1A21-4A6A-B5EE-8FB130F671DB}
+		{31876169-F795-42F7-98A8-7F41BE9E5290} = {4D0EC3D4-1A21-4A6A-B5EE-8FB130F671DB}
+		{29F61C89-26B5-4059-81DB-85768D9BAAE4} = {0E47EA07-D281-401E-AD78-3675F4990932}
+		{F9BB68CB-4B1A-45B5-B97B-3A277FE734E1} = {0E47EA07-D281-401E-AD78-3675F4990932}
 	EndGlobalSection
 EndGlobal

@@ -14,7 +14,7 @@ namespace CineVault.BusinessLogic.Service
     
     public interface IIdGenerator
     {
-        public int Id { get; internal protected set; }
+        public int Id { get; set; }
 
         int GenerateId();
     }

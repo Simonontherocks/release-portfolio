@@ -18,14 +18,6 @@ namespace CineVault.BusinessLogic.ModelMovie
 
         #endregion
 
-        #region Constructor
-
-        public Actor() //(IIdGenerator idGenerator)
-        {
-            //IdGenerator.GenerateId();
-        }
-
-        #endregion
     }
 
 }

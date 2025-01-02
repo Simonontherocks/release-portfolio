@@ -10,6 +10,7 @@ namespace CineVault.MainProgram
     {
         static void Main(string[] args)
         {
+            /*
             //#region MockData
 
             //// Mock data for Actor
@@ -57,6 +58,7 @@ namespace CineVault.MainProgram
             //MovieRepository movieRepository = new MovieRepository();
 
             //#endregion
+            */
 
             #region MockData
 
@@ -91,12 +93,12 @@ namespace CineVault.MainProgram
             Movie movie7 = new Movie { Id = IdGenerator.GenerateId(), Title = "The Matrix", Barcode = "5678901234567", Director = new Director { Name = "Lana Wachowski", IMDBEntry = new IMDBEntry { Name = "Lana Wachowski", Url = "https://www.imdb.com/name/nm0905154/", Type = IMDBType.Director } }, Actors = new List<Actor> { actor9 }, IMDBEntry = new IMDBEntry { Name = "The Matrix", Url = "https://www.imdb.com/title/tt0133093/", Type = IMDBType.Movie }, Seen = true, Score = 10, Year = "1999", CoverUrl = "https://m.media-amazon.com/images/M/MV5BNzQzOTk3NjAtM2YwZC00ZDE1LWI5YzMtYzY0YjY3YjYzYzYzXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg" };
 
             // Mock data for Logger
-            Logger log1 = new Logger { TimeOfDay = DateTime.Now, UserId = 1, Description = "User login", Type = LogType.user };
-            Logger log2 = new Logger { TimeOfDay = DateTime.Now, UserId = null, Description = "System error", Type = LogType.error };
+            Logger log1 = new Logger { Id = IdGenerator.GenerateId(), TimeOfDay = DateTime.Now, UserId = 1, Description = "User login", Type = LogType.user };
+            Logger log2 = new Logger { Id = IdGenerator.GenerateId(), TimeOfDay = DateTime.Now, UserId = null, Description = "System error", Type = LogType.error };
 
             // Mock data for User
-            User user1 = new User { Name = "John Doe", Email = "john.doe@example.com", PasswordHash = "hashed_password", DateOfCreation = DateTime.Now };
-            User user2 = new User { Name = "Jane Smith", Email = "jane.smith@example.com", PasswordHash = "hashed_password", DateOfCreation = DateTime.Now };
+            User user1 = new User { Id = IdGenerator.GenerateId(), Name = "John Doe", Email = "john.doe@example.com", PasswordHash = "hashed_password", DateOfCreation = DateTime.Now };
+            User user2 = new User { Id = IdGenerator.GenerateId(), Name = "Jane Smith", Email = "jane.smith@example.com", PasswordHash = "hashed_password", DateOfCreation = DateTime.Now };
 
             // Mock data for UserLog
             UserLog userLog1 = new UserLog { TimeOfDay = DateTime.Now, AmountOfUsers = 100 };
@@ -170,6 +172,8 @@ namespace CineVault.MainProgram
             Console.WriteLine(actor10.Id);
             Console.WriteLine(actor11.Id);
             Console.WriteLine(actor1.Id);
+            Console.WriteLine(director2.Id);
+            Console.WriteLine(user2.Id);
 
             Console.ReadLine();
         }

@@ -11,20 +11,12 @@ namespace CineVault.BusinessLogic.ModelUser
     {
         #region Properties
 
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public DateTime TimeOfDay { get; set; }
         public int AmountOfUsers { get; set; }
 
         #endregion
 
-        #region Constructor
-
-        public UserLog() //(IIdGenerator idGenerator)
-        {
-            IdGenerator.GenerateId();
-        }
-
-        #endregion
     }
 
 }

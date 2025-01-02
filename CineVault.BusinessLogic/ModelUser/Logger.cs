@@ -11,7 +11,7 @@ namespace CineVault.BusinessLogic.ModelUser
     {
         #region Properties
 
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public DateTime TimeOfDay { get; set; }
         public int? UserId { get; set; } // Nullable voor system logs
         public string Description { get; set; }
@@ -19,16 +19,6 @@ namespace CineVault.BusinessLogic.ModelUser
 
         #endregion
 
-        #region Constructor
-
-        public Logger() //(IIdGenerator idGenerator)
-        {
-            IdGenerator.GenerateId();
-        }
-
-        #endregion
     }
-
-
 
 }

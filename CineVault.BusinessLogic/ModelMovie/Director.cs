@@ -18,9 +18,6 @@ namespace CineVault.BusinessLogic.ModelMovie
 
         #endregion
 
-        #region Constructor
-
-        #endregion
     }
 
 }

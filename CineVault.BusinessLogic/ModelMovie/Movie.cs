@@ -12,7 +12,7 @@ namespace CineVault.BusinessLogic.ModelMovie
     {
         #region Properties
 
-        public int Id { get; protected set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Barcode { get; set; }
         public string CoverUrl { get; set; } // URL to the cover image or thumbnail associated with the IMDb entry.
@@ -27,14 +27,6 @@ namespace CineVault.BusinessLogic.ModelMovie
 
         #endregion
 
-        #region Constructor
-
-        public Movie() //(IIdGenerator idGenerator)
-        {
-            //IdGenerator.GenerateId();
-        }
-
-        #endregion
     }
 
 }

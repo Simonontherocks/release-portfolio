@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CineVault.BusinessLogic.Models
+namespace CineVault.BusinessLogic.ModelMovie
 {
     public enum IMDBType
     {

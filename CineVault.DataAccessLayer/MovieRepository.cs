@@ -1,4 +1,4 @@
-﻿using CineVault.BusinessLogic.Models;
+﻿using CineVault.BusinessLogic.ModelMovie;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +17,10 @@ namespace CineVault.DataAccessLayer
 
         public void AddMovieByMovie(Movie movie)
         {
+            if (movie.IMDBEntry != null && string.IsNullOrEmpty(movie.CoverUrl))
+            {
+                movie.CoverUrl = movie.IMDBEntry.CoverUrl; // Stel de cover-URL in
+            }
             _lstMovies.Add(movie);
         }
 

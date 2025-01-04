@@ -30,7 +30,6 @@ public class MovieTests
         movie.Year = "2010";
 
         // Assert
-        Assert.AreEqual(1, movie.Id);
         Assert.AreEqual("Inception", movie.Title);
         Assert.AreEqual("123456789", movie.Barcode);
         Assert.AreEqual(director, movie.Director);

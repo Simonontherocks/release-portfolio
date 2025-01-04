@@ -61,8 +61,6 @@ public class IdGeneratorTests
     [TestMethod]
     public void IdGenerator_Reset_ShouldStartFromOne()
     {
-        // Assuming there is a Reset method in IdGenerator class
-
         // Arrange
         IdGenerator.Reset();
 

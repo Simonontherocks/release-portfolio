@@ -65,7 +65,7 @@ public class IdGeneratorTests
         IdGenerator.Reset();
 
         // Act
-        var firstIdAfterReset = IdGenerator.GenerateId();
+        int firstIdAfterReset = IdGenerator.GenerateId();
 
         // Assert
         Assert.AreEqual(1, firstIdAfterReset);

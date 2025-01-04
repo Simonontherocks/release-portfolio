@@ -12,7 +12,7 @@ namespace CineVault.BusinessLogic.ModelMovie
     {
         #region Properties
 
-        public int Id { get; set; }
+        public int Id { get; private set; }
         public string Title { get; set; }
         public string Barcode { get; set; }
         public string CoverUrl { get; set; } // URL to the cover image or thumbnail associated with the IMDb entry.
@@ -24,6 +24,15 @@ namespace CineVault.BusinessLogic.ModelMovie
         [Range(0, 10, ErrorMessage = "The score must be between 0 and 10. Decimal numbers are also not accepted.")]
         public int Score { get; set; }
         public string Year { get; set; }
+
+        #endregion
+
+        #region constructor
+
+        public Movie()
+        {
+            Id = IdGenerator.GenerateId();
+        }
 
         #endregion
 

@@ -12,11 +12,16 @@ namespace CineVault.BusinessLogic.Service
 
     public static class IdGenerator
     {
-        private static int _intCurrendId = 1;
+        private static int _intCurrentId = 1;
 
         public static int GenerateId()
         {
-            return _intCurrendId++;   
+            return _intCurrentId++;   
+        }
+
+        public static void Reset() 
+        { 
+            _intCurrentId = 1; 
         }
 
     }

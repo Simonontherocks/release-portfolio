@@ -1,4 +1,4 @@
-using CineVault.BusinessLogic.Models;
+using CineVault.BusinessLogic.ModelMovie;
 
 namespace CineVault.BusinessLogicTests.BusinessLogic.Model.Tests;
 
@@ -10,17 +10,16 @@ public class MovieTests
     {
         // Arrange
         Movie movie = new Movie();
-        Director director = new Director { Id = 1, Name = "Christopher Nolan" };
+        Director director = new Director { Name = "Christopher Nolan" };
         List<Actor> actors = new List<Actor>
         {
-        new Actor { Id = 1, Name = "Leonardo DiCaprio" },
-        new Actor { Id = 2, Name = "Joseph Gordon-Levitt" }
+        new Actor { Name = "Leonardo DiCaprio" },
+        new Actor { Name = "Joseph Gordon-Levitt" }
         };
 
         IMDBEntry imdbEntry = new IMDBEntry { Name = "Inception", Url = "https://www.imdb.com/title/tt1375666/", Type = IMDBType.Movie };
 
         // Act
-        movie.Id = 1;
         movie.Title = "Inception";
         movie.Barcode = "123456789";
         movie.Director = director;

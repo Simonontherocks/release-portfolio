@@ -1,6 +1,6 @@
 using CineVault.BusinessLogic.ModelUser;
 
-namespace CineVault.BusinessLogicTests.BusinessLogic.Model.Tests;
+namespace CineVault.BusinessLogicTests.ModelUser.Tests;
 
 [TestClass]
 public class UserTests
@@ -13,14 +13,12 @@ public class UserTests
         DateTime now = DateTime.Now;
 
         // Act
-        user.Id = 1;
         user.Name = "John Doe";
         user.Email = "johndoe@example.com";
         user.PasswordHash = "hashedpassword";
         user.DateOfCreation = now;
 
         // Assert
-        Assert.AreEqual(1, user.Id);
         Assert.AreEqual("John Doe", user.Name);
         Assert.AreEqual("johndoe@example.com", user.Email);
         Assert.AreEqual("hashedpassword", user.PasswordHash);

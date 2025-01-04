@@ -19,6 +19,10 @@ namespace CineVault.BusinessLogic.ModelUser
 
         #endregion
 
+        #region constructor
+
+        #endregion
+
     }
 
 }

@@ -11,11 +11,20 @@ namespace CineVault.BusinessLogic.ModelUser
     {
         #region Properties
 
-        public int Id { get; set; }
+        public int Id { get; private set; }
         public DateTime TimeOfDay { get; set; }
         public int? UserId { get; set; } // Nullable voor system logs
         public string Description { get; set; }
         public LogType Type { get; set; }
+
+        #endregion
+
+        #region constructor
+
+        public Logger()
+        {
+            Id = IdGenerator.GenerateId();
+        }
 
         #endregion
 

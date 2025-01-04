@@ -1,6 +1,6 @@
 using CineVault.BusinessLogic.ModelUser;
 
-namespace CineVault.BusinessLogicTests.BusinessLogic.Model.Tests;
+namespace CineVault.BusinessLogicTests.ModelUser.Tests;
 
 [TestClass]
 public class LoggerTests
@@ -13,14 +13,12 @@ public class LoggerTests
         DateTime now = DateTime.Now;
 
         // Act
-        logger.Id = 1;
         logger.TimeOfDay = now;
         logger.UserId = 42;
         logger.Description = "System start";
         logger.Type = LogType.user;
 
         // Assert
-        Assert.AreEqual(1, logger.Id);
         Assert.AreEqual(now, logger.TimeOfDay);
         Assert.AreEqual(42, logger.UserId);
         Assert.AreEqual("System start", logger.Description);

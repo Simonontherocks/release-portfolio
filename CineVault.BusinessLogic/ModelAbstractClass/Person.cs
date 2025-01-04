@@ -17,8 +17,17 @@ namespace CineVault.BusinessLogic.ModelAbstractClass
 
         #region Properties
 
-        public int Id { get; set; }            
+        public int Id { get; private set; }            
         public string Name { get; set; }
+
+        #endregion
+
+        #region constructor
+
+        public Person()
+        {
+            Id = IdGenerator.GenerateId();
+        }
 
         #endregion
     }

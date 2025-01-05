@@ -16,19 +16,19 @@ namespace CineVault.DataAccessLayer
         public void RemoveMovieByBarcode(string barcode);
 
         // Here you should be able to filter on the films that have been seen and those that have not been seen.
-        public void ShowAllMoviesAUserContains();
-        public void ShowAllMoviesThatHaveBeenSeen();
-        public void ShowAllMoviesThatHaveNotBeenSeen();
+        public IEnumerable<Movie> ShowAllMoviesAUserContains();
+        public IEnumerable<Movie> ShowAllMoviesThatHaveBeenSeen();
+        public IEnumerable<Movie> ShowAllMoviesThatHaveNotBeenSeen();
 
         // This is where data from a movie is filtered.
-        public void ShowAllActorsFromMovie(Movie movie);
-        public void ShowDirectorFromMovie(Movie movie);
-        public void ShowYearFromMovie(Movie movie);
+        public IEnumerable<Movie> ShowAllActorsFromMovie(Movie movie);
+        public Director ShowDirectorFromMovie(Movie movie);
+        public string ShowYearFromMovie(Movie movie);
 
         // This filters on a model and returns a list.
-        public void ShowMoviesFromTheSameActor(Actor actor);
-        public void ShowMoviesFromTheSameDirector(Director director);
-        public void ShowAllMoviesFromTheSameYear(string strYear);
+        public IEnumerable<Movie> ShowMoviesFromTheSameActor(Actor actor);
+        public IEnumerable<Movie> ShowMoviesFromTheSameDirector(Director director);
+        public IEnumerable<Movie> ShowAllMoviesFromTheSameYear(string strYear);
 
     }
 }

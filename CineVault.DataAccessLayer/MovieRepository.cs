@@ -9,180 +9,311 @@ namespace CineVault.DataAccessLayer
 {
     public class MovieRepository : IMovieRepository
     {
+        #region Field
+
         private readonly List<Movie> _lstMovies = new List<Movie>();
         private readonly List<Actor> _lstActors = new List<Actor>();
         private readonly List<Director> _lstDirectors = new List<Director>();
 
+        #endregion
+
         #region Adding or removing movies
+
+        //public void AddMovieByMovie(Movie movie)
+        //{
+        //    if (movie.IMDBEntry != null && string.IsNullOrEmpty(movie.CoverUrl))
+        //    {
+        //        movie.CoverUrl = movie.IMDBEntry.CoverUrl; // Stel de cover-URL in
+        //    }
+        //    _lstMovies.Add(movie);
+        //}
 
         public void AddMovieByMovie(Movie movie)
         {
-            if (movie.IMDBEntry != null && string.IsNullOrEmpty(movie.CoverUrl))
+            if (movie == null)
             {
-                movie.CoverUrl = movie.IMDBEntry.CoverUrl; // Stel de cover-URL in
+                throw new ArgumentNullException(nameof(movie));
             }
             _lstMovies.Add(movie);
         }
 
+        //public void AddMovieByBarcode(string barcode)
+        //{
+        //    bool blMovieFound;
+
+        //    blMovieFound = false;
+
+        //    foreach (Movie movie in _lstMovies)
+        //    {
+        //        if (movie.Barcode == barcode)
+        //        {
+        //            _lstMovies.Add(movie);
+        //            blMovieFound = true;
+        //        }
+
+        //    }
+
+        //    if (blMovieFound == false)
+        //    {
+
+        //        throw new ArgumentException("Movie with given barcode not found.");
+        //    }
+
+        //}
+
         public void AddMovieByBarcode(string barcode)
         {
-            bool blMovieFound;
-
-            blMovieFound = false;
-
-            foreach (Movie movie in _lstMovies)
+            // first check to see if the barcode is null or empty.
+            if (string.IsNullOrEmpty(barcode))
             {
-                if (movie.Barcode == barcode)
-                {
-                    _lstMovies.Add(movie);
-                    blMovieFound = true;
-                }
-
+                throw new ArgumentNullException(nameof(barcode), "barcode cannot be null or empty");
             }
 
-            if (blMovieFound == false)
+            // Check to see if the movie is already in the list or not.
+            Movie movie = _lstMovies.FirstOrDefault(movie1 => movie1.Barcode == barcode);
+            if (movie == null)
             {
+                throw new ArgumentNullException("Movie with the given barcode not found in the list");
+            }
 
-                throw new ArgumentException("Movie with given barcode not found.");
+            // Add the movie that is not yet in the list.
+            if (!_lstMovies.Contains(movie))
+            {
+                _lstMovies.Add(movie);
+            }
+            else
+            {
+                throw new InvalidOperationException("Movie with the given barcode is already in the list.");
             }
 
         }
+
+        //public void RemoveMovieByMovie(Movie movie)
+        //{
+        //    _lstMovies.Remove(movie);
+        //}
 
         public void RemoveMovieByMovie(Movie movie)
         {
+            if (movie == null)
+                throw new ArgumentNullException(nameof(movie));
+
             _lstMovies.Remove(movie);
         }
 
+        //public void RemoveMovieByBarcode(string barcode)
+        //{
+        //    bool bMovieFound;
+
+        //    bMovieFound = false;
+
+
+        //    foreach (Movie movie in _lstMovies)
+        //    {
+        //        if (movie.Barcode == barcode)
+        //        {
+        //            _lstMovies.Remove(movie);
+        //            bMovieFound = true;
+        //        }
+
+        //    }
+
+        //    if (bMovieFound == false)
+        //    {
+        //        throw new ArgumentException("Movie with given barcode not found.");
+        //    }
+        //}
+
         public void RemoveMovieByBarcode(string barcode)
         {
-            bool bMovieFound;
+            if (string.IsNullOrEmpty(barcode))
+                throw new ArgumentNullException(nameof(barcode));
 
-            bMovieFound = false;
-
-
-            foreach (Movie movie in _lstMovies)
+            Movie movie = _lstMovies.FirstOrDefault(movie1 => movie1.Barcode == barcode);
+            if (movie == null)
             {
-                if (movie.Barcode == barcode)
-                {
-                    _lstMovies.Remove(movie);
-                    bMovieFound = true;
-                }
-
+                throw new ArgumentException("Movie with the given barcode not found.");
             }
 
-            if (bMovieFound == false)
-            {
-                throw new ArgumentException("Movie with given barcode not found.");
-            }
+            _lstMovies.Remove(movie);
         }
 
         #endregion
 
-        #region Showing all movies a user contains
+        #region Retrieve movies by status
 
-        public void ShowAllMoviesAUserContains()
+        //public void ShowAllMoviesAUserContains()
+        //{
+        //    foreach (Movie movie in _lstMovies)
+        //    {
+        //        Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+        //    }
+        //}
+
+        public IEnumerable<Movie> ShowAllMoviesAUserContains()
         {
-            foreach (Movie movie in _lstMovies)
-            {
-                Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
-            }
+            return _lstMovies;
         }
 
-        #endregion
+        //public void ShowAllMoviesThatHaveBeenSeen()
+        //{
+        //    foreach(Movie movie in _lstMovies)
+        //    {
+        //        if (movie.Seen)
+        //        {
+        //            Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+        //        }
 
-        #region Filter by seen or not seen
+        //    }
 
+        //}
 
-
-        public void ShowAllMoviesThatHaveBeenSeen()
+        public IEnumerable<Movie> ShowAllMoviesThatHaveBeenSeen()
         {
-            foreach(Movie movie in _lstMovies)
-            {
-                if (movie.Seen)
-                {
-                    Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
-                }
-
-            }
-
+            return _lstMovies.Where(movie => movie.Seen);
         }
 
-        public void ShowAllMoviesThatHaveNotBeenSeen()
-        {
-            foreach (Movie movie in _lstMovies)
-            {
-                if (!movie.Seen)
-                {
-                    Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
-                }
+        //public void ShowAllMoviesThatHaveNotBeenSeen()
+        //{
+        //    foreach (Movie movie in _lstMovies)
+        //    {
+        //        if (!movie.Seen)
+        //        {
+        //            Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+        //        }
 
-            }
+        //    }
+        //}
+
+        public IEnumerable<Movie> ShowAllMoviesThatHaveNotBeenSeen()
+        {
+            return _lstMovies.Where(movie => !movie.Seen);
         }
 
         #endregion
 
         #region Filter by movie data
 
-        public void ShowAllActorsFromMovie(Movie movie)
+        //public void ShowAllActorsFromMovie(Movie movie)
+        //{
+        //    foreach (Actor actor in movie.Actors)
+        //    {
+        //        Console.WriteLine($"Actor: {actor.Name}");
+        //    }
+
+        //}
+
+        public IEnumerable<Movie> ShowAllActorsFromMovie(Movie movie)
         {
-            foreach (Actor actor in movie.Actors)
+            if (movie is null)
             {
-                Console.WriteLine($"Actor: {actor.Name}");
+                throw new ArgumentNullException(nameof(movie));
             }
 
+            return (IEnumerable<Movie>)movie.Actors;
         }
 
-        public void ShowDirectorFromMovie(Movie movie)
+        //public void ShowDirectorFromMovie(Movie movie)
+        //{
+        //    Console.WriteLine($"director: {movie.Director.Name}");
+        //}
+
+        public Director ShowDirectorFromMovie(Movie movie)
         {
-            Console.WriteLine($"director: {movie.Director.Name}");
+            if (movie is null)
+            {
+                throw new ArgumentNullException(nameof(movie));
+            }
+
+            return movie.Director;
         }
 
-        public void ShowYearFromMovie(Movie movie)
+        //public void ShowYearFromMovie(Movie movie)
+        //{
+        //    Console.WriteLine($"Year: {movie.Year}");
+        //}
+
+        public string ShowYearFromMovie(Movie movie)
         {
-            Console.WriteLine($"Year: {movie.Year}");
+            if (movie is null)
+            {
+                throw new ArgumentNullException(nameof(movie));
+            }
+
+            return movie.Year;
         }
 
         #endregion
 
         #region Filter by model
 
-        public void ShowMoviesFromTheSameActor(Actor actor)
-        {
-            foreach(Movie movie in _lstMovies)
-            {
-                if(movie.Actors.Contains(actor))
-                {
-                    Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
-                }
+        //public void ShowMoviesFromTheSameActor(Actor actor)
+        //{
+        //    foreach (Movie movie in _lstMovies)
+        //    {
+        //        if (movie.Actors.Contains(actor))
+        //        {
+        //            Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+        //        }
 
+        //    }
+
+        //}
+
+        public IEnumerable<Movie> ShowMoviesFromTheSameActor(Actor actor)
+        {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
             }
 
+            return _lstMovies.Where(movie1 => movie1.Actors.Contains(actor));
         }
 
-        public void ShowMoviesFromTheSameDirector(Director director)
-        {
-            foreach(Movie movie in _lstMovies)
-            {
-                if(movie.Director.Equals(director))
-                {
-                    Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
-                }
+        //public void ShowMoviesFromTheSameDirector(Director director)
+        //{
+        //    foreach (Movie movie in _lstMovies)
+        //    {
+        //        if (movie.Director.Equals(director))
+        //        {
+        //            Console.WriteLine($"Title: {movie.Title}, Year: {movie.Year}");
+        //        }
 
+        //    }
+
+        //}
+
+        public IEnumerable<Movie> ShowMoviesFromTheSameDirector(Director director)
+        {
+            if (director is null)
+            {
+                throw new ArgumentNullException(nameof(director));
             }
 
+            return _lstMovies.Where(movie1 => movie1.Director.Equals(director));
         }
 
-        public void ShowAllMoviesFromTheSameYear(string strYear)
-        {
-            foreach(Movie movie in _lstMovies)
-            {
-                if(movie.Year.Equals(strYear))
-                {
-                    Console.WriteLine($"Title: {movie.Title}, Director: {movie.Director.Name}");
-                }
+        //public void ShowAllMoviesFromTheSameYear(string strYear)
+        //{
+        //    foreach (Movie movie in _lstMovies)
+        //    {
+        //        if (movie.Year.Equals(strYear))
+        //        {
+        //            Console.WriteLine($"Title: {movie.Title}, Director: {movie.Director.Name}");
+        //        }
 
+        //    }
+
+        //}
+
+        public IEnumerable<Movie> ShowAllMoviesFromTheSameYear(string strYear)
+        {
+            if (string.IsNullOrEmpty(strYear))
+            {
+                throw new ArgumentNullException(nameof(strYear));
             }
 
+            return _lstMovies.Where(movie1 => movie1.Year.Equals(strYear));
         }
 
         #endregion

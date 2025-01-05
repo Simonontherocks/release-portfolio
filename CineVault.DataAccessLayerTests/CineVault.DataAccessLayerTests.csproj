@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CineVault.BusinessLogic\CineVault.BusinessLogic.csproj" />
     <ProjectReference Include="..\CineVault.DataAccessLayer\CineVault.DataAccessLayer.csproj" />
   </ItemGroup>
 

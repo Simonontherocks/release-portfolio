@@ -7,8 +7,11 @@ using CineVault.BusinessLogic.ModelMovie;
 
 namespace CineVault.DataAccessLayer
 {
+
     public interface IMovieRepository
     {
+        // The use of the IEnumerable is to iterate over a list and retrieve the necessary data.
+
         // Here you should be able to add or remove a movie.
         public void AddMovieByMovie(Movie movie);
         public void AddMovieByBarcode(string barcode);

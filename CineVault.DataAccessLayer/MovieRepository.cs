@@ -34,6 +34,7 @@ namespace CineVault.DataAccessLayer
             {
                 throw new ArgumentNullException(nameof(movie));
             }
+
             _lstMovies.Add(movie);
         }
 
@@ -70,7 +71,8 @@ namespace CineVault.DataAccessLayer
             }
 
             // Check to see if the movie is already in the list or not.
-            Movie movie = _lstMovies.FirstOrDefault(movie1 => movie1.Barcode == barcode);
+            Movie movie = _lstMovies.FirstOrDefault (movie1 => movie1.Barcode == barcode); // to retrieve a single object. In this case, a film with a specific barcode.
+
             if (movie == null)
             {
                 throw new ArgumentNullException("Movie with the given barcode not found in the list");
@@ -127,14 +129,16 @@ namespace CineVault.DataAccessLayer
         public void RemoveMovieByBarcode(string barcode)
         {
             if (string.IsNullOrEmpty(barcode))
-                throw new ArgumentNullException(nameof(barcode));
+                throw new ArgumentNullException(nameof(barcode), "barcode cannot be null or empty");
 
-            Movie movie = _lstMovies.FirstOrDefault(movie1 => movie1.Barcode == barcode);
+            Movie movie = _lstMovies.FirstOrDefault (movie1 => movie1.Barcode == barcode); // to retrieve a single object. In this case, a film with a specific barcode.
+
             if (movie == null)
             {
                 throw new ArgumentException("Movie with the given barcode not found.");
             }
 
+            // Remove movie.
             _lstMovies.Remove(movie);
         }
 
@@ -207,7 +211,7 @@ namespace CineVault.DataAccessLayer
         {
             if (movie is null)
             {
-                throw new ArgumentNullException(nameof(movie));
+                throw new ArgumentNullException(nameof(movie), "The movie you are looking for was not found in the list.");
             }
 
             return (IEnumerable<Movie>)movie.Actors;
@@ -222,7 +226,7 @@ namespace CineVault.DataAccessLayer
         {
             if (movie is null)
             {
-                throw new ArgumentNullException(nameof(movie));
+                throw new ArgumentNullException(nameof(movie), "The movie you are looking for was not found in the list.");
             }
 
             return movie.Director;
@@ -237,7 +241,7 @@ namespace CineVault.DataAccessLayer
         {
             if (movie is null)
             {
-                throw new ArgumentNullException(nameof(movie));
+                throw new ArgumentNullException(nameof(movie), "The movie you are looking for was not found in the list.");
             }
 
             return movie.Year;
@@ -264,7 +268,7 @@ namespace CineVault.DataAccessLayer
         {
             if (actor is null)
             {
-                throw new ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor), "The actor you want to search for was not found in the list.");
             }
 
             return _lstMovies.Where(movie1 => movie1.Actors.Contains(actor));
@@ -287,7 +291,7 @@ namespace CineVault.DataAccessLayer
         {
             if (director is null)
             {
-                throw new ArgumentNullException(nameof(director));
+                throw new ArgumentNullException(nameof(director), "The director you want to search for was not found in the list.");
             }
 
             return _lstMovies.Where(movie1 => movie1.Director.Equals(director));
@@ -310,7 +314,7 @@ namespace CineVault.DataAccessLayer
         {
             if (string.IsNullOrEmpty(strYear))
             {
-                throw new ArgumentNullException(nameof(strYear));
+                throw new ArgumentNullException(nameof(strYear), "The year to search for was not found in the list.");
             }
 
             return _lstMovies.Where(movie1 => movie1.Year.Equals(strYear));

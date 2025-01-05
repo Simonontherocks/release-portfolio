@@ -13,6 +13,8 @@ namespace CineVault.MainProgram
     {
         static void Main(string[] args)
         {
+            // Mainprogram gaat momenteel niet omdat de DAL is aangepast naar LINQ-Queries.
+            // Wel zijn alle referenties al gelegd naar de nodige layers.
             /*
             //#region MockData
 

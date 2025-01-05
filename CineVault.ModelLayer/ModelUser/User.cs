@@ -1,5 +1,4 @@
-﻿using CineVault.BusinessLogic.ModelAbstractClass;
-using CineVault.BusinessLogic.Service;
+﻿using CineVault.ModelLayer.ModelAbstractClass;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace CineVault.BusinessLogic.ModelUser
+namespace CineVault.ModelLayer.ModelUser
 {
     public class User : Person
     {

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CineVault.BusinessLogic\CineVault.BusinessLogic.csproj" />
+    <ProjectReference Include="..\CineVault.ModelLayer\CineVault.ModelLayer.csproj" />
   </ItemGroup>
 
 </Project>

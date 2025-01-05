@@ -1,11 +1,11 @@
-﻿using CineVault.BusinessLogic.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CineVault.ModelLayer.ModelLayerService;
 
-namespace CineVault.BusinessLogic.ModelAbstractClass
+namespace CineVault.ModelLayer.ModelAbstractClass
 {
     public abstract class Person
     {
@@ -26,7 +26,7 @@ namespace CineVault.BusinessLogic.ModelAbstractClass
 
         public Person()
         {
-            Id = IdGenerator.GenerateId();
+            Id = IdGeneratorService.GenerateId();
         }
 
         #endregion

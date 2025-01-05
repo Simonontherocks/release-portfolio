@@ -1,7 +1,7 @@
 ﻿using CineVault.BusinessLogic;
 using CineVault.BusinessLogic.ModelMovie;
 
-namespace CineVault.BusinessLogicTests.BusinessLogic.Model.Tests
+namespace CineVault.ModelLayerTests.ModelLayer.Model.Tests
 {
     [TestClass]
     public class ActorTests

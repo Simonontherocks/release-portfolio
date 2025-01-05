@@ -1,4 +1,5 @@
-﻿using CineVault.BusinessLogic.Service;
+﻿using CineVault.ModelLayer;
+using CineVault.ModelLayer.ModelLayerService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CineVault.BusinessLogic.ModelMovie
+namespace CineVault.ModelLayer.ModelMovie
 {
     public class Movie
     {
@@ -31,7 +32,7 @@ namespace CineVault.BusinessLogic.ModelMovie
 
         public Movie()
         {
-            Id = IdGenerator.GenerateId();
+            Id = IdGeneratorService.GenerateId();
         }
 
         #endregion

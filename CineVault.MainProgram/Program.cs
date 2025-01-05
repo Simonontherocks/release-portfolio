@@ -1,6 +1,8 @@
-﻿using CineVault.BusinessLogic.ModelMovie;
-using CineVault.BusinessLogic.ModelUser;
-using CineVault.BusinessLogic.Service;
+﻿using CineVault.BusinessLogic.Service;
+using CineVault.ModelLayer.ModelAbstractClass;
+using CineVault.ModelLayer.ModelMovie;
+using CineVault.ModelLayer.ModelUser;
+using CineVault.ModelLayer.ModelLayerService;
 using CineVault.DataAccessLayer;
 using System.IO;
 using System.Reflection;

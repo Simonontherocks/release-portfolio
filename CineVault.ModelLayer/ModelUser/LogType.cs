@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CineVault.BusinessLogic.ModelMovie
+namespace CineVault.ModelLayer.ModelUser
 {
-    public enum IMDBType
+    public enum LogType
     {
-        Movie,
-        Actor,
-        Director,
-        Year
+        error,
+        user
     }
 
 }

@@ -1,6 +1,6 @@
 using CineVault.BusinessLogic.ModelUser;
 
-namespace CineVault.BusinessLogicTests.ModelUser.Tests;
+namespace CineVault.ModelLayerTests.ModelLayer.Tests;
 
 [TestClass]
 public class UserTests

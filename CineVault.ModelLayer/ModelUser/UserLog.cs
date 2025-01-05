@@ -1,11 +1,12 @@
-﻿using CineVault.BusinessLogic.Service;
+﻿using CineVault.ModelLayer;
+using CineVault.ModelLayer.ModelLayerService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CineVault.BusinessLogic.ModelUser
+namespace CineVault.ModelLayer.ModelUser
 {
     public class UserLog
     {
@@ -21,7 +22,7 @@ namespace CineVault.BusinessLogic.ModelUser
 
         public UserLog()
         {
-            Id = IdGenerator.GenerateId();
+            Id = IdGeneratorService.GenerateId();
         }
 
         #endregion

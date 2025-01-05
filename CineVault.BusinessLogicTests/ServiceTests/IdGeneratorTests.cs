@@ -9,10 +9,10 @@ public class IdGeneratorTests
     public void IdGenerator_GenerateId_ShouldIncrementId()
     {
         // Arrange
-        int id1 = IdGenerator.GenerateId();
+        int id1 = IdGeneratorService.GenerateId();
 
         // Act
-        int id2 = IdGenerator.GenerateId();
+        int id2 = IdGeneratorService.GenerateId();
 
         // Assert
         Assert.AreEqual(id1 + 1, id2);
@@ -27,7 +27,7 @@ public class IdGeneratorTests
         // Act
         for (int i = 0; i < 100; i++)
         {
-            ids.Add(IdGenerator.GenerateId());
+            ids.Add(IdGeneratorService.GenerateId());
         }
 
         // Assert
@@ -38,11 +38,11 @@ public class IdGeneratorTests
     public void IdGenerator_GenerateId_ShouldBeSequential()
     {
         // Arrange
-        int id1 = IdGenerator.GenerateId();
-        int id2 = IdGenerator.GenerateId();
+        int id1 = IdGeneratorService.GenerateId();
+        int id2 = IdGeneratorService.GenerateId();
 
         // Act
-        int nextId = IdGenerator.GenerateId();
+        int nextId = IdGeneratorService.GenerateId();
 
         // Assert
         Assert.AreEqual(id2 + 1, nextId);
@@ -52,7 +52,7 @@ public class IdGeneratorTests
     public void IdGenerator_GenerateId_ShouldStartFromOne()
     {
         // Arrange & Act
-        int firstId = IdGenerator.GenerateId();
+        int firstId = IdGeneratorService.GenerateId();
 
         // Assert
         Assert.AreEqual(1, firstId);
@@ -62,10 +62,10 @@ public class IdGeneratorTests
     public void IdGenerator_Reset_ShouldStartFromOne()
     {
         // Arrange
-        IdGenerator.Reset();
+        IdGeneratorService.Reset();
 
         // Act
-        int firstIdAfterReset = IdGenerator.GenerateId();
+        int firstIdAfterReset = IdGeneratorService.GenerateId();
 
         // Assert
         Assert.AreEqual(1, firstIdAfterReset);

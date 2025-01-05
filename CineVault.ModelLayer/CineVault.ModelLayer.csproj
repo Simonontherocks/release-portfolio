@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CineVault.ModelLayer\CineVault.ModelLayer.csproj" />
-  </ItemGroup>
-
 </Project>

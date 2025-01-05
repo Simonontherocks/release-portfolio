@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace CineVault.BusinessLogic.ModelMovie
+namespace CineVault.ModelLayer.ModelMovie
 {
     /// Represents an entry from IMDb with details such as name, URL, and type.
     /// This class is used to store metadata related to movies, actors, directors, or years

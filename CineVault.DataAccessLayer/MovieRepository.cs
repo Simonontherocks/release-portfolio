@@ -1,4 +1,4 @@
-﻿using CineVault.BusinessLogic.ModelMovie;
+﻿using CineVault.ModelLayer.ModelMovie;
 using System;
 using System.Collections.Generic;
 using System.Linq;

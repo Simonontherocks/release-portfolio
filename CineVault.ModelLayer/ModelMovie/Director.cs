@@ -1,14 +1,13 @@
-﻿using CineVault.BusinessLogic.ModelAbstractClass;
-using CineVault.BusinessLogic.Service;
+﻿using CineVault.ModelLayer.ModelAbstractClass;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CineVault.BusinessLogic.ModelMovie
+namespace CineVault.ModelLayer.ModelMovie
 {
-    public class Actor : Person
+    public class Director : Person
     {
         #region Properties
 

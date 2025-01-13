@@ -1,6 +1,6 @@
-using CineVault.BusinessLogic.Service;
+using CineVault.ModelLayer.ModelLayerService;
 
-namespace CineVault.BusinessLogicTests;
+namespace CineVault.ModelLayerTests.ModelLayer;
 
 [TestClass]
 public class IdGeneratorTests
@@ -47,16 +47,7 @@ public class IdGeneratorTests
         // Assert
         Assert.AreEqual(id2 + 1, nextId);
     }
-
-    [TestMethod]
-    public void IdGenerator_GenerateId_ShouldStartFromOne()
-    {
-        // Arrange & Act
-        int firstId = IdGeneratorService.GenerateId();
-
-        // Assert
-        Assert.AreEqual(1, firstId);
-    }
+    
 
     [TestMethod]
     public void IdGenerator_Reset_ShouldStartFromOne()
@@ -70,4 +61,15 @@ public class IdGeneratorTests
         // Assert
         Assert.AreEqual(1, firstIdAfterReset);
     }
+
+    [TestMethod]
+    public void IdGenerator_GenerateId_ShouldStartFromOne()
+    {
+        // Arrange & Act
+        int firstId = IdGeneratorService.GenerateId();
+
+        // Assert
+        Assert.AreEqual(1, firstId);
+    }
+
 }

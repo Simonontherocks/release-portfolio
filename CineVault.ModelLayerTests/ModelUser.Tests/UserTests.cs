@@ -1,4 +1,4 @@
-using CineVault.BusinessLogic.ModelUser;
+using CineVault.ModelLayer.ModelUser;
 
 namespace CineVault.ModelLayerTests.ModelLayer.Tests;
 

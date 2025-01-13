@@ -1,5 +1,4 @@
-﻿using CineVault.BusinessLogic;
-using CineVault.BusinessLogic.ModelMovie;
+﻿using CineVault.ModelLayer.ModelMovie;
 
 namespace CineVault.ModelLayerTests.ModelLayer.Model.Tests
 {

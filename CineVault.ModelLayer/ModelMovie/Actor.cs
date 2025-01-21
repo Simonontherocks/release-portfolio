@@ -14,6 +14,13 @@ namespace CineVault.ModelLayer.ModelMovie
         // Using the Id- and Name properties from the abstract class "Person"
 
         public IMDBEntry IMDBEntry { get; set; }
+        public List<Actor> Actors { get; set; }
+
+        #endregion
+
+        #region navigationProperty
+
+        public ICollection<MovieActor> MovieActors { get; set; }
 
         #endregion
 

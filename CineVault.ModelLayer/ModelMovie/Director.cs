@@ -17,6 +17,12 @@ namespace CineVault.ModelLayer.ModelMovie
 
         #endregion
 
+        #region navigationProperty
+
+        public ICollection<MovieDirector> MovieDirectors { get; set; }
+
+        #endregion
+
     }
 
 }

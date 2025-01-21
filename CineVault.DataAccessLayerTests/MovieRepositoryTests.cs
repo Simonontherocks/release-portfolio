@@ -41,7 +41,7 @@ namespace CineVault.DataAccessLayerTests
         public void AddMovieByMovie_Should_AllowMovies_WithNullBarcode()
         {
             // Arrange
-            var movie = new Movie { Title = "No Barcode Movie", Barcode = null };
+            Movie movie = new Movie { Title = "No Barcode Movie", Barcode = null };
 
             // Act
             testRepo.AddMovieByMovie(movie);
@@ -65,6 +65,10 @@ namespace CineVault.DataAccessLayerTests
             Assert.IsTrue(movies.Any(m => m == movie), "Movie not found in the repository.");
         }
 
+        #endregion
+
+        #region AddMovieByBarcode - Testing
+
         [TestMethod]
         public void AddMovieByBarcode_Should_ThrowException_WhenBarcodeIsNullOrEmpty()
         {
@@ -78,19 +82,72 @@ namespace CineVault.DataAccessLayerTests
 
         #endregion
 
-        #region AddMovieByBarcode - Testing
-
-        #endregion
-
         #region RemoveMovieByMovie - Testing
 
         [TestMethod]
+        public void RemoveMovieById_ShouldRemoveMovieFromList()
+        {
+            // Arrange
 
+            Movie movie1 = new Movie { Title = "Inception", Barcode = "12345", Year = "2010", Seen = false };
+            Movie movie2 = new Movie { Title = "The Godfather", Barcode = "9876543210678", Year = "1972", Seen = true };
+            testRepo.AddMovieByMovie(movie1);
+            testRepo.AddMovieByMovie(movie2);
 
+            // Act
+
+            testRepo.RemoveMovieByMovie(movie2);
+
+            // Assert
+
+            Assert.IsTrue(!testRepo.ShowAllMoviesAUserContains().Contains(movie2));
+        }
+
+        [TestMethod]
+        public void RemoveMovieByMovie_Should_ThrowException_WhenMovieIsNull()
+        {
+            // Arrange
+            Movie movie = new Movie { Title = null, Barcode = null, Year = null, Seen = false };
+
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => testRepo.AddMovieByMovie(null));
+        }
+
+        [TestMethod]
+        public void RemoveMovieByMovie_Should_ThrowException_IfMovieIsAlreadyRemoved()
+        {
+            // Arrange
+
+            Movie movie1 = new Movie { Title = "Inception", Barcode = "12345", Year = "2010", Seen = false };
+            Movie movie2 = new Movie { Title = "The Godfather", Barcode = "9876543210678", Year = "1972", Seen = true };
+            testRepo.AddMovieByMovie(movie1);
+            testRepo.AddMovieByMovie(movie2);
+
+            // Act
+
+            testRepo.RemoveMovieByMovie(movie2);
+            testRepo.RemoveMovieByMovie(movie2);
+
+            // Assert
+
+            Assert.ThrowsException<ArgumentNullException>(() => testRepo.RemoveMovieByMovie(null));
+
+        }
 
         #endregion
 
         #region RemoveMovieByBarcode - Testing
+
+        [TestMethod]
+        public void RemoveMovieByBarcode_Should_ThrowException_WhenBarcodeIsNullOrEmpty()
+        {
+            // Arrange
+            //MovieRepository movieRepository = new MovieRepository();
+
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => testRepo.RemoveMovieByBarcode(null));
+            Assert.ThrowsException<ArgumentNullException>(() => testRepo.RemoveMovieByBarcode(""));
+        }
 
         #endregion
 
@@ -99,6 +156,8 @@ namespace CineVault.DataAccessLayerTests
         #region Retrieve movies by status - Tests
 
         #region ShowAllMoviesAUserContains - Testing
+
+
 
         #endregion
 

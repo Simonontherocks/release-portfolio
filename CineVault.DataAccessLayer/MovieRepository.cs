@@ -11,9 +11,19 @@ namespace CineVault.DataAccessLayer
     {
         #region Field
 
-        private readonly List<Movie> _lstMovies = new List<Movie>();
-        private readonly List<Actor> _lstActors = new List<Actor>();
-        private readonly List<Director> _lstDirectors = new List<Director>();
+        //private readonly List<Movie> _lstMovies = new List<Movie>();
+        //private readonly List<Actor> _lstActors = new List<Actor>();
+        //private readonly List<Director> _lstDirectors = new List<Director>();
+        private AppDBContext _dbContext;
+
+        #endregion
+
+        #region Constructor
+
+        public MovieRepository(AppDBContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         #endregion
 
@@ -35,7 +45,8 @@ namespace CineVault.DataAccessLayer
                 throw new ArgumentNullException(nameof(movie));
             }
 
-            _lstMovies.Add(movie);
+            //_lstMovies.Add(movie);
+            _dbContext.Add(movie);            
         }
 
         //public void AddMovieByBarcode(string barcode)
@@ -100,7 +111,8 @@ namespace CineVault.DataAccessLayer
             if (movie == null)
                 throw new ArgumentNullException(nameof(movie));
 
-            _lstMovies.Remove(movie);
+            //_lstMovies.Remove(movie);
+            _dbContext.Remove(movie);            
         }
 
         //public void RemoveMovieByBarcode(string barcode)

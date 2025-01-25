@@ -35,15 +35,6 @@ namespace CineVault.ModelLayer.ModelMovie
 
         #endregion
 
-        #region constructor
-
-        public Movie()
-        {
-            Id = IdGeneratorService.GenerateId();
-        }
-
-        #endregion
-
     }
 
 }

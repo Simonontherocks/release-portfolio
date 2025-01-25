@@ -24,14 +24,6 @@ namespace CineVault.ModelLayer.ModelAbstractClass
 
         #endregion
 
-        #region constructor
-
-        public Person()
-        {
-            Id = IdGeneratorService.GenerateId();
-        }
-
-        #endregion
 
     }
 

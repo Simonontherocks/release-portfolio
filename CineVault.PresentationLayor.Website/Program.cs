@@ -1,3 +1,6 @@
+using CineVault.DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
+
 namespace CineVault.PresentationLayor.Website
 {
     public class Program
@@ -8,6 +11,14 @@ namespace CineVault.PresentationLayor.Website
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Add clascontext
+
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            IConfigurationRoot config = configBuilder.Build();
+            builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+
 
             var app = builder.Build();
 

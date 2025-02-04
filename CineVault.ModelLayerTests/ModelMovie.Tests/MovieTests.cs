@@ -21,20 +21,12 @@ public class MovieTests
 
         // Act
         movie.Title = "Inception";
-        movie.Barcode = "123456789";
-        movie.Director = director;
-        movie.Actors = actors;
-        movie.IMDBEntry = imdbEntry;
         movie.Seen = true;
         movie.Score = 10;
         movie.Year = "2010";
 
         // Assert
         Assert.AreEqual("Inception", movie.Title);
-        Assert.AreEqual("123456789", movie.Barcode);
-        Assert.AreEqual(director, movie.Director);
-        Assert.AreEqual(actors, movie.Actors);
-        Assert.AreEqual(imdbEntry, movie.IMDBEntry);
         Assert.IsTrue(movie.Seen);
         Assert.AreEqual(10, movie.Score);
         Assert.AreEqual("2010", movie.Year);

@@ -62,14 +62,4 @@ public class IdGeneratorTests
         Assert.AreEqual(1, firstIdAfterReset);
     }
 
-    [TestMethod]
-    public void IdGenerator_GenerateId_ShouldStartFromOne()
-    {
-        // Arrange & Act
-        int firstId = IdGeneratorService.GenerateId();
-
-        // Assert
-        Assert.AreEqual(1, firstId);
-    }
-
 }

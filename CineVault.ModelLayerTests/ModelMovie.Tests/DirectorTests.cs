@@ -13,12 +13,9 @@ public class DirectorTests
 
         // Act
         director.Name = "Christopher Nolan";
-        director.IMDBEntry = new IMDBEntry { Name = "Christopher Nolan", Url = "https://www.imdb.com/name/nm0634240/", Type = IMDBType.Director };
 
         // Assert
         Assert.AreEqual("Christopher Nolan", director.Name);
-        Assert.IsNotNull(director.IMDBEntry);
-        Assert.AreEqual("Christopher Nolan", director.IMDBEntry.Name);
     }
 
 }

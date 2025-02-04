@@ -10,16 +10,16 @@ namespace CineVault.ModelLayer.ModelAbstractClass
 {
     public abstract class Person
     {
-        /* 
-         * Here the abstract class is created. 
-         * This will serve as a template for the other classes. 
-         * The advantage is that it is reusable in the future.
+        /*
+         * Hier wordt de abstracte klasse gemaakt.
+         * Dit zal dienen als een sjabloon voor de andere klassen.
+         * Het voordeel is dat het in de toekomst herbruikbaar is.
          */
 
         #region Properties
 
         [Key]
-        public int Id { get; private set; }            
+        public int Id { get; private set; }
         public string Name { get; set; }
 
         #endregion

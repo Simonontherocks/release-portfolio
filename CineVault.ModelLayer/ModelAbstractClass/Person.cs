@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,8 @@ namespace CineVault.ModelLayer.ModelAbstractClass
         #region Properties
 
         [Key]
-        public int Id { get; private set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Dit is toegevoegd om een unieke id te geven
+        public int Id { get; set; }
         public string Name { get; set; }
 
         #endregion

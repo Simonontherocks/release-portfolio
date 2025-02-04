@@ -23,6 +23,7 @@ namespace CineVault.ModelLayer.ModelMovie
         #region Properties
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Dit is toegevoegd om een unieke id te geven
         public int Id { get; private set; }
         public string Title { get; set; }
         public bool Seen { get; set; }

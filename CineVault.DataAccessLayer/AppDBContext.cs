@@ -46,6 +46,85 @@ namespace CineVault.DataAccessLayer
 
         #endregion
 
+        #region Toevoegen van mockdata
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Voeg mock-acteurs toe
+            modelBuilder.Entity<Actor>().HasData(
+                new Actor { Name = "Leonardo DiCaprio" },
+                new Actor { Name = "Joseph Gordon-Levitt" },
+                new Actor { Name = "Elliot Page" },
+                new Actor { Name = "John Travolta" },
+                new Actor { Name = "Samuel L. Jackson" },
+                new Actor { Name = "Matthew McConaughey" },
+                new Actor { Name = "Anne Hathaway" },
+                new Actor { Name = "Kate Winslet" },
+                new Actor { Name = "Quentin Tarantino" }
+            );
+
+            // Voeg mock-regisseurs toe
+            modelBuilder.Entity<Director>().HasData(
+                new Director { Name = "Christopher Nolan" },
+                new Director { Name = "Quentin Tarantino" },
+                new Director { Name = "James Cameron" },
+                new Director { Name = "Robert Rodriguez" },
+                new Director { Name = "George Lucas" }
+            );
+
+            // Voeg mock-films toe
+            modelBuilder.Entity<Movie>().HasData(
+                new Movie { Title = "Inception", Seen = true, Score = 9.0, Year = "2010" },
+                new Movie { Title = "Pulp Fiction", Seen = false, Score = 9, Year = "1994" },
+                new Movie { Title = "Interstellar", Seen = true, Score = 8.5, Year = "2014" },
+                new Movie { Title = "Titanic", Seen = true, Score = 8.0, Year = "1997" },
+                new Movie { Title = "Sin City", Seen = false, Score = 7.0, Year = "2005" },
+                new Movie { Title = "Star Wars", Seen = true, Score = 7.5, Year = "2005"}
+            );
+
+            // Relaties toevoegen in tussen-tabellen
+            modelBuilder.Entity<MovieActor>().HasData(
+                // Inception (2010)
+                new MovieActor { MovieId = 1, ActorId = 1 }, // Leonardo DiCaprio
+                new MovieActor { MovieId = 1, ActorId = 2 }, // Joseph Gordon-Levitt
+                new MovieActor { MovieId = 1, ActorId = 3 }, // Elliot Page
+
+                // Pulp Fiction (1994)
+                new MovieActor { MovieId = 2, ActorId = 4 }, // John Travolta
+                new MovieActor { MovieId = 2, ActorId = 5 }, // Samuel L. Jackson
+                new MovieActor { MovieId = 2, ActorId = 9 }, // Quentin Tarantino (Regisseur & Acteur)
+
+                // Interstellar (2014)
+                new MovieActor { MovieId = 3, ActorId = 6 }, // Matthew McConaughey
+                new MovieActor { MovieId = 3, ActorId = 7 }, // Anne Hathaway
+
+                // Titanic (1997)
+                new MovieActor { MovieId = 4, ActorId = 1 }, // Leonardo DiCaprio
+                new MovieActor { MovieId = 4, ActorId = 8 }, // Kate Winslet
+
+                // Sin City (2005)
+                new MovieActor { MovieId = 5, ActorId = 9 }, // Quentin Tarantino (Regisseur & Acteur)
+
+                // Star Wars (2005)
+                new MovieActor { MovieId = 6, ActorId = 5 } // Samuel L. Jackson
+            );
+
+            modelBuilder.Entity<MovieDirector>().HasData(
+                new MovieDirector { MovieId = 1, DirectorId = 1 }, // Inception - Christopher Nolan
+                new MovieDirector { MovieId = 2, DirectorId = 2 }, // Pulp Fiction - Quentin Tarantino
+                new MovieDirector { MovieId = 3, DirectorId = 1 }, // Interstellar - Christopher Nolan
+                new MovieDirector { MovieId = 4, DirectorId = 3 }, // Titanic - James Cameron
+                new MovieDirector { MovieId = 5, DirectorId = 2 }, // Sin City - Quentin Tarantino
+                new MovieDirector { MovieId = 5, DirectorId = 4 }, // Sin City - Robert Rodriguez
+                new MovieDirector { MovieId = 6, DirectorId = 5 } // Star Wars - George Lucas
+            );
+
+        }
+
+
+        #endregion
 
     }
 

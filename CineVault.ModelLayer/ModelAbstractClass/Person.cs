@@ -20,7 +20,7 @@ namespace CineVault.ModelLayer.ModelAbstractClass
         #region Properties
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Dit is toegevoegd om een unieke id te geven
+        // [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Dit is toegevoegd om een unieke id te geven
         public int Id { get; set; }
         public string Name { get; set; }
 

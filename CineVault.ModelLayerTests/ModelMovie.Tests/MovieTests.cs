@@ -17,7 +17,7 @@ public class MovieTests
         new Actor { Name = "Joseph Gordon-Levitt" }
         };
 
-        IMDBEntry imdbEntry = new IMDBEntry { Name = "Inception", Url = "https://www.imdb.com/title/tt1375666/", Type = IMDBType.Movie };
+        //IMDBEntry imdbEntry = new IMDBEntry { Name = "Inception", Url = "https://www.imdb.com/title/tt1375666/", Type = IMDBType.Movie };
 
         // Act
         movie.Title = "Inception";

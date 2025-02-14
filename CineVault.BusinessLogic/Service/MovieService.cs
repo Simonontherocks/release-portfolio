@@ -5,9 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using CineVault.DataAccessLayer;
 using CineVault.ModelLayer.ModelMovie;
+using Microsoft.EntityFrameworkCore;
 
 namespace CineVault.BusinessLogic.Service
 {
+    /// <summary>
+    /// Deze klasse zal contact maken met de DAL.
+    /// Deze zal via de methodes hier, data gaan ophalen uit de database.
+    /// De methodes in deze klasse hebben dezelfde signatuur als in de DAL, om het leesbaar en eenvoudig te houden.
+    /// Er wordt gebruik gemaakt van Dependency Injection in het field, namelijk van deIMovieRepository
+    /// </summary>
+    
     public class MovieService
     {
         #region Field
@@ -17,18 +25,26 @@ namespace CineVault.BusinessLogic.Service
         #endregion
 
 
-        // under construction
         #region Constructor
 
-        //public MovieRepository(IMovieRepository movieRepository)
-        //{
-        //    _movieRepository = movieRepository;
-        //}
+        public MovieService(IMovieRepository movieRepository)
+        {
+            _movieRepository = movieRepository;
+        }
 
         #endregion
 
 
         #region Methods
+
+        //#region Check for existing movies
+
+        //public bool MovieExists(string title, string releaseDate)
+        //{
+        //    return _dbContext.Movies.Any(m => m.Title == title && m.Year == releaseDate);
+        //}
+
+        //#endregion
 
         #region Adding or removing movies
 
@@ -38,6 +54,12 @@ namespace CineVault.BusinessLogic.Service
             if (movie == null)
             {
                 throw new ArgumentNullException(nameof(movie), "movie cannot be NULL");
+            }
+
+            // ToDo: Deze methode is aangemaakt in de interface en de klasse zelf. Nog controleren of deze methode werkt.
+            if(_movieRepository.CheckIfMovieExists(movie.Title, movie.Year))
+            {
+                throw new InvalidOperationException("A movie with the same title and release date already exists.");
             }
 
             _movieRepository.AddMovieByMovie(movie);

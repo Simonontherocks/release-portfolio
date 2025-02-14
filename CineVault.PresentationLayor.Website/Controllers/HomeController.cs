@@ -1,3 +1,5 @@
+using CineVault.BusinessLogic.Service;
+using CineVault.DataAccessLayer;
 using CineVault.PresentationLayor.Website.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -8,9 +10,11 @@ namespace CineVault.PresentationLayor.Website.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(ILogger<HomeController> logger, MovieService repo)
         {
             _logger = logger;
+            repo.RemoveMovieByMovie(new ModelLayer.ModelMovie.Movie() { Id = 7 });
         }
 
         public IActionResult Index()

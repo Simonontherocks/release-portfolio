@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using CineVault.ModelLayer.ModelLayerService;
 
@@ -20,8 +21,9 @@ namespace CineVault.ModelLayer.ModelAbstractClass
         #region Properties
 
         [Key]
-        // [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Dit is toegevoegd om een unieke id te geven
         public int Id { get; set; }
+
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         #endregion

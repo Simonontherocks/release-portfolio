@@ -8,6 +8,7 @@ using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CineVault.ModelLayer.ModelMovie
@@ -23,10 +24,16 @@ namespace CineVault.ModelLayer.ModelMovie
         #region Properties
 
         [Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Dit is toegevoegd om een unieke id te geven
         public int Id { get; set; }
+
+        // ToDO
+        [JsonPropertyName("id")]
+        public int IMDBId {  get; set; }
+
+        [JsonPropertyName("title")]
         public string Title { get; set; }
         public bool Seen { get; set; }
+
         public double? Score
         {
             get
@@ -47,10 +54,13 @@ namespace CineVault.ModelLayer.ModelMovie
                 {
                     _score = value;
                 }
+
             }
+
         }
 
         // Deze property mag NULL zijn.
+        [JsonPropertyName("release_date")]
         public string? Year { get; set; }
 
         #endregion

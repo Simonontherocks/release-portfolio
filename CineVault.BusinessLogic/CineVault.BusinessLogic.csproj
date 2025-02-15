@@ -24,4 +24,8 @@
     <ProjectReference Include="..\CineVault.ModelLayer\CineVault.ModelLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ApiAdapters\" />
+  </ItemGroup>
+
 </Project>

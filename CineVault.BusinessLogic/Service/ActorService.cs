@@ -1,0 +1,57 @@
+﻿using CineVault.DataAccessLayer.Repositories;
+using CineVault.ModelLayer.ModelMovie;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CineVault.BusinessLogic.Service
+{
+    public class ActorService
+    {
+        // ToDo = nog af te werken
+        private IActorRepository _actorRepository;
+
+        public ActorService(IActorRepository actorRepository)
+        {
+            _actorRepository = actorRepository;
+        }
+
+        public List<Actor> GetAll()
+        {
+            return _actorRepository.GetAll();
+        }
+
+        public void Insert(Actor actor)
+        {
+            // add businessLogic
+
+            if (actor == null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            // ToDo => nog aan te vullen.
+
+            _actorRepository.Insert(actor);
+        }
+
+        public void Delete(Actor actor)
+        {
+            if (actor == null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            _actorRepository.Delete(actor);
+        }
+
+        public void SaveChanges()
+        {            
+            _actorRepository.SaveChanges();
+        }
+
+    }
+
+}

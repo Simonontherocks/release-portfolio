@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CineVault.ModelLayer.ModelMovie;
 
-namespace CineVault.DataAccessLayer
+namespace CineVault.DataAccessLayer.Repositories
 {
     /*
      * Deze interface zal dienen als blauwprint over hoe de werkelijke repository er uit zal moeten zien.

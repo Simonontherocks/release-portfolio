@@ -1,5 +1,6 @@
 using CineVault.BusinessLogic.Service;
 using CineVault.DataAccessLayer;
+using CineVault.DataAccessLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace CineVault.PresentationLayor.Website
@@ -21,6 +22,9 @@ namespace CineVault.PresentationLayor.Website
             builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IMovieRepository, MovieRepository>(); //<Is hetgeen ik vraag (interface), is hetgeen ik krijg (Klasse)>
             builder.Services.AddScoped<MovieService>();
+            builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddScoped<MovieService>();
+            builder.Services.AddHttpClient<ApiService>();
 
             var app = builder.Build();
 

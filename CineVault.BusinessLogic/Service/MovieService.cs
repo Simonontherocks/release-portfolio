@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CineVault.DataAccessLayer;
+using CineVault.BusinessLogic.ApiModels;
+using CineVault.DataAccessLayer.Repositories;
 using CineVault.ModelLayer.ModelMovie;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,21 +16,23 @@ namespace CineVault.BusinessLogic.Service
     /// De methodes in deze klasse hebben dezelfde signatuur als in de DAL, om het leesbaar en eenvoudig te houden.
     /// Er wordt gebruik gemaakt van Dependency Injection in het field, namelijk van deIMovieRepository
     /// </summary>
-    
+
     public class MovieService
     {
         #region Field
 
         private readonly IMovieRepository _movieRepository;
+        private readonly ApiService _apiService;
 
         #endregion
 
 
         #region Constructor
 
-        public MovieService(IMovieRepository movieRepository)
+        public MovieService(IMovieRepository movieRepository, ApiService apiService)
         {
             _movieRepository = movieRepository;
+            _apiService = apiService;
         }
 
         #endregion
@@ -48,8 +51,10 @@ namespace CineVault.BusinessLogic.Service
 
         #region Adding or removing movies
 
+
         public void AddMovieByMovie(Movie movie)
         {
+            _apiService.GetMoviesByTitle(movie.Title);
 
             if (movie == null)
             {
@@ -61,6 +66,7 @@ namespace CineVault.BusinessLogic.Service
             {
                 throw new InvalidOperationException("A movie with the same title and release date already exists.");
             }
+
 
             _movieRepository.AddMovieByMovie(movie);
         }
@@ -170,6 +176,12 @@ namespace CineVault.BusinessLogic.Service
         }
 
         #endregion
+
+        #endregion
+
+        #region Using adapter
+
+        
 
         #endregion
 

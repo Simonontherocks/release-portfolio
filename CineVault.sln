@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.ModelLayer", "Cin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.ModelLayerTests", "CineVault.ModelLayerTests\CineVault.ModelLayerTests.csproj", "{0322A9AC-8AC4-47AD-831E-05DC3D7146A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.PresentationLayor.Website", "CineVault.PresentationLayor.Website\CineVault.PresentationLayor.Website.csproj", "{10F8C893-F6D7-4FFD-AF89-8EDDC7543805}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineVault.PresentationLayer.Website", "CineVault.PresentationLayor.Website\CineVault.PresentationLayer.Website.csproj", "{10F8C893-F6D7-4FFD-AF89-8EDDC7543805}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

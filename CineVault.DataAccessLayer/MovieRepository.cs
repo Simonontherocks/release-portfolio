@@ -1,4 +1,5 @@
-﻿using CineVault.ModelLayer.ModelMovie;
+﻿using CineVault.DataAccessLayer.Repositories;
+using CineVault.ModelLayer.ModelMovie;
 using CineVault.ModelLayer.ModelUser;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -44,6 +45,7 @@ namespace CineVault.DataAccessLayer
 
 
         #region Adding or removing movies
+
 
         public void AddMovieByMovie(Movie movie)
         {
@@ -136,6 +138,8 @@ namespace CineVault.DataAccessLayer
 
             return Enumerable.Empty<Movie>();
         }
+
+        
 
         #endregion
 

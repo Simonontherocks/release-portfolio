@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace CineVault.DataAccessLayer
 {
+    // Add-Migration InitialCreate -Project Quest.Data -StartupProject Quest.UI
+    // Update-Database -Project Quest.Data -StartupProject Quest.UI
     public class AppDBContext : DbContext
     {
         #region Property        

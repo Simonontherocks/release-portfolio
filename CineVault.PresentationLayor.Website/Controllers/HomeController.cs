@@ -14,7 +14,8 @@ namespace CineVault.PresentationLayor.Website.Controllers
         public HomeController(ILogger<HomeController> logger, MovieService repo)
         {
             _logger = logger;
-            repo.RemoveMovieByMovie(new ModelLayer.ModelMovie.Movie() { Id = 7 });
+            repo.AddMovieByMovie(new ModelLayer.ModelMovie.Movie { Title = "Bravehaert"});
+            // repo.RemoveMovieByMovie(new ModelLayer.ModelMovie.Movie() { Id = 7 });
         }
 
         public IActionResult Index()

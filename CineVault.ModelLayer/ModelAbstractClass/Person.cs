@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using CineVault.ModelLayer.ModelLayerService;
 
 namespace CineVault.ModelLayer.ModelAbstractClass
 {
@@ -26,8 +25,10 @@ namespace CineVault.ModelLayer.ModelAbstractClass
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        #endregion
+        [JsonPropertyName("id")]
+        public int Imdb_ID { get; set; } // Hier zal de imdb-id van de desbetreffende persoon opgeslaan worden
 
+        #endregion
 
     }
 

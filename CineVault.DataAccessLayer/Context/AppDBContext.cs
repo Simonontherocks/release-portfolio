@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CineVault.DataAccessLayer
+namespace CineVault.DataAccessLayer.Context
 {
     // Add-Migration InitialCreate -Project Quest.Data -StartupProject Quest.UI
     // Update-Database -Project Quest.Data -StartupProject Quest.UI
@@ -21,7 +21,7 @@ namespace CineVault.DataAccessLayer
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieActor> MovieActors { get; set; }
         public DbSet<MovieDirector> MovieDirectors { get; set; }
-        
+
         #endregion
 
 
@@ -30,9 +30,10 @@ namespace CineVault.DataAccessLayer
         public AppDBContext(DbContextOptions<AppDBContext> options) //, IConfiguration configuration)
             : base(options)
         {
-            
+
         }
 
+        public AppDBContext() { }
         #endregion
 
         #region OnConfiguring
@@ -41,7 +42,14 @@ namespace CineVault.DataAccessLayer
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=SIMON\\SQLEXPRESS;Database=CineVault; Trusted_Connection=true; TrustServerCertificate=True");
+            // Dit controleert eerst of de opties voor de databaseconfiguratie al zijn ingesteld.
+            // Dit is handig als de configuratie via Dependency Injection wordt doorgegeven.
+            if (!optionsBuilder.IsConfigured)
+            {
+                // Stelt de database in die Entity Framework moet gebruiken.
+                // Hier wordt een SQL Server-database gebruikt.
+                optionsBuilder.UseSqlServer("server=SIMON\\SQLEXPRESS;Database=CineVault; Trusted_Connection=true; TrustServerCertificate=True");
+            }
         }
 
         #endregion
@@ -54,34 +62,34 @@ namespace CineVault.DataAccessLayer
 
             // Voeg mock-acteurs toe
             modelBuilder.Entity<Actor>().HasData(
-                new Actor { Id = 1, Name = "Leonardo DiCaprio" },
-                new Actor { Id = 2, Name = "Joseph Gordon-Levitt" },
-                new Actor { Id = 3, Name = "Elliot Page" },
-                new Actor { Id = 4, Name = "John Travolta" },
-                new Actor { Id = 5, Name = "Samuel L. Jackson" },
-                new Actor { Id = 6, Name = "Matthew McConaughey" },
-                new Actor { Id = 7, Name = "Anne Hathaway" },
-                new Actor { Id = 8, Name = "Kate Winslet" },
-                new Actor { Id = 9, Name = "Quentin Tarantino" }
+                new Actor { Id = 1, Name = "Leonardo DiCaprio", Imdb_ID = 6193 },
+                new Actor { Id = 2, Name = "Joseph Gordon-Levitt", Imdb_ID = 24045 },
+                new Actor { Id = 3, Name = "Elliot Page", Imdb_ID = 27578 },
+                new Actor { Id = 4, Name = "John Travolta", Imdb_ID = 8891 },
+                new Actor { Id = 5, Name = "Samuel L. Jackson", Imdb_ID = 2231 },
+                new Actor { Id = 6, Name = "Matthew McConaughey", Imdb_ID = 10297 },
+                new Actor { Id = 7, Name = "Anne Hathaway", Imdb_ID = 1813 },
+                new Actor { Id = 8, Name = "Kate Winslet", Imdb_ID = 204 },
+                new Actor { Id = 9, Name = "Quentin Tarantino", Imdb_ID = 138 }
             );
 
             // Voeg mock-regisseurs toe
             modelBuilder.Entity<Director>().HasData(
-                new Director { Id = 1, Name = "Christopher Nolan" },
-                new Director { Id = 2, Name = "Quentin Tarantino" },
-                new Director { Id = 3, Name = "James Cameron" },
-                new Director { Id = 4, Name = "Robert Rodriguez" },
-                new Director { Id = 5, Name = "George Lucas" }
+                new Director { Id = 1, Name = "Christopher Nolan", Imdb_ID = 525 },
+                new Director { Id = 2, Name = "Quentin Tarantino", Imdb_ID = 138 },
+                new Director { Id = 3, Name = "James Cameron", Imdb_ID = 2710 },
+                new Director { Id = 4, Name = "Robert Rodriguez", Imdb_ID = 2294 },
+                new Director { Id = 5, Name = "George Lucas", Imdb_ID = 1 }
             );
 
             // Voeg mock-films toe
             modelBuilder.Entity<Movie>().HasData(
-                new Movie { Id = 1, Title = "Inception", Seen = true, Score = 9.0, Year = "2010" },
-                new Movie { Id = 2, Title = "Pulp Fiction", Seen = false, Score = 9, Year = "1994" },
-                new Movie { Id = 3, Title = "Interstellar", Seen = true, Score = 8.5, Year = "2014" },
-                new Movie { Id = 4, Title = "Titanic", Seen = true, Score = 8.0, Year = "1997" },
-                new Movie { Id = 5, Title = "Sin City", Seen = false, Score = 7.0, Year = "2005" },
-                new Movie { Id = 6, Title = "Star Wars", Seen = true, Score = 7.5, Year = "2005"}
+                new Movie { Id = 1, Title = "Inception", Seen = true, Score = 9.0, Year = "2010", IMDBId = 27205 },
+                new Movie { Id = 2, Title = "Pulp Fiction", Seen = false, Score = 9, Year = "1994", IMDBId = 680 },
+                new Movie { Id = 3, Title = "Interstellar", Seen = true, Score = 8.5, Year = "2014", IMDBId = 157336 },
+                new Movie { Id = 4, Title = "Titanic", Seen = true, Score = 8.0, Year = "1997", IMDBId = 597 },
+                new Movie { Id = 5, Title = "Sin City", Seen = false, Score = 7.0, Year = "2005", IMDBId = 187 },
+                new Movie { Id = 6, Title = "Star Wars: The Phantom Menace", Seen = true, Score = 7.5, Year = "2005", IMDBId = 1893 }
             );
 
             // Relaties toevoegen in tussen-tabellen

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CineVault.DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250222104251_Added_IMDB-ID_Column")]
-    partial class Added_IMDBID_Column
+    [Migration("20250322155716_Added_Imdb-Id_To_Person")]
+    partial class Added_ImdbId_To_Person
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,10 @@ namespace CineVault.DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Imdb_ID")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "id");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -45,46 +49,55 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
+                            Imdb_ID = 0,
                             Name = "Leonardo DiCaprio"
                         },
                         new
                         {
                             Id = 2,
+                            Imdb_ID = 0,
                             Name = "Joseph Gordon-Levitt"
                         },
                         new
                         {
                             Id = 3,
+                            Imdb_ID = 0,
                             Name = "Elliot Page"
                         },
                         new
                         {
                             Id = 4,
+                            Imdb_ID = 0,
                             Name = "John Travolta"
                         },
                         new
                         {
                             Id = 5,
+                            Imdb_ID = 0,
                             Name = "Samuel L. Jackson"
                         },
                         new
                         {
                             Id = 6,
+                            Imdb_ID = 0,
                             Name = "Matthew McConaughey"
                         },
                         new
                         {
                             Id = 7,
+                            Imdb_ID = 0,
                             Name = "Anne Hathaway"
                         },
                         new
                         {
                             Id = 8,
+                            Imdb_ID = 0,
                             Name = "Kate Winslet"
                         },
                         new
                         {
                             Id = 9,
+                            Imdb_ID = 0,
                             Name = "Quentin Tarantino"
                         });
                 });
@@ -96,6 +109,10 @@ namespace CineVault.DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Imdb_ID")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -110,26 +127,31 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
+                            Imdb_ID = 0,
                             Name = "Christopher Nolan"
                         },
                         new
                         {
                             Id = 2,
+                            Imdb_ID = 0,
                             Name = "Quentin Tarantino"
                         },
                         new
                         {
                             Id = 3,
+                            Imdb_ID = 0,
                             Name = "James Cameron"
                         },
                         new
                         {
                             Id = 4,
+                            Imdb_ID = 0,
                             Name = "Robert Rodriguez"
                         },
                         new
                         {
                             Id = 5,
+                            Imdb_ID = 0,
                             Name = "George Lucas"
                         });
                 });

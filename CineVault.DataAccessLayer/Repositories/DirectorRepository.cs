@@ -1,12 +1,13 @@
-﻿using CineVault.DataAccessLayer.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
 using CineVault.ModelLayer.ModelMovie;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CineVault.DataAccessLayer.Context;
 
-namespace CineVault.DataAccessLayer
+namespace CineVault.DataAccessLayer.Repositories
 {
     public class DirectorRepository : IDirectorRepository
     {
@@ -34,13 +35,13 @@ namespace CineVault.DataAccessLayer
 
         public Director GetById(int id)
         {
-           return _context.Directors.FirstOrDefault(d => d.Id == id);
+            return _context.Directors.FirstOrDefault(d => d.Id == id);
         }
 
         public void Insert(Director director)
         {
             _context.Directors.Add(director);
-        }        
+        }
 
         public void Update(Director director)
         {
@@ -53,7 +54,7 @@ namespace CineVault.DataAccessLayer
 
         public void Delete(Director director)
         {
-            if(director == null)
+            if (director == null)
             {
                 throw new ArgumentNullException(nameof(director));
             }

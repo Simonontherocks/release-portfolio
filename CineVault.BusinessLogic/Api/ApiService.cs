@@ -36,6 +36,10 @@ namespace CineVault.BusinessLogic.Service
         
         public async Task<List<Movie>?> GetMoviesByTitle(string strTitle)
         {
+            if (string.IsNullOrEmpty(strTitle))
+            {
+                throw new ArgumentNullException("Titel mag niet leeg of null zijn", nameof(strTitle));
+            }
             // Het HTTP-verzoek om films te zoeken op basis van de titel (searchUrl + apiKey + zoekquery).
             HttpResponseMessage searchResponse = await _httpClient.GetAsync(searchUrl + apiKey + $"&query={strTitle}");
 
@@ -45,7 +49,7 @@ namespace CineVault.BusinessLogic.Service
                 string searchJsonRespons = await searchResponse.Content.ReadAsStringAsync(); // Haalt het JSON-antwoord op van de API.
                 MovieResponse? movieResponse = JsonSerializer.Deserialize<MovieResponse>(searchJsonRespons); // Deserializeert de JSON naar een MovieResponse-object.
 
-                if (movieResponse != null) // Als de response succesvol is gedeserializeerd, wordt onderstaande code uitgevoerd.
+                if (movieResponse != null && movieResponse.Results.Any()) // Als de response succesvol is gedeserializeerd, wordt onderstaande code uitgevoerd.
                 {
                     Debug.WriteLine("Gevonden films"); // Wordt gebruikt om output naar de console te sturen, wat handig is voor debugging.
                     foreach (CineVault.ModelLayer.ModelMovie.Movie movie in movieResponse.Results) // Itereer over de lijst van films die de API heeft teruggegeven.
@@ -61,10 +65,15 @@ namespace CineVault.BusinessLogic.Service
                     return movieResponse.Results; // Geeft de lijst van gevonden films terug.
 
                 }
-
+                else
+                {
+                    throw new InvalidOperationException("Geen films gevonden met opgegeven titel.");                    
+                }
+                
             }
 
-            return null; // Ik geef een lege lijst terug als de API-response niet correct was.
+            throw new HttpRequestException("Fout bij het ophalen van de film");
+            // return null; // Ik geef een lege lijst terug als de API-response niet correct was.
         }
 
         /// <summary>

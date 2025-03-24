@@ -1,5 +1,4 @@
 ﻿using CineVault.ModelLayer;
-using CineVault.ModelLayer.ModelLayerService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +21,10 @@ namespace CineVault.ModelLayer.ModelUser
 
         #region constructor
 
-        public Logger()
-        {
-            Id = IdGeneratorService.GenerateId();
-        }
+        //public Logger()
+        //{
+        //    Id = IdGeneratorService.GenerateId();
+        //}
 
         #endregion
 

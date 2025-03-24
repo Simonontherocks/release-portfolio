@@ -1,4 +1,4 @@
-﻿using CineVault.DataAccessLayer.Repositories;
+﻿using CineVault.DataAccessLayer.Context;
 using CineVault.ModelLayer.ModelMovie;
 using CineVault.ModelLayer.ModelUser;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CineVault.DataAccessLayer
+namespace CineVault.DataAccessLayer.Repositories
 {
     public class MovieRepository : IMovieRepository
     {
@@ -36,9 +36,14 @@ namespace CineVault.DataAccessLayer
         #region Check for existing movies
 
         // ToDo: Controleren of deze methode werkt
-        public bool CheckIfMovieExists(string title, string releaseDate)
+        //public bool CheckIfMovieExists(string title, string releaseDate)
+        //{
+        //    return _dbContext.Movies.Any(m => m.Title == title && m.Year == releaseDate);
+        //}
+
+        public bool CheckIfMovieExists (Movie movie)
         {
-            return _dbContext.Movies.Any(m => m.Title == title && m.Year == releaseDate);
+            return _dbContext.Movies.Any(m => m.IMDBId.Equals(movie.IMDBId));
         }
 
         #endregion
@@ -139,7 +144,7 @@ namespace CineVault.DataAccessLayer
             return Enumerable.Empty<Movie>();
         }
 
-        
+
 
         #endregion
 

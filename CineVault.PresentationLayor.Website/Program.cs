@@ -1,5 +1,5 @@
 using CineVault.BusinessLogic.Service;
-using CineVault.DataAccessLayer;
+using CineVault.DataAccessLayer.Context;
 using CineVault.DataAccessLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 

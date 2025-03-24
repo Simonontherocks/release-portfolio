@@ -1,5 +1,4 @@
 ﻿using CineVault.ModelLayer;
-using CineVault.ModelLayer.ModelLayerService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,7 +16,7 @@ namespace CineVault.ModelLayer.ModelMovie
     {
         #region Field
 
-        private double? _score;
+        // Empty
 
         #endregion
 
@@ -34,30 +33,8 @@ namespace CineVault.ModelLayer.ModelMovie
         public string Title { get; set; }
         public bool Seen { get; set; }
 
+        [JsonPropertyName("vote_average")]
         public double? Score { get; set; }
-        //{
-        //    get
-        //    {
-        //        return _score;
-        //    }
-        //    set
-        //    {
-        //        if (value < 0 || value > 10)
-        //        {
-        //            throw new ArgumentException("Value must be at least 0 and can be at most 10.");
-        //        }
-        //        else if (value % 0.5 != 0)
-        //        {
-        //            throw new ArgumentException("Value can only be 0.5 after the decimal point.");
-        //        }
-        //        else
-        //        {
-        //            _score = value;
-        //        }
-
-        //    }
-
-        //}
 
         // Deze property mag NULL zijn.
         [JsonPropertyName("release_date")]

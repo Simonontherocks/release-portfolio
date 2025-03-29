@@ -25,7 +25,7 @@ namespace CineVault.BusinessLogic.Service
         {
             _httpClient = new HttpClient(); // Initialisatie van de HttpClient om verzoeken te sturen.
         }
-        
+
         /// <summary>
         /// Hier zal een film gezocht worden op basis van een meegegeven parameter.
         /// De methode zal via de api de film(s) zoeken die de meegegeven parameter bevatten.
@@ -33,7 +33,7 @@ namespace CineVault.BusinessLogic.Service
         /// </summary>
         /// <param name="strTitle">De titel van de film waar je wilt op zoeken.</param>
         /// <returns>Een lijst van films die voldoen aan de zoekcriteria of null bij fout.</returns>
-        
+
         public async Task<List<Movie>?> GetMoviesByTitle(string strTitle)
         {
             if (string.IsNullOrEmpty(strTitle))
@@ -45,7 +45,7 @@ namespace CineVault.BusinessLogic.Service
 
             // Voorwaarde die Controleert of het verzoek succesvol was.
             if (searchResponse.IsSuccessStatusCode) // voert uit als het true is.
-            {                
+            {
                 string searchJsonRespons = await searchResponse.Content.ReadAsStringAsync(); // Haalt het JSON-antwoord op van de API.
                 MovieResponse? movieResponse = JsonSerializer.Deserialize<MovieResponse>(searchJsonRespons); // Deserializeert de JSON naar een MovieResponse-object.
 
@@ -61,15 +61,15 @@ namespace CineVault.BusinessLogic.Service
                         // En omdat ik enkel het eerste object opvraag, zal ik enkel het jaartal krijgen.
 
                     }
-                    
+
                     return movieResponse.Results; // Geeft de lijst van gevonden films terug.
 
                 }
                 else
                 {
-                    throw new InvalidOperationException("Geen films gevonden met opgegeven titel.");                    
+                    throw new InvalidOperationException("Geen films gevonden met opgegeven titel.");
                 }
-                
+
             }
 
             throw new HttpRequestException("Fout bij het ophalen van de film");
@@ -82,7 +82,7 @@ namespace CineVault.BusinessLogic.Service
         /// <param name="intChosenMovieId">De ID van de gekozen film</param>
         /// <returns>Een dictionary met de naam van de acteurs en regisseurs en hun functies in de film</returns>
 
-        public async Task<Dictionary<string,List<string>>?> GetActorsAndDirectorsFromMovieId(int intChosenMovieId)
+        public async Task<Dictionary<int, Dictionary<string, List<string>>>> GetActorsAndDirectorsFromMovie(int intChosenMovieId)
         {
             // Haalt credits op voor de gekozen film door middel van de URL.
             string creditsUrl = $"https://api.themoviedb.org/3/movie/{intChosenMovieId}/credits?api_key={apiKey}";
@@ -94,41 +94,53 @@ namespace CineVault.BusinessLogic.Service
 
                 if (movieCreditsResponse != null) // Als de response succesvol is gedeserializeerd, wordt onderstaande code uitgevoerd.
                 {
-                    // dictionary = <string (naam van de persoon)<List(functies in de film van de persoon)>>
-                    Dictionary<string, List<string>> dictionaryOfCastAndCrews = new Dictionary<string, List<string>>(); // Maak een nieuwe dictionary om acteurs en regisseurs bij te houden.
-                    foreach (Cast cast in movieCreditsResponse.Cast) // Voegt de acteurs toe aan de dictionary met hun naam als sleutel en "actor" als functie.
+                    // dictionary = <int (imdb-id van persoon), dictionary<string(naam van persoon), List<string (functies in de film)>>>
+                    Dictionary<int, Dictionary<string, List<string>>> secondCastAndCrew = new Dictionary<int, Dictionary<string, List<string>>>();
+
+                    // Toevoegen van acteurs
+
+                    foreach (Cast cast in movieCreditsResponse.Cast)
                     {
-                        dictionaryOfCastAndCrews.Add(cast.Name, new List<string> { "actor" });
+                        Dictionary<string, List<string>> personDictionary = new Dictionary<string, List<string>>
+                        {
+                            { cast.Name, new List<string> { "actor" } }
+                        };
+
+                        secondCastAndCrew[cast.Imdb_Id] = personDictionary;
                     }
 
-                    foreach (Crew crew in movieCreditsResponse.Crew) // Voegt de regisseurs toe aan de dictionary. Als een regisseur al bestaat, wordt "director" toegevoegd aan hun functies.
+                    // Toevoegen van regisseurs
+
+                    foreach (Crew crew in movieCreditsResponse.Crew)
                     {
                         if (crew.Job == "Director")
                         {
-                            // ToDo: te controleren op dubbele namen en toch verschillende personen.
-                            if (dictionaryOfCastAndCrews.Keys.Contains(crew.Name)) // Als de regisseur al in de dictionary staat, voegt di de functie "director" toe.
+                            if (secondCastAndCrew.ContainsKey(crew.Imdb_Id))
                             {
-                                dictionaryOfCastAndCrews[crew.Name].Add("director");
+                                secondCastAndCrew[crew.Imdb_Id][crew.Name].Add("director");
                             }
-                            else // Voegt de regisseur toe aan de dictionary als deze nog niet bestaat.
+                            else
                             {
-                                dictionaryOfCastAndCrews.Add(crew.Name, new List<string> { "director" });
+                                Dictionary<string, List<string>> personDictionary = new Dictionary<string, List<string>>
+                                {
+                                    { crew.Name, new List<string> { "director" } }
+                                };
+
+                                secondCastAndCrew[crew.Imdb_Id] = personDictionary;
                             }
-                            
+
                         }
 
                     }
 
-                    // Return de dictionary met de acteurs en regisseurs en hun functies.
-                    return dictionaryOfCastAndCrews;
-
+                     return secondCastAndCrew;
                 }
 
             }
 
             // Als er een fout is opgetreden of geen credits worden gevonden, wordt er null gereturned.
             return null;
-            
+
         }
 
     }

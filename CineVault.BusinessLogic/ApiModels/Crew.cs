@@ -14,5 +14,8 @@ namespace CineVault.BusinessLogic.ApiModels
 
         [JsonPropertyName("job")]
         public string Job { get; set; }
+
+        [JsonPropertyName("id")]
+        public int Imdb_Id { get; set; }
     }
 }

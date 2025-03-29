@@ -258,16 +258,134 @@ namespace CineVault.BusinessLogic.Service
 
         }
 
-        public void RemoveMovieByMovie(Movie movie)
+        public void RemoveMovieByMovie(int movieId)
         {
-
-            if (movie == null)
+            // Controleer of het ID geldig is
+            if (movieId <= 0)
             {
-                throw new ArgumentNullException(nameof(movie), "movie cannot be NULL");
+                throw new ArgumentException("Het opgegeven ID moet een positief geheel getal zijn.", nameof(movieId));
             }
 
-            _movieRepository.RemoveMovieByMovie(movie);
+            // Zoek de film in de database op basis van het interne ID
+            Movie movieToRemove = _appDBContext.Movies.FirstOrDefault(m => m.Id == movieId);
+
+            if (movieToRemove == null)
+            {
+                throw new InvalidOperationException("Film bestaat niet in de database.");
+            }
+
+            // Verwijder relaties met acteurs
+            List<MovieActor> movieActors = _appDBContext.MovieActors.Where(ma => ma.MovieId == movieToRemove.Id).ToList();
+            _appDBContext.MovieActors.RemoveRange(movieActors);
+
+            // Verwijder relaties met regisseurs
+            List<MovieDirector> movieDirectors = _appDBContext.MovieDirectors.Where(md => md.MovieId == movieToRemove.Id).ToList();
+            _appDBContext.MovieDirectors.RemoveRange(movieDirectors);
+
+            // Controleer of de acteurs nog in andere films spelen
+            foreach (MovieActor movieActor in movieActors)
+            {
+                Actor actor = _appDBContext.Actors.FirstOrDefault(a => a.Id == movieActor.ActorId);
+                if (actor != null)
+                {
+                    bool isActorInOtherMovies = _appDBContext.MovieActors.Any(ma => ma.ActorId == actor.Id && ma.MovieId != movieToRemove.Id);
+                    if (!isActorInOtherMovies)
+                    {
+                        _appDBContext.Actors.Remove(actor);
+                    }
+                }
+            }
+
+            // Controleer of de regisseurs nog andere films hebben
+            foreach (MovieDirector movieDirector in movieDirectors)
+            {
+                Director director = _appDBContext.Directors.FirstOrDefault(d => d.Id == movieDirector.DirectorId);
+                if (director != null)
+                {
+                    bool isDirectorInOtherMovies = _appDBContext.MovieDirectors.Any(md => md.DirectorId == director.Id && md.MovieId != movieToRemove.Id);
+                    if (!isDirectorInOtherMovies)
+                    {
+                        _appDBContext.Directors.Remove(director);
+                    }
+                }
+            }
+
+            // Verwijder de film zelf
+            _appDBContext.Movies.Remove(movieToRemove);
+
+            // Sla de wijzigingen op
+            _appDBContext.SaveChanges();
         }
+
+
+        ////////////public void RemoveMovieByMovie(Movie movie)
+        ////////////{
+        ////////////    if (movie == null)
+        ////////////    {
+        ////////////        throw new ArgumentNullException(nameof(movie), "Movie cannot be NULL.");
+        ////////////    }
+
+        ////////////    // Zoek de film in de database
+        ////////////    Movie movieToRemove = _appDBContext.Movies.FirstOrDefault(m => m.IMDBId == movie.IMDBId);
+
+        ////////////    if (movieToRemove == null)
+        ////////////    {
+        ////////////        throw new InvalidOperationException("Film bestaat niet in de database.");
+        ////////////    }
+
+        ////////////    // Verwijder relaties met acteurs
+        ////////////    List<MovieActor> movieActors = _appDBContext.MovieActors.Where(ma => ma.MovieId == movieToRemove.Id).ToList();
+        ////////////    _appDBContext.MovieActors.RemoveRange(movieActors);
+
+        ////////////    // Verwijder relaties met regisseurs
+        ////////////    List<MovieDirector> movieDirectors = _appDBContext.MovieDirectors.Where(md => md.MovieId == movieToRemove.Id).ToList();
+        ////////////    _appDBContext.MovieDirectors.RemoveRange(movieDirectors);
+
+        ////////////    // Controleer of de acteurs nog in andere films spelen
+        ////////////    foreach (MovieActor movieActor in movieActors)
+        ////////////    {
+        ////////////        Actor actor = _appDBContext.Actors.FirstOrDefault(a => a.Id == movieActor.ActorId);
+        ////////////        if (actor != null)
+        ////////////        {
+        ////////////            bool isActorInOtherMovies = _appDBContext.MovieActors.Any(ma => ma.ActorId == actor.Id && ma.MovieId != movieToRemove.Id);
+        ////////////            if (!isActorInOtherMovies)
+        ////////////            {
+        ////////////                _appDBContext.Actors.Remove(actor);
+        ////////////            }
+        ////////////        }
+        ////////////    }
+
+        ////////////    // Controle of de regisseurs ook nog andere films hebben.
+        ////////////    foreach (MovieDirector movieDirector in movieDirectors)
+        ////////////    {
+        ////////////        Director director = _appDBContext.Directors.FirstOrDefault(d => d.Id == movieDirector.DirectorId);
+        ////////////        if (director != null)
+        ////////////        {
+        ////////////            bool isDirectorInOtherMovies = _appDBContext.MovieDirectors.Any(md => md.DirectorId == director.Id && md.MovieId != movieToRemove.Id);
+        ////////////            if (!isDirectorInOtherMovies)
+        ////////////            {
+        ////////////                _appDBContext.Directors.Remove(director);
+        ////////////            }
+        ////////////        }
+        ////////////    }
+
+        ////////////    // Verwijder de film zelf
+        ////////////    _appDBContext.Movies.Remove(movieToRemove);
+
+        ////////////    // Sla de wijzigingen op
+        ////////////    _appDBContext.SaveChanges();
+        ////////////}
+
+        ////////////public void RemoveMovieByMovie(Movie movie)
+        ////////////{
+
+        ////////////    if (movie == null)
+        ////////////    {
+        ////////////        throw new ArgumentNullException(nameof(movie), "movie cannot be NULL");
+        ////////////    }
+
+        ////////////    _movieRepository.RemoveMovieByMovie(movie);
+        ////////////}
 
         #endregion
 

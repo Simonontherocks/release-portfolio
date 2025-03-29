@@ -26,7 +26,8 @@ namespace CineVault.MainProgram
             var movieRepository = new MovieRepository(dbContext);
             var movieService = new MovieService(movieRepository, apiService, dbContext);
 
-            movieService.AddMovieByTitle("dos");
+            //movieService.AddMovieByTitle("dos");
+            movieService.RemoveMovieByMovie(22);
             //movieService.AddSelectedMovieByIMDBId(movieService.SearchMoviesByTitle("dos"), 811072);
             Console.ReadLine();
 

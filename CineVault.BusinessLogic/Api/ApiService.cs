@@ -27,53 +27,72 @@ namespace CineVault.BusinessLogic.Service
         }
 
         /// <summary>
-        /// Hier zal een film gezocht worden op basis van een meegegeven parameter.
+        /// Deze methode zoekt films op basis van een meegegeven parameter(strTitle)
         /// De methode zal via de api de film(s) zoeken die de meegegeven parameter bevatten.
-        /// Daarna zullen alle films getoont worden op de console.
+        /// Het resultaat bevat een lijst van films die aan de zoekcriteria voldoen, inclusief paginering als er meer resultaten zijn.
         /// </summary>
-        /// <param name="strTitle">De titel van de film waar je wilt op zoeken.</param>
+        /// <param name="strTitle">De titel van de film waarop gezocht moet worden.</param>
         /// <returns>Een lijst van films die voldoen aan de zoekcriteria of null bij fout.</returns>
 
         public async Task<List<Movie>?> GetMoviesByTitle(string strTitle)
         {
+            // Controleer of de opgegeven titel niet null of leeg is.
             if (string.IsNullOrEmpty(strTitle))
             {
-                throw new ArgumentNullException("Titel mag niet leeg of null zijn", nameof(strTitle));
+                throw new ArgumentNullException("Titel mag niet leeg of null zijn", nameof(strTitle)); // Gooi een uitzondering als de titel ongeldig is.
             }
-            // Het HTTP-verzoek om films te zoeken op basis van de titel (searchUrl + apiKey + zoekquery).
-            HttpResponseMessage searchResponse = await _httpClient.GetAsync(searchUrl + apiKey + $"&query={strTitle}");
 
-            // Voorwaarde die Controleert of het verzoek succesvol was.
-            if (searchResponse.IsSuccessStatusCode) // voert uit als het true is.
+            List<Movie> allMovies = new List<Movie>(); // Lijst om alle films op te slaan die door de API worden gevonden.
+            int currentPage = 1; // Start met de eerste pagina.
+            int totalPages = 1; // Voor het geval de API geen totalPages teruggeeft, instellen op 1 als standaard.
+
+            do
             {
-                string searchJsonRespons = await searchResponse.Content.ReadAsStringAsync(); // Haalt het JSON-antwoord op van de API.
-                MovieResponse? movieResponse = JsonSerializer.Deserialize<MovieResponse>(searchJsonRespons); // Deserializeert de JSON naar een MovieResponse-object.
+                // Maak de URL voor de huidige paginering, inclusief de zoekterm en paginanummer.
+                string url = $"{searchUrl}{apiKey}&query={strTitle}&page={currentPage}";
+                HttpResponseMessage searchResponse = await _httpClient.GetAsync(url); // Verstuur een GET-verzoek naar de API.
 
-                if (movieResponse != null && movieResponse.Results.Any()) // Als de response succesvol is gedeserializeerd, wordt onderstaande code uitgevoerd.
+                // Controleer of de API een succesvolle respons heeft gegeven.
+                if (searchResponse.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine("Gevonden films"); // Wordt gebruikt om output naar de console te sturen, wat handig is voor debugging.
-                    foreach (CineVault.ModelLayer.ModelMovie.Movie movie in movieResponse.Results) // Itereer over de lijst van films die de API heeft teruggegeven.
+                    // Lees de JSON-reactie van de API.
+                    string searchJsonResponse = await searchResponse.Content.ReadAsStringAsync();
+
+                    // Deserialize de JSON-reactie naar een MovieResponse-object.
+                    MovieResponse? movieResponse = JsonSerializer.Deserialize<MovieResponse>(searchJsonResponse);
+
+                    // Controleer of er resultaten zijn in de API-respons.
+                    if (movieResponse != null && movieResponse.Results.Any())
                     {
-                        Debug.WriteLine($"ID: {movie.IMDBId}, Titel: {movie.Title}, Jaar: {movie.Year.Substring(0, 4)}"); // ?.Split('-')[0]}"); // Toon de ID, titel, en jaar van elke film in de console.
-                        // de releasedate zal gesplits worden dmv de Split()-methode.
-                        // de split zal gebeuren op basis van het "-" teken en in een array gestoken worden.
-                        // Doordat de datum van api wordt verkregen door jaar - maand - dag
-                        // En omdat ik enkel het eerste object opvraag, zal ik enkel het jaartal krijgen.
-
+                        allMovies.AddRange(movieResponse.Results); // Voeg de gevonden films toe aan de lijst.
+                        totalPages = movieResponse.TotalPages; // Werk het totale aantal pagina's bij op basis van de respons.
+                        currentPage++; // Ga naar de volgende pagina.
                     }
-
-                    return movieResponse.Results; // Geeft de lijst van gevonden films terug.
-
+                    else
+                    {
+                        totalPages = currentPage - 1; // Stop de lus als er geen resultaten meer zijn.
+                    }
                 }
                 else
                 {
-                    throw new InvalidOperationException("Geen films gevonden met opgegeven titel.");
+                    // Gooi een uitzondering als de API een fout retourneert.
+                    throw new HttpRequestException("Fout bij het ophalen van de filmgegevens.");
                 }
+            }
+            while (currentPage <= totalPages); // Blijf door pagineren tot alle pagina's zijn doorlopen.
 
+            // Controleer of er films zijn gevonden en toon het aantal in de console.
+            if (allMovies.Any())
+            {
+                Console.WriteLine($"Totaal aantal gevonden films: {allMovies.Count}");
+            }
+            else
+            {
+                Console.WriteLine("Geen films gevonden."); // Toon een bericht als er geen resultaten zijn.
             }
 
-            throw new HttpRequestException("Fout bij het ophalen van de film");
-            // return null; // Ik geef een lege lijst terug als de API-response niet correct was.
+            // Retourneer de lijst met films, of null als er geen resultaten zijn.
+            return allMovies.Any() ? allMovies : null;
         }
 
         /// <summary>
@@ -81,8 +100,6 @@ namespace CineVault.BusinessLogic.Service
         /// </summary>
         /// <param name="intChosenMovieId">De ID van de gekozen film</param>
         /// <returns>Een dictionary met de naam van de acteurs en regisseurs en hun functies in de film</returns>
-
-        //ToDo: nog controleren of alle films van alle pages uit de API meegenomen worden.
 
         public async Task<Dictionary<int, Dictionary<string, List<string>>>> GetActorsAndDirectorsFromMovie(int intChosenMovieId)
         {

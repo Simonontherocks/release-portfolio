@@ -28,7 +28,7 @@ namespace CineVault.MainProgram
 
             #region Testing adding or removing movies
 
-            //movieService.AddMovieByTitle("dos");
+            movieService.AddMovieByTitle("star wars");
             //movieService.RemoveMovieByIdAsync(27);
 
             #endregion
@@ -77,21 +77,21 @@ namespace CineVault.MainProgram
             #region Testing filter by model
 
             // Getest => works
-            string actorName = "ot"; // Je hoeft nu niet de volledige naam in te voeren
-            Actor specificActor = await movieService.GetActorByPartialNameAsync(actorName);
+            //string actorName = "ot"; // Je hoeft nu niet de volledige naam in te voeren
+            //Actor specificActor = await movieService.GetActorByPartialNameAsync(actorName);
 
-            if (specificActor != null)
-            {
-                Console.WriteLine($"Gevonden acteur: {specificActor.Name}");
+            //if (specificActor != null)
+            //{
+            //    Console.WriteLine($"Gevonden acteur: {specificActor.Name}");
 
-                // Test films met deze acteur
-                IEnumerable<Movie> movies = await movieService.ShowMoviesFromTheSameActorAsync(specificActor);
-                PrintEnumerable(movies, movie => $"Film met {specificActor.Name}: {movie.Title} ({movie.Year})");
-            }
-            else
-            {
-                Console.WriteLine($"Geen acteur gevonden met de naam '{actorName}'.");
-            }
+            //    // Test films met deze acteur
+            //    IEnumerable<Movie> movies = await movieService.ShowMoviesFromTheSameActorAsync(specificActor);
+            //    PrintEnumerable(movies, movie => $"Film met {specificActor.Name}: {movie.Title} ({movie.Year})");
+            //}
+            //else
+            //{
+            //    Console.WriteLine($"Geen acteur gevonden met de naam '{actorName}'.");
+            //}
 
             // Getest => works
             //string directorName = "Nol"; // Ook hier kan een deel van de naam worden ingevoerd
@@ -117,8 +117,6 @@ namespace CineVault.MainProgram
             #endregion
 
             Console.ReadLine();
-
-            // Controleer de database of de film, acteurs en regisseurs zijn opgeslagen.
 
         }
 

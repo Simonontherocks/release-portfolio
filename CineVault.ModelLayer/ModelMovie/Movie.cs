@@ -16,7 +16,16 @@ namespace CineVault.ModelLayer.ModelMovie
     {
         #region Field
 
-        // Empty
+        //private string? _year;
+
+        #endregion
+
+        #region Constructor
+
+        //public Movie()
+        //{
+        //    //Year = _year;
+        //}
 
         #endregion
 
@@ -39,6 +48,33 @@ namespace CineVault.ModelLayer.ModelMovie
         // Deze property mag NULL zijn.
         [JsonPropertyName("release_date")]
         public string? Year { get; set; }
+
+        //public string? Year
+        //{
+        //    get
+        //    {
+        //        return _year;
+        //    }
+        //    set
+        //    {
+        //        if (!string.IsNullOrEmpty(value))
+        //        {
+        //            // Probeer de waarde als datum te parseren
+        //            if (DateTime.TryParse(value, out DateTime parsedDate))
+        //            {
+        //                _year = parsedDate.Year.ToString(); // Sla alleen het jaar op
+        //            }
+        //            else
+        //            {
+        //                throw new ArgumentException("De opgegeven waarde is geen geldige datum.", nameof(value));
+        //            }
+        //        }
+        //        else
+        //        {
+        //            _year = null; // Stel null in als de waarde leeg is
+        //        }
+        //    }
+        //}
 
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace CineVault.BusinessLogic.Service
         public List<Director> DirectorsFromApi { get; set; }
         public List<Movie>? MoviesFromApi { get; set; }
         public List<int>? ListWithReceivedIds { get; set; }
-        private int MovieId { get; set; }        
+        private int MovieId { get; set; }
 
         #endregion
 
@@ -67,6 +68,7 @@ namespace CineVault.BusinessLogic.Service
 
         #region Adding or removing movies
 
+        // Getest in MainProgram => works
         public async Task AddMovieByTitle(string movieTitle)
         {
             bool blCorrectyEnteredId;
@@ -258,229 +260,207 @@ namespace CineVault.BusinessLogic.Service
 
         }
 
-        public void RemoveMovieByMovie(int movieId)
+        // Getest in MainProgram => works
+        public async Task RemoveMovieByIdAsync(int movieId)
         {
-            // Controleer of het ID geldig is
+            // Controle of het ID geldig is
+
             if (movieId <= 0)
             {
                 throw new ArgumentException("Het opgegeven ID moet een positief geheel getal zijn.", nameof(movieId));
             }
 
             // Zoek de film in de database op basis van het interne ID
-            Movie movieToRemove = _appDBContext.Movies.FirstOrDefault(m => m.Id == movieId);
+            Movie movieToRemove = await _appDBContext.Movies.FirstOrDefaultAsync(m => m.Id == movieId);
 
             if (movieToRemove == null)
             {
                 throw new InvalidOperationException("Film bestaat niet in de database.");
             }
 
-            // Verwijder relaties met acteurs
-            List<MovieActor> movieActors = _appDBContext.MovieActors.Where(ma => ma.MovieId == movieToRemove.Id).ToList();
+            // Verwijderen van de relaties met acteurs
+
+            List<MovieActor> movieActors = await _appDBContext.MovieActors
+                .Where(ma => ma.MovieId == movieToRemove.Id)
+                .ToListAsync();
             _appDBContext.MovieActors.RemoveRange(movieActors);
 
-            // Verwijder relaties met regisseurs
-            List<MovieDirector> movieDirectors = _appDBContext.MovieDirectors.Where(md => md.MovieId == movieToRemove.Id).ToList();
+            // Verwijderen van de relaties met regisseurs
+            List<MovieDirector> movieDirectors = await _appDBContext.MovieDirectors
+                .Where(md => md.MovieId == movieToRemove.Id)
+                .ToListAsync();
             _appDBContext.MovieDirectors.RemoveRange(movieDirectors);
 
-            // Controleer of de acteurs nog in andere films spelen
+            // Controleer of de acteurs nog in andere films spelen en verwijder ze indien nodig
             foreach (MovieActor movieActor in movieActors)
             {
-                Actor actor = _appDBContext.Actors.FirstOrDefault(a => a.Id == movieActor.ActorId);
+                Actor actor = await _appDBContext.Actors.FirstOrDefaultAsync(a => a.Id == movieActor.ActorId);
+
                 if (actor != null)
                 {
-                    bool isActorInOtherMovies = _appDBContext.MovieActors.Any(ma => ma.ActorId == actor.Id && ma.MovieId != movieToRemove.Id);
+                    bool isActorInOtherMovies = await _appDBContext.MovieActors
+                        .AnyAsync(ma => ma.ActorId == actor.Id && ma.MovieId != movieToRemove.Id);
+
                     if (!isActorInOtherMovies)
                     {
                         _appDBContext.Actors.Remove(actor);
                     }
+
                 }
+
             }
 
-            // Controleer of de regisseurs nog andere films hebben
+            // Controle of de regisseurs nog andere films hebben en verwijderen indien dit nodig is.
+
             foreach (MovieDirector movieDirector in movieDirectors)
             {
-                Director director = _appDBContext.Directors.FirstOrDefault(d => d.Id == movieDirector.DirectorId);
+                Director director = await _appDBContext.Directors.FirstOrDefaultAsync(d => d.Id == movieDirector.DirectorId);
                 if (director != null)
                 {
-                    bool isDirectorInOtherMovies = _appDBContext.MovieDirectors.Any(md => md.DirectorId == director.Id && md.MovieId != movieToRemove.Id);
+                    bool isDirectorInOtherMovies = await _appDBContext.MovieDirectors
+                        .AnyAsync(md => md.DirectorId == director.Id && md.MovieId != movieToRemove.Id);
                     if (!isDirectorInOtherMovies)
                     {
                         _appDBContext.Directors.Remove(director);
                     }
+
                 }
+
             }
 
-            // Verwijder de film zelf
+            // Verwijderen van de film.
             _appDBContext.Movies.Remove(movieToRemove);
 
-            // Sla de wijzigingen op
-            _appDBContext.SaveChanges();
+            // Sla de wijzigingen asynchroon op
+            await _appDBContext.SaveChangesAsync();
         }
-
-
-        ////////////public void RemoveMovieByMovie(Movie movie)
-        ////////////{
-        ////////////    if (movie == null)
-        ////////////    {
-        ////////////        throw new ArgumentNullException(nameof(movie), "Movie cannot be NULL.");
-        ////////////    }
-
-        ////////////    // Zoek de film in de database
-        ////////////    Movie movieToRemove = _appDBContext.Movies.FirstOrDefault(m => m.IMDBId == movie.IMDBId);
-
-        ////////////    if (movieToRemove == null)
-        ////////////    {
-        ////////////        throw new InvalidOperationException("Film bestaat niet in de database.");
-        ////////////    }
-
-        ////////////    // Verwijder relaties met acteurs
-        ////////////    List<MovieActor> movieActors = _appDBContext.MovieActors.Where(ma => ma.MovieId == movieToRemove.Id).ToList();
-        ////////////    _appDBContext.MovieActors.RemoveRange(movieActors);
-
-        ////////////    // Verwijder relaties met regisseurs
-        ////////////    List<MovieDirector> movieDirectors = _appDBContext.MovieDirectors.Where(md => md.MovieId == movieToRemove.Id).ToList();
-        ////////////    _appDBContext.MovieDirectors.RemoveRange(movieDirectors);
-
-        ////////////    // Controleer of de acteurs nog in andere films spelen
-        ////////////    foreach (MovieActor movieActor in movieActors)
-        ////////////    {
-        ////////////        Actor actor = _appDBContext.Actors.FirstOrDefault(a => a.Id == movieActor.ActorId);
-        ////////////        if (actor != null)
-        ////////////        {
-        ////////////            bool isActorInOtherMovies = _appDBContext.MovieActors.Any(ma => ma.ActorId == actor.Id && ma.MovieId != movieToRemove.Id);
-        ////////////            if (!isActorInOtherMovies)
-        ////////////            {
-        ////////////                _appDBContext.Actors.Remove(actor);
-        ////////////            }
-        ////////////        }
-        ////////////    }
-
-        ////////////    // Controle of de regisseurs ook nog andere films hebben.
-        ////////////    foreach (MovieDirector movieDirector in movieDirectors)
-        ////////////    {
-        ////////////        Director director = _appDBContext.Directors.FirstOrDefault(d => d.Id == movieDirector.DirectorId);
-        ////////////        if (director != null)
-        ////////////        {
-        ////////////            bool isDirectorInOtherMovies = _appDBContext.MovieDirectors.Any(md => md.DirectorId == director.Id && md.MovieId != movieToRemove.Id);
-        ////////////            if (!isDirectorInOtherMovies)
-        ////////////            {
-        ////////////                _appDBContext.Directors.Remove(director);
-        ////////////            }
-        ////////////        }
-        ////////////    }
-
-        ////////////    // Verwijder de film zelf
-        ////////////    _appDBContext.Movies.Remove(movieToRemove);
-
-        ////////////    // Sla de wijzigingen op
-        ////////////    _appDBContext.SaveChanges();
-        ////////////}
-
-        ////////////public void RemoveMovieByMovie(Movie movie)
-        ////////////{
-
-        ////////////    if (movie == null)
-        ////////////    {
-        ////////////        throw new ArgumentNullException(nameof(movie), "movie cannot be NULL");
-        ////////////    }
-
-        ////////////    _movieRepository.RemoveMovieByMovie(movie);
-        ////////////}
 
         #endregion
 
         #region Retrieve movies by status
 
-        public IEnumerable<Movie> ShowAllMoviesAUserContains()
+        // Getest in MainProgram => works
+        public async Task<IEnumerable<Movie>> ShowAllMovies()
         {
-            return _movieRepository.ShowAllMoviesAUserContains()
-                .OrderBy(movie => movie.Title);
+            return await _appDBContext.Movies
+                .OrderBy(movie => movie.Title)
+                .ToListAsync();
         }
 
-        public IEnumerable<Movie> ShowAllMoviesThatHaveBeenSeen()
+        // Getest in MainProgram => works
+        public async Task <IEnumerable<Movie>> ShowAllMoviesThatHaveBeenSeen()
         {
-            return _movieRepository.ShowAllMoviesThatHaveBeenSeen()
-                .OrderBy(movie => movie.Title);
+            return await _appDBContext.Movies
+                .Where(movie => movie.Seen) // Alleen de films die gezien zijn (true)
+                .OrderBy(movie => movie.Title)
+                .ToListAsync();
         }
 
-        public IEnumerable<Movie> ShowAllMoviesThatHaveNotBeenSeen()
+        // Getest in MainProgram => works
+        public async Task <IEnumerable<Movie>> ShowAllMoviesThatHaveNotBeenSeen()
         {
-            return _movieRepository.ShowAllMoviesThatHaveNotBeenSeen()
-                .OrderBy(movie => movie.Title);
+            return await _appDBContext.Movies
+                .Where(movie => !movie.Seen) // Alleen de films die niet gezien zijn (false)
+                .OrderBy(movie => movie.Title)
+                .ToListAsync();
         }
 
         #endregion
 
         #region Filter by movie data
 
-        public IEnumerable<Actor> ShowAllActorsFromMovie(Movie movie)
+        public async Task<IEnumerable<Actor>> ShowAllActorsFromMovieAsync(Movie movie)
         {
-
             if (movie == null)
             {
-                throw new ArgumentNullException(nameof(movie));
+                throw new ArgumentNullException(nameof(movie), "De film mag niet null zijn.");
             }
 
-            return _movieRepository.ShowAllActorsFromMovie(movie);
+            return await _appDBContext.MovieActors
+                .Where(ma => ma.MovieId == movie.Id)
+                .Select(ma => ma.Actor)
+                .ToListAsync();
         }
 
-        public IEnumerable<Director> ShowDirectorFromMovie(Movie movie)
+        public async Task<IEnumerable<Director>> ShowDirectorFromMovieAsync(Movie movie)
         {
-
             if (movie == null)
             {
-                throw new ArgumentNullException(nameof(movie));
+                throw new ArgumentNullException(nameof(movie), "De film mag niet null zijn.");
             }
 
-            return _movieRepository.ShowDirectorFromMovie(movie);
+            return await _appDBContext.MovieDirectors
+                .Where(md => md.MovieId == movie.Id)
+                .Select(md => md.Director)
+                .ToListAsync();
         }
 
-        public string ShowYearFromMovie(Movie movie)
+        public async Task<string> ShowYearFromMovieAsync(Movie movie)
         {
-
             if (movie == null)
             {
-                throw new ArgumentNullException(nameof(movie));
+                throw new ArgumentNullException(nameof(movie), "De film mag niet null zijn.");
             }
 
-            return _movieRepository.ShowYearFromMovie(movie);
+            return await Task.FromResult(movie.Year.ToString());
         }
 
         #endregion
 
         #region Filter by model
 
-        public IEnumerable<Movie> ShowMoviesFromTheSameActor(Actor actor)
+        public async Task<IEnumerable<Movie>> ShowMoviesFromTheSameActorAsync(Actor actor)
         {
-
             if (actor == null)
             {
-                throw new ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor), "De acteur mag niet null zijn.");
             }
 
-            return _movieRepository.ShowMoviesFromTheSameActor(actor);
+            bool actorExists = await _appDBContext.Actors.AnyAsync(d => d.Id == actor.Id);
+            if (!actorExists)
+            {
+                throw new InvalidOperationException("De opgegeven acteur bestaat niet in de database.");
+            }
+
+            return await _appDBContext.MovieActors
+                .Where(ma => ma.ActorId == actor.Id)
+                .Select(ma => ma.Movie)
+                .OrderBy(m => m.Title)
+                .ToListAsync();
         }
 
-        public IEnumerable<Movie> ShowMoviesFromTheSameDirector(Director director)
+        public async Task<IEnumerable<Movie>> ShowMoviesFromTheSameDirectorAsync(Director director)
         {
-
             if (director == null)
             {
-                throw new ArgumentNullException(nameof(director));
+                throw new ArgumentNullException(nameof(director), "De regisseur mag niet null zijn.");
             }
 
-            return _movieRepository.ShowMoviesFromTheSameDirector(director);
+            bool directorExists = await _appDBContext.Directors.AnyAsync(d => d.Id == director.Id);
+            if (!directorExists)
+            {
+                throw new InvalidOperationException("De opgegeven regisseur bestaat niet in de database.");
+            }
+
+            return await _appDBContext.MovieDirectors
+                .Where(md => md.DirectorId == director.Id)
+                .Select(md => md.movie)
+                .OrderBy(m => m.Title)
+                .ToListAsync();
         }
 
-        public IEnumerable<Movie> ShowAllMoviesFromTheSameYear(string strYear)
+        // Getest in MainProgram => works
+        public async Task<IEnumerable<Movie>> ShowAllMoviesFromTheSameYearAsync(string strYear)
         {
-
             if (string.IsNullOrWhiteSpace(strYear))
             {
-                throw new ArgumentException("Year cannot be null or empty", nameof(strYear));
+                throw new ArgumentException("Het jaartal mag niet leeg of null zijn.", nameof(strYear));
             }
 
-            return _movieRepository.ShowAllMoviesFromTheSameYear(strYear);
+            return await _appDBContext.Movies
+                .Where(m => m.Year == strYear)
+                .OrderBy(m => m.Title)
+                .ToListAsync();
         }
 
         #endregion
@@ -513,8 +493,6 @@ namespace CineVault.BusinessLogic.Service
         }
 
         #endregion
-
-
 
     }
 }

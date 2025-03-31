@@ -82,6 +82,8 @@ namespace CineVault.BusinessLogic.Service
         /// <param name="intChosenMovieId">De ID van de gekozen film</param>
         /// <returns>Een dictionary met de naam van de acteurs en regisseurs en hun functies in de film</returns>
 
+        //ToDo: nog controleren of alle films van alle pages uit de API meegenomen worden.
+
         public async Task<Dictionary<int, Dictionary<string, List<string>>>> GetActorsAndDirectorsFromMovie(int intChosenMovieId)
         {
             // Haalt credits op voor de gekozen film door middel van de URL.

@@ -21,19 +21,58 @@ namespace CineVault.MainProgram
 
         static async Task Main(string[] args)
         {
-            var dbContext = new AppDBContext();
-            var apiService = new ApiService();
-            var movieRepository = new MovieRepository(dbContext);
-            var movieService = new MovieService(movieRepository, apiService, dbContext);
+            AppDBContext dbContext = new AppDBContext();
+            ApiService apiService = new ApiService();
+            MovieRepository movieRepository = new MovieRepository(dbContext);
+            MovieService movieService = new MovieService(movieRepository, apiService, dbContext);
 
-            //movieService.AddMovieByTitle("dos");
-            movieService.RemoveMovieByMovie(22);
-            //movieService.AddSelectedMovieByIMDBId(movieService.SearchMoviesByTitle("dos"), 811072);
+            #region Testing adding or removing movies
+
+            //movieService.AddMovieByTitle("revenant");
+            //movieService.RemoveMovieByIdAsync(27);
+
+            #endregion
+
+            #region Testing retrieve movies by status
+
+            //IEnumerable<Movie> seenMovies = await movieService.ShowAllMoviesThatHaveBeenSeen();
+            //PrintEnumerable<Movie>(seenMovies, movie => $"{movie.Title} ({movie.Year})");            
+            //Console.WriteLine("----------");
+            //IEnumerable<Movie> unseenMovies = await movieService.ShowAllMoviesThatHaveNotBeenSeen();
+            //PrintEnumerable<Movie>(unseenMovies, movie => $"{movie.Title} ({movie.Year})");
+
+            #endregion
+
+            #region Filter by movie data
+
+            #endregion
+
+            #region Testing filter by model
+
+            IEnumerable<Movie> moviesFrom2005 = await movieService.ShowAllMoviesFromTheSameYearAsync("2005");
+            PrintEnumerable(moviesFrom2005, movie => $"{movie.Title} ({movie.Year})");
+
+            #endregion
+
             Console.ReadLine();
 
             // Controleer de database of de film, acteurs en regisseurs zijn opgeslagen.
 
         }
+
+        // Deze methode dient om alle films te printen die gevraagd worden.
+        // Dit is om duplicate code te voorkomen.
+
+        public static void PrintEnumerable<T>(IEnumerable<T> collection, Func<T, string> formatItem)
+        {
+            foreach (T item in collection)
+            {
+                Console.WriteLine(formatItem(item));
+            }
+        }
+
+    }
+}
         //////    List<Movie> listOfMovies = new List<Movie>
         //////    {
         //////        new Movie { Id = 1, Title = "Inception", Seen = true, Score = 9, Year = "2010", IMDBId = 0},
@@ -261,6 +300,6 @@ namespace CineVault.MainProgram
 
         //////}
 
-    }
+    //}
 
-}
+//}

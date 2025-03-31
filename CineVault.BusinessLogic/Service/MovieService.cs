@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CineVault.BusinessLogic.ApiModels;
@@ -369,46 +370,55 @@ namespace CineVault.BusinessLogic.Service
 
         #region Filter by movie data
 
-        public async Task<IEnumerable<Actor>> ShowAllActorsFromMovieAsync(Movie movie)
+        // Getest in MainProgram => works
+        public async Task<IEnumerable<Actor>> ShowAllActorsFromMovieAsync(string partialMovieTitle)
         {
-            if (movie == null)
+            Movie selectedMovie = await GetMovieByPartialTitleAsync(partialMovieTitle);
+
+            if (partialMovieTitle == null)
             {
-                throw new ArgumentNullException(nameof(movie), "De film mag niet null zijn.");
+                throw new ArgumentNullException(nameof(partialMovieTitle), "De film mag niet null zijn.");
             }
 
             return await _appDBContext.MovieActors
-                .Where(ma => ma.MovieId == movie.Id)
+                .Where(ma => ma.MovieId == selectedMovie.Id)
                 .Select(ma => ma.Actor)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Director>> ShowDirectorFromMovieAsync(Movie movie)
+        // Getest in MainProgram => works
+        public async Task<IEnumerable<Director>> ShowDirectorFromMovieAsync(string partialMovieTitle)
         {
-            if (movie == null)
+            Movie selectedMovie = await GetMovieByPartialTitleAsync(partialMovieTitle);
+
+            if (partialMovieTitle == null)
             {
-                throw new ArgumentNullException(nameof(movie), "De film mag niet null zijn.");
+                throw new ArgumentNullException(nameof(partialMovieTitle), "De film mag niet null zijn.");
             }
 
             return await _appDBContext.MovieDirectors
-                .Where(md => md.MovieId == movie.Id)
+                .Where(md => md.MovieId == selectedMovie.Id)
                 .Select(md => md.Director)
                 .ToListAsync();
         }
 
-        public async Task<string> ShowYearFromMovieAsync(Movie movie)
+        // Getest in MainProgram => works
+        public async Task<string> ShowYearFromMovieAsync(string partialMovieTitle)
         {
-            if (movie == null)
+            Movie selectedMovie = await GetMovieByPartialTitleAsync(partialMovieTitle);
+            if (partialMovieTitle == null)
             {
-                throw new ArgumentNullException(nameof(movie), "De film mag niet null zijn.");
+                throw new ArgumentNullException(nameof(partialMovieTitle), "De film mag niet null zijn.");
             }
 
-            return await Task.FromResult(movie.Year.ToString());
+            return selectedMovie.Year;
         }
 
         #endregion
 
         #region Filter by model
 
+        // Getest in MainProgram => works
         public async Task<IEnumerable<Movie>> ShowMoviesFromTheSameActorAsync(Actor actor)
         {
             if (actor == null)
@@ -429,6 +439,7 @@ namespace CineVault.BusinessLogic.Service
                 .ToListAsync();
         }
 
+        // Getest in MainProgram => works
         public async Task<IEnumerable<Movie>> ShowMoviesFromTheSameDirectorAsync(Director director)
         {
             if (director == null)
@@ -469,27 +480,172 @@ namespace CineVault.BusinessLogic.Service
 
         #region Methods to avoid duplicat code
 
+        /// <summary>
+        /// Converteert een lijst van namen (opgeslagen in een dictionary) naar een lijst van entiteiten van type T.  
+        /// Dit wordt gedaan door een nieuwe instantie van T te maken en de eigenschap "Name" in te vullen met de gevonden waarden.  
+        /// </summary>
+        /// <typeparam name="T">Het type entiteit dat wordt gemaakt. Moet een parameterloze constructor hebben.</typeparam>
+        /// <param name="data">Een dictionary waarin de sleutel een categorie is en de waarde een lijst van namen.</param>
+        /// <param name="key">De sleutel in de dictionary waarvan de lijst van namen moet worden omgezet naar entiteiten.</param>
+        /// <returns>Een lijst met objecten van type T, waarbij de eigenschap "Name" is ingevuld met de waarden uit de dictionary.</returns>
+
         public List<T> ConvertNamesToEntities<T>(Dictionary<string, List<string>> data, string key) where T : new()
         {
-            List<T> entities = new List<T>();
+            List<T> entities = new List<T>(); // Initialiseer een lege lijst om de geconverteerde objecten op te slaan.
 
-            if (data.ContainsKey(key))
+            if (data.ContainsKey(key)) // Controleer of de dictionary de opgegeven sleutel bevat.
             {
-                foreach (string name in data[key])
+                foreach (string name in data[key]) // Itereer over de lijst met namen die aan de sleutel gekoppeld zijn.
                 {
-                    T entity = new T();
-                    var property = typeof(T).GetProperty("Name");
+                    T entity = new T(); // Maak een nieuwe instantie van T. Dit werkt alleen omdat T een parameterloze constructor moet hebben.
 
-                    if (property != null)
+                    var property = typeof(T).GetProperty("Name"); // Zoek de "Name"-eigenschap van het type T.
+
+                    if (property != null) // Controleer of de eigenschap "Name" bestaat.
                     {
-                        property.SetValue(entity, name);
+                        property.SetValue(entity, name); // Stel de waarde van de "Name"-eigenschap in op de huidige naam uit de lijst.
                     }
 
-                    entities.Add(entity);
+                    entities.Add(entity); // Voeg de nieuw gemaakte entiteit toe aan de lijst.
                 }
             }
 
-            return entities;
+            return entities; // Retourneer de lijst met geconverteerde entiteiten.
+        }
+
+        /// <summary>
+        /// Zoekt een entiteit op basis van een gedeeltelijke string-match in de opgegeven DbSet.
+        /// Indien er meerdere matches zijn, krijgt de gebruiker de mogelijkheid om een specifieke entiteit te kiezen.
+        /// </summary>
+        /// <typeparam name="T">Het type entiteit dat wordt opgehaald.</typeparam>
+        /// <param name="dbSetSelector">Een functie die de juiste DbSet uit de databasecontext selecteert.</param>
+        /// <param name="propertySelector">Een functie die bepaalt welke eigenschap van de entiteit wordt gebruikt voor de vergelijking.</param>
+        /// <param name="partialValue">De zoekterm die wordt gebruikt om een gedeeltelijke match te vinden.</param>
+        /// <returns>De gevonden entiteit of null als er geen overeenkomsten zijn.</returns>
+
+        public async Task<T> GetByPartialMatchAsync<T>(
+            Func<AppDBContext, DbSet<T>> dbSetSelector, // Functie die bepaalt welke DbSet wordt gebruikt
+            Func<T, string> propertySelector, // Functie die bepaalt welk property van het object wordt vergeleken
+            string partialValue) where T : class // De zoekterm die wordt gebruikt voor filtering
+        {
+            if (string.IsNullOrWhiteSpace(partialValue)) // Controleert of de zoekterm leeg is
+            {
+                throw new ArgumentException("De waarde mag niet leeg zijn.", nameof(partialValue));
+            }
+
+            // dbSetSelector is een parameter die een functie (Func<AppDBContext, DbSet<T>>) verwacht. => (GetByPartialMatchAsync) 
+
+            DbSet<T> dbSet = dbSetSelector(_appDBContext); // Ophalen van de juiste DbSet via de selectorfunctie (GetByPartialMatchAsync) 
+
+            // Stap 1: Eerst alle entiteiten ophalen uit de database
+            List<T> allEntities = await dbSet.ToListAsync();
+
+            // Stap 2: Filteren in geheugen met StringComparison.OrdinalIgnoreCase (case-insensitive zoekopdracht)
+            List<T> entities = allEntities
+                .Where(entity => propertySelector(entity).Contains(partialValue, StringComparison.OrdinalIgnoreCase)) // Hiermee kan ik een hoofdletter-ongevoelige vergelijking uitvoeren. bijvoorbeel movie en MOvie worden als gelijke beschouwd. Ordinal houd rekening met de numerieke waarde van een teken (unicode)
+                .ToList();
+
+            if (!entities.Any()) return null; // Geen resultaten gevonden, return null
+            if (entities.Count == 1) return entities.First(); // Exact één resultaat, return dat object
+
+            // Stap 3: Gebruiker een keuze laten maken als er meerdere resultaten zijn
+            return await SelectEntityByIdAsync(entities, propertySelector);
+        }
+
+        /// <summary>
+        /// Laat de gebruiker een entiteit kiezen uit een lijst op basis van ID.
+        /// De gebruiker kan een geldig ID invoeren, 'terug' typen om opnieuw te zoeken, of 'exit' om het programma af te sluiten.
+        /// </summary>
+        /// <typeparam name="T">Het type entiteit in de lijst.</typeparam>
+        /// <param name="entities">De lijst met entiteiten waaruit de gebruiker kan kiezen.</param>
+        /// <param name="propertySelector">Een functie die de naam of beschrijving van de entiteit bepaalt.</param>
+        /// <returns>De geselecteerde entiteit of null als de gebruiker teruggaat.</returns>
+
+        private async Task<T> SelectEntityByIdAsync<T>(List<T> entities, Func<T, string> propertySelector) where T : class
+        {
+            if (entities == null || !entities.Any()) // Controleert of de lijst leeg is
+            {
+                Console.WriteLine("Geen resultaten gevonden. Probeer opnieuw met een andere zoekopdracht.");
+                return null; // Teruggaan om opnieuw te zoeken
+            }
+
+            PropertyInfo idProperty = typeof(T).GetProperty("Id"); // Ophalen van de 'Id' property van het object
+            if (idProperty == null)
+            {
+                throw new InvalidOperationException("De entiteit moet een 'Id' eigenschap hebben.");
+            }
+
+            while (true) // Blijft in de lus totdat de gebruiker een geldige ID invoert of teruggaat
+            {
+                Console.WriteLine("\nMeerdere resultaten gevonden. Kies een ID, typ 'terug' om opnieuw te zoeken, of 'exit' om te stoppen:");
+
+                foreach (T entity in entities) // Toon alle resultaten met ID
+                {
+                    int id = (int)idProperty.GetValue(entity); // Haal de waarde van de 'Id' property op
+                    Console.WriteLine($"{id}: {propertySelector(entity)}"); // Toon ID en naam/titel
+                }
+
+                Console.Write("\nVoer het ID van de gewenste entiteit in ('terug' om opnieuw te zoeken, 'exit' om te stoppen): ");
+                string input = Console.ReadLine().Trim(); // Lees gebruikersinput
+
+                if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)) // Sluit het programma af als de gebruiker 'exit' invoert
+                {
+                    Console.WriteLine("Programma wordt afgesloten...");
+                    Environment.Exit(0);
+                }
+
+                if (input.Equals("terug", StringComparison.OrdinalIgnoreCase)) // Geeft de gebruiker de mogelijkheid om terug te gaan
+                {
+                    Console.WriteLine("Terug naar de vorige stap...");
+                    return null; // Terug zonder selectie
+                }
+
+                if (int.TryParse(input, out int selectedId)) // Controleert of de input een geldig nummer is
+                {
+                    T selectedEntity = entities.FirstOrDefault(entity => (int)idProperty.GetValue(entity) == selectedId); // Zoek de entiteit op basis van ID
+
+                    if (selectedEntity != null)
+                    {
+                        return selectedEntity; // Return het geselecteerde object
+                    }
+
+                    Console.WriteLine("ID niet gevonden. Probeer opnieuw."); // Geef een melding als het ID niet gevonden is
+                }
+                else
+                {
+                    Console.WriteLine("Ongeldige invoer. Voer een numerieke ID in, 'terug' om opnieuw te zoeken, of 'exit' om te stoppen.");
+                }
+            }
+        }
+
+        // Methode om een film te zoeken op basis van een deel van de titel
+        public async Task<Movie> GetMovieByPartialTitleAsync(string partialTitle)
+        {
+            return await GetByPartialMatchAsync(
+                db => db.Movies, // Geeft de DbSet van films terug => wordt de functie dbSelector
+                movie => movie.Title, // Gebruikt de titel van de film als eigenschap om te filteren
+                partialTitle // De zoekterm
+            );
+        }
+
+        // Methode om een acteur te zoeken op basis van een deel van de naam
+        public async Task<Actor> GetActorByPartialNameAsync(string partialName)
+        {
+            return await GetByPartialMatchAsync(
+                db => db.Actors, // Geeft de DbSet van acteurs terug => wordt de functie dbSelector
+                actor => actor.Name, // Gebruikt de naam van de acteur als eigenschap om te filteren
+                partialName // De zoekterm
+            );
+        }
+
+        // Methode om een regisseur te zoeken op basis van een deel van de naam
+        public async Task<Director> GetDirectorByPartialNameAsync(string partialName)
+        {
+            return await GetByPartialMatchAsync(
+                db => db.Directors, // Geeft de DbSet van regisseurs terug => wordt de functie dbSelector
+                director => director.Name, // Gebruikt de naam van de regisseur als eigenschap om te filteren
+                partialName // De zoekterm
+            );
         }
 
         #endregion

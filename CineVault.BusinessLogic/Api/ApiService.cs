@@ -54,7 +54,7 @@ namespace CineVault.BusinessLogic.Service
                     Debug.WriteLine("Gevonden films"); // Wordt gebruikt om output naar de console te sturen, wat handig is voor debugging.
                     foreach (CineVault.ModelLayer.ModelMovie.Movie movie in movieResponse.Results) // Itereer over de lijst van films die de API heeft teruggegeven.
                     {
-                        Debug.WriteLine($"ID: {movie.IMDBId}, Titel: {movie.Title}, Jaar: {movie.Year?.Split('-')[0]}"); // Toon de ID, titel, en jaar van elke film in de console.
+                        Debug.WriteLine($"ID: {movie.IMDBId}, Titel: {movie.Title}, Jaar: {movie.Year.Substring(0, 4)}"); // ?.Split('-')[0]}"); // Toon de ID, titel, en jaar van elke film in de console.
                         // de releasedate zal gesplits worden dmv de Split()-methode.
                         // de split zal gebeuren op basis van het "-" teken en in een array gestoken worden.
                         // Doordat de datum van api wordt verkregen door jaar - maand - dag

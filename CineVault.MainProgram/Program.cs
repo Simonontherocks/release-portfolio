@@ -28,7 +28,7 @@ namespace CineVault.MainProgram
 
             #region Testing adding or removing movies
 
-            //movieService.AddMovieByTitle("revenant");
+            //movieService.AddMovieByTitle("dos");
             //movieService.RemoveMovieByIdAsync(27);
 
             #endregion
@@ -45,12 +45,74 @@ namespace CineVault.MainProgram
 
             #region Filter by movie data
 
+            //string movieTitle = "ic"; // Nu kan je ook hier een deel van de titel gebruiken
+            //Movie specificMovie = await movieService.GetMovieByPartialTitleAsync(movieTitle);
+
+            //if (specificMovie != null)
+            //{
+            //    Console.WriteLine($"Gevonden film: {specificMovie.Title} ({specificMovie.Year})");
+
+            //    // Getest => works
+            //    //// Test acteurs van de film
+            //    //IEnumerable<Actor> actors = await movieService.ShowAllActorsFromMovieAsync(specificMovie.Title);
+            //    //PrintEnumerable(actors, actor => actor.Name);
+
+            //    // Getest => works
+            //    //// Test regisseur(s) van de film
+            //    //IEnumerable<Director> directors = await movieService.ShowDirectorFromMovieAsync(specificMovie.Title);
+            //    //PrintEnumerable(directors, director => $"Regisseur: {director.Name}");
+
+            //    // Getest => works
+            //    //// Test jaar van de film
+            //    //string year = await movieService.ShowYearFromMovieAsync(specificMovie.Title);
+            //    //Console.WriteLine($"Jaar van de film: {year}");
+            //}
+            //else
+            //{
+            //    Console.WriteLine($"Geen film gevonden met de titel '{movieTitle}'.");
+            //}
+
             #endregion
 
             #region Testing filter by model
 
-            IEnumerable<Movie> moviesFrom2005 = await movieService.ShowAllMoviesFromTheSameYearAsync("2005");
-            PrintEnumerable(moviesFrom2005, movie => $"{movie.Title} ({movie.Year})");
+            // Getest => works
+            string actorName = "ot"; // Je hoeft nu niet de volledige naam in te voeren
+            Actor specificActor = await movieService.GetActorByPartialNameAsync(actorName);
+
+            if (specificActor != null)
+            {
+                Console.WriteLine($"Gevonden acteur: {specificActor.Name}");
+
+                // Test films met deze acteur
+                IEnumerable<Movie> movies = await movieService.ShowMoviesFromTheSameActorAsync(specificActor);
+                PrintEnumerable(movies, movie => $"Film met {specificActor.Name}: {movie.Title} ({movie.Year})");
+            }
+            else
+            {
+                Console.WriteLine($"Geen acteur gevonden met de naam '{actorName}'.");
+            }
+
+            // Getest => works
+            //string directorName = "Nol"; // Ook hier kan een deel van de naam worden ingevoerd
+            //Director specificDirector = await movieService.GetDirectorByPartialNameAsync(directorName);
+
+            //if (specificDirector != null)
+            //{
+            //    Console.WriteLine($"Gevonden regisseur: {specificDirector.Name}");
+
+            //    // Test films van deze regisseur
+            //    IEnumerable<Movie> movies = await movieService.ShowMoviesFromTheSameDirectorAsync(specificDirector);
+            //    PrintEnumerable(movies, movie => $"Film geregisseerd door {specificDirector.Name}: {movie.Title} ({movie.Year})");
+            //}
+            //else
+            //{
+            //    Console.WriteLine($"Geen regisseur gevonden met de naam '{directorName}'.");
+            //}
+
+
+            //IEnumerable<Movie> moviesFrom2005 = await movieService.ShowAllMoviesFromTheSameYearAsync("2005");
+            //PrintEnumerable(moviesFrom2005, movie => $"{movie.Title} ({movie.Year})");
 
             #endregion
 

@@ -58,38 +58,32 @@ namespace CineVault.BusinessLogic.Service
 
         #region Methods
 
-        //#region Check for existing movies
-
-        //public bool MovieExists(string title, string releaseDate)
-        //{
-        //    return _dbContext.Movies.Any(m => m.Title == title && m.Year == releaseDate);
-        //}
-
-        //#endregion
-
         #region Adding or removing movies
 
         // Getest in MainProgram => works
-        public async Task AddMovieByTitle(string movieTitle)
+        public async Task AddMovieByTitle(string movieTitle, bool seen)
         {
             bool blCorrectyEnteredId;
             int intEnteredId;
             int intResultId;
-            int movieId;
-            string strMovieToSearchFor = movieTitle.Trim().ToLower();
+            int intMovieId;
             string strEnteredId;
+            string strMovieToSearchFor;            
             string strSelectedMovieBasedOnId;
             Movie selectedMovie;
 
             blCorrectyEnteredId = false;
             intResultId = 0;
-            movieId = 0;
-
+            intMovieId = 0;
             selectedMovie = new Movie();
 
-            if (string.IsNullOrEmpty(strMovieToSearchFor))
+            if (string.IsNullOrWhiteSpace(movieTitle))
             {
-                throw new ArgumentNullException(nameof(strMovieToSearchFor), "Movie title cannot be NULL or empty.");
+                throw new ArgumentNullException("Titel mag niet null of leeg zijn", nameof(movieTitle));
+            }
+            else
+            {
+                strMovieToSearchFor = movieTitle.Trim().ToLower();
             }
 
             // Eerst wordt de film opgezocht door de api.
@@ -133,7 +127,7 @@ namespace CineVault.BusinessLogic.Service
                 }
                 else
                 {
-                    movieId = intEnteredId;
+                    intMovieId = intEnteredId;
                     blCorrectyEnteredId = true;
                 }
 
@@ -143,7 +137,7 @@ namespace CineVault.BusinessLogic.Service
 
             for (int index = 0; index < MoviesFromApi.Count; index++)
             {
-                if (MoviesFromApi[index].IMDBId.Equals(movieId))
+                if (MoviesFromApi[index].IMDBId.Equals(intMovieId))
                 {
                     selectedMovie = MoviesFromApi[index];
                     index = MoviesFromApi.Count;
@@ -156,6 +150,7 @@ namespace CineVault.BusinessLogic.Service
 
             if (_movieRepository.CheckIfMovieExists(selectedMovie) == false)
             {
+                selectedMovie.Seen = seen;  // Zet de film direct op Seen of NotSeen
                 _movieRepository.AddMovieByMovie(selectedMovie);
             }
             else
@@ -163,7 +158,7 @@ namespace CineVault.BusinessLogic.Service
                 Console.WriteLine("Film zit al in database");
             }
 
-            Dictionary<int, Dictionary<string, List<string>>> castAndCrew = await _apiService.GetActorsAndDirectorsFromMovie(movieId);
+            Dictionary<int, Dictionary<string, List<string>>> castAndCrew = await _apiService.GetActorsAndDirectorsFromMovie(intMovieId);
 
             if (castAndCrew == null)
             {
@@ -406,9 +401,15 @@ namespace CineVault.BusinessLogic.Service
         public async Task<string> ShowYearFromMovieAsync(string partialMovieTitle)
         {
             Movie selectedMovie = await GetMovieByPartialTitleAsync(partialMovieTitle);
+
             if (partialMovieTitle == null)
             {
                 throw new ArgumentNullException(nameof(partialMovieTitle), "De film mag niet null zijn.");
+            }
+
+            if (selectedMovie == null)
+            {
+                throw new ArgumentException($"geen film gevonden met titel: {partialMovieTitle}");
             }
 
             return selectedMovie.Year;
@@ -421,10 +422,14 @@ namespace CineVault.BusinessLogic.Service
         // Getest in MainProgram => works
         public async Task<IEnumerable<Movie>> ShowMoviesFromTheSameActorAsync(Actor actor)
         {
-            if (actor == null)
+            if (actor == null || string.IsNullOrWhiteSpace(actor.Name))
             {
                 throw new ArgumentNullException(nameof(actor), "De acteur mag niet null zijn.");
             }
+
+            Actor matchedActor = await GetActorByPartialNameAsync(actor.Name);
+            if (matchedActor == null)
+                throw new InvalidOperationException($"Geen acteur gevonden met de naam {actor.Name}.");
 
             bool actorExists = await _appDBContext.Actors.AnyAsync(d => d.Id == actor.Id);
             if (!actorExists)
@@ -466,6 +471,16 @@ namespace CineVault.BusinessLogic.Service
             if (string.IsNullOrWhiteSpace(strYear))
             {
                 throw new ArgumentException("Het jaartal mag niet leeg of null zijn.", nameof(strYear));
+            }
+
+            if(CheckForCharacters(strYear).Equals(false))
+            {
+                throw new ArgumentException("Het jaartal moet uit enkel karakters bestaan.", nameof(strYear));
+            }
+
+            if(strYear.Length != 4)
+            {
+                throw new ArgumentException("Het jaartal moet uit 4 cijfers bestaan.", nameof(strYear));
             }
 
             return await _appDBContext.Movies
@@ -648,7 +663,23 @@ namespace CineVault.BusinessLogic.Service
             );
         }
 
+        // Methode om na te gaan of een jaartal enkel maar bestaat uit cijfers
+        public bool CheckForCharacters(string strYear)
+        {
+            char[] chars = strYear.ToCharArray();
+
+            foreach (char c in chars)
+            {
+                if (!char.IsDigit(c) || c.Equals("-"))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
         #endregion
 
     }
+
 }

@@ -14,11 +14,6 @@ namespace CineVault.DataAccessLayer.Repositories
     {
         #region Field
 
-        // TODO : Code nog correct zetten en overbodige code en commentaar verwijderen.
-
-        //private readonly List<Movie> _lstMovies = new List<Movie>();
-        //private readonly List<Actor> _lstActors = new List<Actor>();
-        //private readonly List<Director> _lstDirectors = new List<Director>();
         private AppDBContext _dbContext;
 
         #endregion
@@ -32,14 +27,7 @@ namespace CineVault.DataAccessLayer.Repositories
 
         #endregion
 
-
         #region Check for existing movies
-
-        // ToDo: Controleren of deze methode werkt
-        //public bool CheckIfMovieExists(string title, string releaseDate)
-        //{
-        //    return _dbContext.Movies.Any(m => m.Title == title && m.Year == releaseDate);
-        //}
 
         public bool CheckIfMovieExists (Movie movie)
         {
@@ -48,9 +36,7 @@ namespace CineVault.DataAccessLayer.Repositories
 
         #endregion
 
-
         #region Adding or removing movies
-
 
         public void AddMovieByMovie(Movie movie)
         {
@@ -66,7 +52,6 @@ namespace CineVault.DataAccessLayer.Repositories
         }
 
         #endregion
-
 
         #region Retrieve movies by status
 
@@ -86,7 +71,6 @@ namespace CineVault.DataAccessLayer.Repositories
         }
 
         #endregion
-
 
         #region Filter by movie data
 
@@ -112,7 +96,6 @@ namespace CineVault.DataAccessLayer.Repositories
         }
 
         #endregion
-
 
         #region Filter by model
 
@@ -143,8 +126,6 @@ namespace CineVault.DataAccessLayer.Repositories
 
             return Enumerable.Empty<Movie>();
         }
-
-
 
         #endregion
 

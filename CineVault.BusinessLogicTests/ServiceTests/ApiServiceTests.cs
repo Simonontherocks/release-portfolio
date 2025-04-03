@@ -9,10 +9,21 @@ public class ApiServiceTests
 {
     #region Field
 
-    //private DbContextOptions<AppDBContext> dbContextOptions;
+    private DbContextOptions<AppDBContext> _dbContextOptions;
 
     #endregion
 
+    #region TestInitialize
+
+    public void Setup()
+    {
+        // Nieuwe databasecontext per test
+        _dbContextOptions = new DbContextOptionsBuilder<AppDBContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unieke database per test
+            .Options;
+    }
+
+    #endregion
 
     [TestMethod]
     public void TestMethod1()

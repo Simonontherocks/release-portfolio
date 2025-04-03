@@ -28,8 +28,8 @@ namespace CineVault.MainProgram
 
             #region Testing adding or removing movies
 
-            movieService.AddMovieByTitle("star wars");
-            //movieService.RemoveMovieByIdAsync(27);
+            movieService.AddMovieByTitle("inception", true);
+            //movieService.RemoveMovieByIdAsync(29);
 
             #endregion
 
@@ -45,7 +45,7 @@ namespace CineVault.MainProgram
 
             #region Filter by movie data
 
-            //string movieTitle = "ic"; // Nu kan je ook hier een deel van de titel gebruiken
+            //string movieTitle = "jones"; // Nu kan je ook hier een deel van de titel gebruiken
             //Movie specificMovie = await movieService.GetMovieByPartialTitleAsync(movieTitle);
 
             //if (specificMovie != null)
@@ -93,7 +93,7 @@ namespace CineVault.MainProgram
             //    Console.WriteLine($"Geen acteur gevonden met de naam '{actorName}'.");
             //}
 
-            // Getest => works
+            //Getest => works
             //string directorName = "Nol"; // Ook hier kan een deel van de naam worden ingevoerd
             //Director specificDirector = await movieService.GetDirectorByPartialNameAsync(directorName);
 
@@ -110,8 +110,7 @@ namespace CineVault.MainProgram
             //    Console.WriteLine($"Geen regisseur gevonden met de naam '{directorName}'.");
             //}
 
-
-            //IEnumerable<Movie> moviesFrom2005 = await movieService.ShowAllMoviesFromTheSameYearAsync("2005");
+            //IEnumerable<Movie> moviesFrom2005 = await movieService.ShowAllMoviesFromTheSameYearAsync("200");
             //PrintEnumerable(moviesFrom2005, movie => $"{movie.Title} ({movie.Year})");
 
             #endregion

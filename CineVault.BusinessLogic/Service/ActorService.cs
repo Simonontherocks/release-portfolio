@@ -20,7 +20,12 @@ namespace CineVault.BusinessLogic.Service
 
         public List<Actor> GetAll()
         {
-            return _actorRepository.GetAll();
+            return _actorRepository.GetAll().OrderBy(a => a.Name).ToList();
+        }
+
+        public Actor GetById(int id)
+        {
+            return _actorRepository.GetById(id);
         }
 
         public void Insert(Actor actor)

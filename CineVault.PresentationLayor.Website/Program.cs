@@ -1,4 +1,5 @@
 using CineVault.BusinessLogic.Service;
+using CineVault.DataAccessLayer;
 using CineVault.DataAccessLayer.Context;
 using CineVault.DataAccessLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,11 @@ namespace CineVault.PresentationLayor.Website
             builder.Services.AddScoped<MovieService>();
             builder.Services.AddSingleton<ApiService>();
             builder.Services.AddScoped<MovieService>();
-            builder.Services.AddHttpClient<ApiService>();
+            builder.Services.AddScoped<ApiService>();
+            builder.Services.AddScoped<ActorService>();
+            builder.Services.AddScoped<IActorRepository, ActorRepository>();
+            builder.Services.AddScoped<IDirectorRepository, DirectorRepository>();
+            builder.Services.AddScoped<DirectorService>();
 
             var app = builder.Build();
 

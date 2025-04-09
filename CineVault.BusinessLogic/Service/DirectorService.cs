@@ -1,4 +1,5 @@
-﻿using CineVault.DataAccessLayer.Repositories;
+﻿using CineVault.DataAccessLayer;
+using CineVault.DataAccessLayer.Repositories;
 using CineVault.ModelLayer.ModelMovie;
 using System;
 using System.Collections.Generic;

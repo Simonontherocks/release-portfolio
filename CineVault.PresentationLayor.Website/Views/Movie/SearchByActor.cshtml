@@ -1,0 +1,36 @@
+﻿@model IEnumerable<CineVault.ModelLayer.ModelMovie.Actor>
+
+@{
+    ViewData["Title"] = "SearchByActor";
+}
+
+<h1>SearchByActor</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imdb_ID)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Imdb_ID)
+            </td>
+            <td>
+                    <a asp-action="ShowMoviesFromActor" asp-route-id="@item.Id">Select</a> @*Action is nu ShowMovies... omdat in de URL select stond en dit daarom niet werkte.*@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

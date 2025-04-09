@@ -28,7 +28,7 @@ namespace CineVault.MainProgram
 
             #region Testing adding or removing movies
 
-            movieService.AddMovieByTitle("inception", true);
+            movieService.AddMovieByTitle("matrix", true);
             //movieService.RemoveMovieByIdAsync(29);
 
             #endregion

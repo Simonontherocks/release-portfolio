@@ -8,14 +8,8 @@ namespace CineVault.PresentationLayor.Website.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-
-        public HomeController(ILogger<HomeController> logger, MovieService repo)
+        public HomeController()
         {
-            _logger = logger;
-            repo.AddMovieByMovie(new ModelLayer.ModelMovie.Movie { Title = "Bravehaert"});
-            // repo.RemoveMovieByMovie(new ModelLayer.ModelMovie.Movie() { Id = 7 });
         }
 
         public IActionResult Index()

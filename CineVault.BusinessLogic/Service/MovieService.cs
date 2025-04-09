@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -429,7 +430,9 @@ namespace CineVault.BusinessLogic.Service
 
             Actor matchedActor = await GetActorByPartialNameAsync(actor.Name);
             if (matchedActor == null)
+            {
                 throw new InvalidOperationException($"Geen acteur gevonden met de naam {actor.Name}.");
+            }                
 
             bool actorExists = await _appDBContext.Actors.AnyAsync(d => d.Id == actor.Id);
             if (!actorExists)
@@ -447,11 +450,17 @@ namespace CineVault.BusinessLogic.Service
         // Getest in MainProgram => works
         public async Task<IEnumerable<Movie>> ShowMoviesFromTheSameDirectorAsync(Director director)
         {
-            if (director == null)
+            if (director == null || string.IsNullOrWhiteSpace(director.Name))
             {
                 throw new ArgumentNullException(nameof(director), "De regisseur mag niet null zijn.");
             }
 
+            Director matchedDirector = await GetDirectorByPartialNameAsync(director.Name);
+            if (matchedDirector == null)
+            {
+                throw new InvalidOperationException($"Geen acteur gevonden met de naam {director.Name}.");
+            }
+            
             bool directorExists = await _appDBContext.Directors.AnyAsync(d => d.Id == director.Id);
             if (!directorExists)
             {
@@ -488,6 +497,78 @@ namespace CineVault.BusinessLogic.Service
                 .OrderBy(m => m.Title)
                 .ToListAsync();
         }
+
+        // Added as extra
+        public List<Movie> GetAllYears()
+        {
+            //List<Movie> movieYears = new List<Movie>();
+            //foreach(Movie movie in _appDBContext.Movies)
+            //{
+            //    movieYears.Add(movie);
+            //}
+
+            //return movieYears;
+            return _appDBContext.Movies
+                        .OrderBy(m => m.Year) // Sorteer films op jaartal van klein naar groot
+                        .ToList(); // Converteer het resultaat naar een lijst
+        }
+
+        //public async Task<List<Movie>> ShowAllMoviesFromTheSameYearAsync(string year)
+        //{
+        //    return await _appDBContext.Movies
+        //                              .Where(m => m.Year == year)
+        //                              .ToListAsync();
+        //}
+
+        #endregion
+
+        #region Changing status
+
+        /// <summary>
+        /// Stelt de 'Seen'-status in voor een film op basis van het film-ID.
+        /// </summary>
+        /// <param name="movieId">Het unieke ID van de film.</param>
+        /// <param name="seen">De nieuwe waarde voor de 'Seen'-status (true = gezien, false = niet gezien).</param>
+        /// <exception cref="ArgumentException">Wanneer het ID ongeldig is (bijv. 0 of negatief).</exception>
+        /// <exception cref="InvalidOperationException">Wanneer de film niet wordt gevonden in de database.</exception>
+        public async Task SetMovieSeenStatusAsync(int movieId, bool seen)
+        {
+            if (movieId <= 0)
+                throw new ArgumentException("Het opgegeven ID moet een positief geheel getal zijn.", nameof(movieId));
+
+            Movie movieToUpdate = await _appDBContext.Movies.FirstOrDefaultAsync(m => m.Id == movieId);
+
+            if (movieToUpdate == null)
+                throw new InvalidOperationException("Film bestaat niet in de database.");
+
+            movieToUpdate.Seen = seen;
+
+            _appDBContext.Movies.Update(movieToUpdate);
+            await _appDBContext.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Stelt de 'Seen'-status in voor een film op basis van een (gedeeltelijke) titel.
+        /// </summary>
+        /// <param name="partialTitle">Een (gedeeltelijke) titel van de film.</param>
+        /// <param name="seen">De nieuwe waarde voor de 'Seen'-status (true = gezien, false = niet gezien).</param>
+        /// <exception cref="ArgumentException">Wanneer de titel leeg of ongeldig is.</exception>
+        /// <exception cref="InvalidOperationException">Wanneer geen film met de opgegeven (deel)titel wordt gevonden.</exception>
+        public async Task SetMovieSeenStatusByTitleAsync(string partialTitle, bool seen)
+        {
+            if (string.IsNullOrWhiteSpace(partialTitle))
+                throw new ArgumentException("Titel mag niet leeg zijn.", nameof(partialTitle));
+
+            Movie movie = await GetMovieByPartialTitleAsync(partialTitle);
+            if (movie == null)
+                throw new InvalidOperationException("Geen film gevonden met de opgegeven titel.");
+
+            movie.Seen = seen;
+
+            _appDBContext.Movies.Update(movie);
+            await _appDBContext.SaveChangesAsync();
+        }
+
 
         #endregion
 

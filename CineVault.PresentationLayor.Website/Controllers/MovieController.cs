@@ -78,9 +78,10 @@ namespace CineVault.PresentationLayer.Website.Controllers
             return View(_movieService.GetAllYears());
         }
 
-        public async Task<IActionResult> ShowMoviesFromYear(string year)
+        public async Task<IActionResult> ShowMoviesFromYear(int id)
         {
-            return View(await _movieService.ShowAllMoviesFromTheSameYearAsync(year));
+            Movie searchedMovie = _movieService.GetById(id);
+            return View(await _movieService.ShowAllMoviesFromTheSameYearAsync(searchedMovie.Year));
         }
 
         #endregion

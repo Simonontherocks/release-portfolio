@@ -129,6 +129,15 @@ namespace CineVault.DataAccessLayer.Repositories
 
         #endregion
 
+        #region Default CRUD
+
+        public Movie GetById(int id)
+        {
+            return _dbContext.Movies.FirstOrDefault(m => m.Id == id);
+        }
+
+        #endregion
+
     }
 
 }

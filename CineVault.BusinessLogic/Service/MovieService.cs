@@ -501,24 +501,32 @@ namespace CineVault.BusinessLogic.Service
         // Added as extra
         public List<Movie> GetAllYears()
         {
-            //List<Movie> movieYears = new List<Movie>();
-            //foreach(Movie movie in _appDBContext.Movies)
-            //{
-            //    movieYears.Add(movie);
-            //}
-
-            //return movieYears;
             return _appDBContext.Movies
-                        .OrderBy(m => m.Year) // Sorteer films op jaartal van klein naar groot
-                        .ToList(); // Converteer het resultaat naar een lijst
+                        .OrderBy(m => m.Year)
+                        .ToList();
         }
 
-        //public async Task<List<Movie>> ShowAllMoviesFromTheSameYearAsync(string year)
-        //{
-        //    return await _appDBContext.Movies
-        //                              .Where(m => m.Year == year)
-        //                              .ToListAsync();
-        //}
+        public Movie GetById(int id)
+        {
+            // Eerste controle is om te kijken of de Id een geldige waarde heeft.
+            // Indien de waarde 0 is, dan wordt er een uitzondering getoont.
+            if (id.Equals(0))
+            {
+                throw new ArgumentException("ongeldige id");
+            }
+
+            Movie requestedMovie = _movieRepository.GetById(id); // hier wordt de director opgehaald via de repository uit de database.
+
+            // Hier gebeurd de controle op de opgevraagde director, om na te gaan of die niet null is.
+            // Indien deze null is, dan wordt er een uitzondering getoond.
+            if (requestedMovie == null)
+            {
+                throw new ArgumentNullException(nameof(requestedMovie));
+            }
+
+            // De opgevraagde director wordt teruggegeven.
+            return requestedMovie;
+        }
 
         #endregion
 

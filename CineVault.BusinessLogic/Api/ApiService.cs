@@ -64,6 +64,22 @@ namespace CineVault.BusinessLogic.Service
                     // Controleer of er resultaten zijn in de API-respons.
                     if (movieResponse != null && movieResponse.Results.Any())
                     {
+                        // Deze lus zal ervoor zorgen dat het binnengekregen jaar enkel het jaartal opslaat.
+                        foreach (Movie movie in movieResponse.Results)
+                        {
+                            if (!string.IsNullOrEmpty(movie.Year) && movie.Year.Length >= 4)
+                            {
+                                movie.Year = movie.Year.Substring(0, 4); // enkel het jaar zal overhouden worden.
+                            }
+
+                            if (movie.Score.HasValue) // Hier wordt er nagegaan of de score uit de API wel degelijk een waarde heeft.
+                            {
+                                movie.Score = Math.Round(movie.Score.Value, 2);
+                            }
+
+                            Debug.WriteLine($"ID: {movie.IMDBId}, Titel: {movie.Title}, Jaar: {movie.Year}, Score: {movie.Score}");
+                        }
+
                         allMovies.AddRange(movieResponse.Results); // Voeg de gevonden films toe aan de lijst.
                         totalPages = movieResponse.TotalPages; // Werk het totale aantal pagina's bij op basis van de respons.
                         currentPage++; // Ga naar de volgende pagina.

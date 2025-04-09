@@ -15,7 +15,6 @@ namespace CineVault.DataAccessLayer.Repositories
     {
         // Het doel van IEnumerable is om over een lijst te itereren en de benodigde gegevens op te halen.
 
-        // ToDo: Toegevoegd aan de interdface. In de klasse zelf nog controleren of deze methode werkt.
         public bool CheckIfMovieExists(Movie movie); //(string title, string releaseDate);
 
         // Hieronder staan de signaturen van de methodes om een film toe te voegen of te verwijderen.
@@ -36,6 +35,9 @@ namespace CineVault.DataAccessLayer.Repositories
         public IEnumerable<Movie> ShowMoviesFromTheSameActor(Actor actor); // Hier worden alle films getoont waar een bepaalde acteur in meespeelt.
         public IEnumerable<Movie> ShowMoviesFromTheSameDirector(Director director); // Hier worden alle films getoont die door een bepaalde acteur zijn geregisseerd.
         public IEnumerable<Movie> ShowAllMoviesFromTheSameYear(string strYear); // Hier worden alle films getoont die in een bepaald jaar zijn verschenen.
+
+        // Deze methode zal dienen om een film te kunnen opzoeken via een id
+        public Movie GetById(int id); // Zal dienen om een film te kunnen opzoeken via een id
 
     }
 }

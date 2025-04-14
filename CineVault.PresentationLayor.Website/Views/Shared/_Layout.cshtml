@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/CineVault.PresentationLayor.Website.styles.css" asp-append-version="true" />
 </head>
-<body> @* style="background-image: url('@Url.Content("~/Images/A vintage vault with a rotating wheel and dark color, with personal films flying into it with showstar effects for a website background.png") *@
+<body> @* style="background-image: url('@Url.Content("~/Images/Vintage_Vault.png")'); background-size: cover; background-position: center; background-repeat: no-repeat;"> *@
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 			<div class="container-fluid">
@@ -47,33 +47,7 @@
 									</a>
 								</li>
 							</ul>
-						</li>
-						<li class="nav-item dropdown">
-							<a href="#" class="nav-link text-black dropdown-toggle"
-							   id="FilmInfoDropdown"
-							   role="button"
-							   data-bs-toggle="dropdown"
-							   aria-expanded="false">
-								Zoeken op gegevens
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="FilmInfoDropDown">
-								<li>
-									<a class="dropdown-item" asp-controller="Actor" asp-action="ActorsInMovie">
-										Cast van een film
-									</a>
-								</li>
-								<li>
-									<a class="dropdown-item" asp-controller="Director" asp-action="DirectorInMovie">
-										Crew van een film
-									</a>
-								</li>
-								<li>
-									<a class="dropdown-item" asp-controller="Movie" asp-action="YearFromMovie">
-										Jaar van een film
-									</a>
-								</li>
-							</ul>
-						</li>
+						</li>						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link text-black dropdown-toggle"
 							   id="GegevensDropdown"

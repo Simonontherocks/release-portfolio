@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CineVault.ModelLayer.ModelMovie.Movie>
+﻿@model IEnumerable<string>
 
 @{
     ViewData["Title"] = "SearchByYear";
@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                @Html.DisplayNameFor(model => model)
             </th>
             <th></th>
         </tr>
@@ -22,10 +22,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Year)
+                @Html.DisplayFor(modelItem => item)
             </td>
             <td>
-                    <a asp-action="ShowMoviesFromYear" asp-route-id="@item.Id">Select</a>
+                    <a asp-action="ShowMoviesFromYear" asp-route-year="@item">Select</a> @*asp-route-year => year is de variabele naam, moet hetzelfde zijn als de methode-action*@
             </td>
         </tr>
 }

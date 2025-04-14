@@ -499,11 +499,12 @@ namespace CineVault.BusinessLogic.Service
         }
 
         // Added as extra
-        public List<Movie> GetAllYears()
+        public List<string?> GetAllYears()
         {
-            return _appDBContext.Movies
-                        .OrderBy(m => m.Year)
-                        .ToList();
+            return _appDBContext.Movies.Select(m => m.Year)
+                .Order()
+                .Distinct()
+                .ToList();
         }
 
         public Movie GetById(int id)
@@ -542,12 +543,16 @@ namespace CineVault.BusinessLogic.Service
         public async Task SetMovieSeenStatusAsync(int movieId, bool seen)
         {
             if (movieId <= 0)
+            {
                 throw new ArgumentException("Het opgegeven ID moet een positief geheel getal zijn.", nameof(movieId));
+            }                
 
             Movie movieToUpdate = await _appDBContext.Movies.FirstOrDefaultAsync(m => m.Id == movieId);
 
             if (movieToUpdate == null)
+            {
                 throw new InvalidOperationException("Film bestaat niet in de database.");
+            }               
 
             movieToUpdate.Seen = seen;
 

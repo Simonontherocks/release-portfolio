@@ -862,4 +862,74 @@ public class MovieServiceTests
     }
 
     #endregion
+
+    #region testen op Changing status
+
+    [TestMethod]
+    public async Task SetMovieSeenStatusByTitleAsync_Should_UpdateSeenStatus_When_ValidPartialTitleProvided()
+    {
+        // ARRANGE
+        Setup();
+        AppDBContext context = new AppDBContext(_dbContextOptions);
+        MovieRepository movieRepository = new MovieRepository(context);
+        ApiService apiService = new ApiService();
+        MovieService movieService = new MovieService(movieRepository, apiService, context);
+
+        Movie movie = new Movie { Title = "Inception", Seen = false };
+        context.Movies.Add(movie);
+        await context.SaveChangesAsync();
+
+        // ACT
+        await movieService.SetMovieSeenStatusByTitleAsync("Incep", true);
+
+        // ASSERT
+        Assert.IsTrue(context.Movies.First(m => m.Title == "Inception").Seen);
+    }
+
+    [TestMethod]
+    public async Task SetMovieSeenStatusAsync_Should_UpdateSeenStatus_When_ValidIdProvided()
+    {
+        // ARRANGE
+        Setup();
+        AppDBContext context = new AppDBContext(_dbContextOptions);
+        MovieRepository movieRepository = new MovieRepository(context);
+        ApiService apiService = new ApiService();
+        MovieService movieService = new MovieService(movieRepository, apiService, context);
+
+        Movie movie = new Movie { Title = "Interstellar", Seen = false };
+        context.Movies.Add(movie);
+        await context.SaveChangesAsync();
+        int movieId = movie.Id;
+
+        // ACT
+        await movieService.SetMovieSeenStatusAsync(movieId, true);
+
+        // ASSERT
+        Assert.IsTrue(context.Movies.First(m => m.Id == movieId).Seen);
+    }
+
+    [TestMethod]
+    public void GetById_Should_ReturnMovie_When_ValidIdProvided()
+    {
+        // ARRANGE
+        Setup();
+        AppDBContext context = new AppDBContext(_dbContextOptions);
+        MovieRepository movieRepository = new MovieRepository(context);
+        ApiService apiService = new ApiService();
+        MovieService movieService = new MovieService(movieRepository, apiService, context);
+
+        Movie movie = new Movie { Title = "Dunkirk", Seen = false };
+        context.Movies.Add(movie);
+        context.SaveChanges();
+        int movieId = movie.Id;
+
+        // ACT
+        Movie retrievedMovie = movieService.GetById(movieId);
+
+        // ASSERT
+        Assert.AreEqual(movieId, retrievedMovie.Id);
+    }
+
+
+    #endregion
 }

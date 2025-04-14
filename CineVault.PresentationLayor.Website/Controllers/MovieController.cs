@@ -67,6 +67,11 @@ namespace CineVault.PresentationLayer.Website.Controllers
             return View(_directorService.GetAll());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"> is de regisseur-ID van mijn databank.</param> 
+        /// <returns></returns>
         public async Task<IActionResult> ShowMoviesFromDirector(int id)
         {
             Director searchedDirector = _directorService.GetById(id);
@@ -78,10 +83,14 @@ namespace CineVault.PresentationLayer.Website.Controllers
             return View(_movieService.GetAllYears());
         }
 
-        public async Task<IActionResult> ShowMoviesFromYear(int id)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"> is de film-ID van mijn databank.</param> 
+        /// <returns></returns>
+        public async Task<IActionResult> ShowMoviesFromYear(string year)
         {
-            Movie searchedMovie = _movieService.GetById(id);
-            return View(await _movieService.ShowAllMoviesFromTheSameYearAsync(searchedMovie.Year));
+            return View(await _movieService.ShowAllMoviesFromTheSameYearAsync(year));
         }
 
         #endregion

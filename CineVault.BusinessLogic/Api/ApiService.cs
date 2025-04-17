@@ -18,7 +18,7 @@ namespace CineVault.BusinessLogic.Service
         private HttpClient _httpClient; // Deze HttpClient zal gebruikt worden om een verzoek te sturen naar de nodige API.
         readonly string apiKey = "6ff2d9c5916b798dc04c3762ace90261"; // API-sleutel, nodig voor authenticatie bij de API.
         readonly string searchUrl = "https://api.themoviedb.org/3/search/movie?api_key="; // URL voor de zoekopdracht naar films via de API.
-
+        readonly string headerApiKey = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZmYyZDljNTkxNmI3OThkYzA0YzM3NjJhY2U5MDI2MSIsIm5iZiI6MTczODI0NTEzMy44NDUsInN1YiI6IjY3OWI4NDBkNGViYzk5MWVhNGJkOGE0MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lC9tpxspAO6GrYE_Z0tgeL1x6-BppT4sVnxPo13ST1c";
 
         // Constructor voor de ApiService klasse. Dit maakt een nieuwe instance van HttpClient aan.
         public ApiService()
@@ -117,7 +117,7 @@ namespace CineVault.BusinessLogic.Service
         /// <param name="intChosenMovieId">De ID van de gekozen film</param>
         /// <returns>Een dictionary met de naam van de acteurs en regisseurs en hun functies in de film</returns>
 
-        public async Task<Dictionary<int, Dictionary<string, List<string>>>> GetActorsAndDirectorsFromMovie(int intChosenMovieId)
+        public async Task<Dictionary<int, Dictionary<string, List<string>>>> AddMovieWithActorsAndDirectorsToDatabase(int intChosenMovieId)
         {
             // Haalt credits op voor de gekozen film door middel van de URL.
             string creditsUrl = $"https://api.themoviedb.org/3/movie/{intChosenMovieId}/credits?api_key={apiKey}";
@@ -168,13 +168,47 @@ namespace CineVault.BusinessLogic.Service
 
                     }
 
-                     return secondCastAndCrew;
+                    return secondCastAndCrew;
                 }
 
             }
 
             // Als er een fout is opgetreden of geen credits worden gevonden, wordt er null gereturned.
             return null;
+
+        }
+
+        public async Task<Movie?> GetMovieByImdbId(int imdbId)
+        {
+            // get the movie details from this url
+            // https://api.themoviedb.org/3/movie/{movie_id}
+            // details on how to use:
+            // https://developer.themoviedb.org/reference/movie-details
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://api.themoviedb.org/3/movie/{imdbId}");
+            request.Headers.Add("Authorization", headerApiKey);            
+            HttpResponseMessage response = _httpClient.Send(request);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                Movie movieresult = JsonSerializer.Deserialize<Movie>(responseContent);
+
+                if (!string.IsNullOrEmpty(movieresult.Year) && movieresult.Year.Length >= 4)
+                {
+                    movieresult.Year = movieresult.Year.Substring(0, 4); // enkel het jaar zal overhouden worden.
+                }
+
+                if (movieresult.Score.HasValue) // Hier wordt er nagegaan of de score uit de API wel degelijk een waarde heeft.
+                {
+                    movieresult.Score = Math.Round(movieresult.Score.Value, 2);
+                }
+
+                return movieresult;
+
+            }
+            else
+            {
+                return null;
+            }
 
         }
 

@@ -1,0 +1,100 @@
+﻿@model CineVault.ModelLayer.ModelMovie.Movie
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Movie</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IMDBId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IMDBId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Seen)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Seen)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Score)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Score)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Year)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+    </dl>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>
+                    Acteurs @*dit is de naam die ik zal zien staan*@
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var acteur in Model.MovieActors) @*hier zal er geloopt worden in de MovieActors*@
+            {
+                <tr>
+                    <td>
+                        @acteur.Actor.Name @*Is hetgeen ik zal zien staan.*@
+                    </td>
+                    <td>
+                        <a asp-action="ShowMoviesFromActor" asp-route-id="@acteur.Actor.Id">Select</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>
+                    Regisseurs @*dit is de naam die ik zal zien staan*@
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var regisseur in Model.MovieDirectors) @*hier zal er geloopt worden in de MovieDirectors*@
+            {
+                <tr>
+                    <td>
+                        @regisseur.Director.Name @*Is hetgeen ik zal zien staan.*@
+                    </td>
+                    <td>
+                        <a asp-action="ShowMoviesFromActor" asp-route-id="@regisseur.Director.Id">Select</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id">
+        Verwijder film
+    </a>
+</div>

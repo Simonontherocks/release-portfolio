@@ -4,11 +4,8 @@
 	ViewData["Title"] = "Index";
 }
 
-<h1>Indec</h1>
+<h1>Index</h1>
 
-<p>
-	<a asp-action="Create">Create New</a>
-</p>
 <table class="table">
 	<thead>
 		<tr>
@@ -52,9 +49,31 @@
 				<td>
 					@*action is de actie de we willen uitvoeren. Route is de naam in de URL.*@
 					<a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-					<a asp-action="ToggleSeen" asp-route-id="@item.Id">Set as seen or unseen</a>
+					<a href="#" class="toggle-seen" data-id="@item.Id"> set as seen or unseen</a>
 				</td>
 			</tr>
 		}
 	</tbody>
 </table>
+
+@*script is nodig om javascript in te laden*@
+<script>
+		$(document).ready(function(){
+		$(".toggle-seen").click(function (event) {
+		event.preventDefault();
+		var movieId = $(this).data("id");
+
+		$.ajax({
+			url: "/Movie/ToggleSeen",  // Your backend endpoint
+			type: "POST",
+			data: { id: movieId },
+			success: function (response) {
+				location.reload();
+			},
+			error: function () {
+				alert("Something went wrong!");
+			}
+		});
+	});
+	});
+</script>

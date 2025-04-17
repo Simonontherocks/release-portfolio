@@ -28,8 +28,10 @@ namespace CineVault.MainProgram
 
             #region Testing adding or removing movies
 
-            movieService.AddMovieByTitle("Kill bill", false);
-            //movieService.RemoveMovieByIdAsync(34);
+            //movieService.AddMovieByTitle("die hard", false);
+            //movieService.AddMovieByTitle("armageddon", false);
+            //movieService.AddMovieByImdbId(39);
+            //movieService.RemoveMovieByIdAsync(39);
 
             #endregion
 

@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "AddMovie";
+}
+
+<h1>Add Movie to database</h1>
+<input type="text" name="Movietitle" id="MovieTitle" value="" />
+
+<button id="searchbutton">
+    Search movie
+</button>
+
+<br />
+<br />
+<table id="MovieTable">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Year
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+@*script is nodig om javascript in te laden*@
+<script> 
+    $(document).ready(function(){
+        $("#searchbutton").click(function(){
+            var title = $("#MovieTitle").val();
+            $.ajax({
+                url:`/movie/GetMoviesFromImdb?movieTitle=${title}`,
+                type:"GET",
+                dataType:"json",
+                success:function(data){
+                    data.forEach(function(movie) {
+                        $("#MovieTable tbody").append(
+                            `<tr> <td> ${movie.title}</td>
+                            <td> ${movie.year}</td>
+                            <td><a href="/Movie/AddMovieByImdbId?imdbId=${movie.imdbId}"> Voeg film toe aan database </a></td></tr>`
+                        );
+                    });
+                },
+                error: function(){
+                    alert("error");
+                }
+            });
+        });
+    });
+</script>

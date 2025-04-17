@@ -133,7 +133,10 @@ namespace CineVault.DataAccessLayer.Repositories
 
         public Movie GetById(int id)
         {
-            return _dbContext.Movies.FirstOrDefault(m => m.Id == id);
+            return _dbContext.Movies.Include(m => m.MovieActors) // Hier laad ik de klasse MovieActors vanuit de klasse movie in.
+                .ThenInclude(a => a.Actor) // Hier laad ik de acteurs van de film in.
+                .Include(m => m.MovieDirectors) // Hier laad ik de klasse MovieDirectors vanuit de klasse movie in.
+                .ThenInclude(d => d.Director).FirstOrDefault(m => m.Id == id); // hier laad ik de directors van de film in.
         }
 
         #endregion

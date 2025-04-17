@@ -61,6 +61,7 @@ namespace CineVault.BusinessLogic.Service
 
         #region Adding or removing movies
 
+        [Obsolete] // was goed om de api te leren kennen, maar zal niet gebruikt worden omdat deze in de program getest is geweest.
         // Getest in MainProgram => works
         public async Task AddMovieByTitle(string movieTitle, bool seen)
         {
@@ -159,7 +160,7 @@ namespace CineVault.BusinessLogic.Service
                 Console.WriteLine("Film zit al in database");
             }
 
-            Dictionary<int, Dictionary<string, List<string>>> castAndCrew = await _apiService.GetActorsAndDirectorsFromMovie(intMovieId);
+            Dictionary<int, Dictionary<string, List<string>>> castAndCrew = await _apiService.AddMovieWithActorsAndDirectorsToDatabase(intMovieId);
 
             if (castAndCrew == null)
             {
@@ -196,6 +197,148 @@ namespace CineVault.BusinessLogic.Service
                         if (existingDirector == null)
                         {
                             Director newDirector = new Director { Name = personName, Imdb_ID = imdbId };
+                            _appDBContext.Directors.Add(newDirector);
+                        }
+
+                    }
+
+                }
+
+            }
+
+            // Wijzigingen opslaan
+
+            _appDBContext.SaveChanges();
+
+            // De relaties tussen Movie, Actor en Director worden gemaakt.
+
+            Movie movie = _appDBContext.Movies.FirstOrDefault(m => m.IMDBId == selectedMovie.IMDBId);
+
+            if (movie == null)
+            {
+                throw new InvalidOperationException("Film bestaat niet in de database.");
+            }
+
+            foreach (KeyValuePair<int, Dictionary<string, List<string>>> person in castAndCrew)
+            {
+                Dictionary<string, List<string>> personInfo = person.Value;
+
+                foreach (KeyValuePair<string, List<string>> nameAndRoles in personInfo)
+                {
+                    string personName = nameAndRoles.Key;
+                    List<string> roles = nameAndRoles.Value;
+
+                    // Koppelen van Actor aan Movie.
+                    if (roles.Contains("actor"))
+                    {
+                        Actor actor = _appDBContext.Actors.FirstOrDefault(a => a.Name == personName);
+                        if (actor != null)
+                        {
+                            MovieActor movieActor = new MovieActor { MovieId = movie.Id, ActorId = actor.Id };
+                            _appDBContext.MovieActors.Add(movieActor);
+                        }
+                    }
+
+                    // Koppelen van Director aan Movie.
+                    if (roles.Contains("director"))
+                    {
+                        Director director = _appDBContext.Directors.FirstOrDefault(d => d.Name == personName);
+                        if (director != null)
+                        {
+                            MovieDirector movieDirector = new MovieDirector { MovieId = movie.Id, DirectorId = director.Id };
+                            _appDBContext.MovieDirectors.Add(movieDirector);
+                        }
+                    }
+                }
+            }
+
+            // Relaties opslaan
+
+            _appDBContext.SaveChanges();
+
+        }
+
+        public async Task AddMovieByImdbId(int imdbId)
+        {
+            bool blCorrectyEnteredId;
+            int intEnteredId;
+            int intResultId;
+            int intMovieId;
+            string strEnteredId;
+            string strMovieToSearchFor;
+            string strSelectedMovieBasedOnId;
+            Movie selectedMovie;
+
+            blCorrectyEnteredId = false;
+            intResultId = 0;
+            intMovieId = 0;
+            selectedMovie = new Movie();
+
+            if (imdbId == 0)
+            {
+                throw new ArgumentNullException("imdb-ID mag niet null zijn", nameof(imdbId));
+            }
+
+            // Eerst wordt de film opgezocht door de api.
+
+            //ToDO GetMovieByImdbId in apiService aanmaken
+            selectedMovie = await _apiService.GetMovieByImdbId(imdbId); // Het gevonden resultaat wordt in de property gestoken.
+
+            if (selectedMovie is null) // Indien er geen film gevonden is, zal er een uitzondering getoont worden.
+            {
+                throw new InvalidOperationException("Er zijn geen films gevonden met opgegeven ID");
+            }
+
+
+            // Controle of de film al dan niet in de database zit.
+            // Indien de film nog niet in de database zit, zal deze toegevoegd worden
+
+            if (_movieRepository.CheckIfMovieExists(selectedMovie) == false)
+            {
+                selectedMovie.Seen = false;  // Zet de film direct op Seen of NotSeen
+                _movieRepository.AddMovieByMovie(selectedMovie);
+            }
+            else
+            {
+                Console.WriteLine("Film zit al in database");
+            }
+
+            Dictionary<int, Dictionary<string, List<string>>> castAndCrew = await _apiService.AddMovieWithActorsAndDirectorsToDatabase(imdbId);
+
+            if (castAndCrew == null)
+            {
+                throw new InvalidOperationException("Geen gegevens opgehaald van de API.");
+            }
+
+            // Toevoegen van de acteurs en de regisseurs in de database
+
+            foreach (KeyValuePair<int, Dictionary<string, List<string>>> person in castAndCrew)
+            {
+                Dictionary<string, List<string>> personInfo = person.Value;
+
+                foreach (KeyValuePair<string, List<string>> nameAndRoles in personInfo)
+                {
+                    string personName = nameAndRoles.Key;
+                    List<string> roles = nameAndRoles.Value;
+
+                    // Acteurs verwerken
+                    if (roles.Contains("actor"))
+                    {
+                        Actor existingActor = _appDBContext.Actors.FirstOrDefault(a => a.Name == personName);
+                        if (existingActor == null)
+                        {
+                            Actor newActor = new Actor { Name = personName, Imdb_ID = person.Key };
+                            _appDBContext.Actors.Add(newActor);
+                        }
+                    }
+
+                    // Regisseurs verwerken
+                    if (roles.Contains("director"))
+                    {
+                        Director existingDirector = _appDBContext.Directors.FirstOrDefault(d => d.Name == personName);
+                        if (existingDirector == null)
+                        {
+                            Director newDirector = new Director { Name = personName, Imdb_ID = person.Key };
                             _appDBContext.Directors.Add(newDirector);
                         }
 
@@ -560,6 +703,7 @@ namespace CineVault.BusinessLogic.Service
             await _appDBContext.SaveChangesAsync();
         }
 
+        // Gemaakt om later mogelijke uitbreiding te doen. Zal nu niet gebruikt worden.
         /// <summary>
         /// Stelt de 'Seen'-status in voor een film op basis van een (gedeeltelijke) titel.
         /// </summary>

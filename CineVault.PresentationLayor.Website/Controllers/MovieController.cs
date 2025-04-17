@@ -1,25 +1,76 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CineVault.BusinessLogic.Service;
 using CineVault.ModelLayer.ModelMovie;
+using CineVault.PresentationLayer.Website.ViewModels;
+using System.Drawing;
 
 namespace CineVault.PresentationLayer.Website.Controllers
 {
     public class MovieController : Controller
     {
+        #region Field
+
         private readonly MovieService _movieService;
         private readonly ActorService _actorService;
         private readonly DirectorService _directorService;
+        private readonly ApiService _apiService;
 
-        public MovieController(MovieService movieService, ActorService actorService, DirectorService directorService)
+        #endregion
+
+        #region Constructor
+
+        public MovieController(MovieService movieService, ActorService actorService, DirectorService directorService, ApiService apiService)
         {
             _movieService = movieService;
             _actorService = actorService;
             _directorService = directorService;
+            _apiService = apiService;
         }
-        public IActionResult Index()
+
+        #endregion
+
+        #region Index
+
+        public async Task<IActionResult> Index()
+        {
+            return View(await _movieService.ShowAllMovies());
+        }
+
+        #endregion
+
+        #region Films toevoegen en verwijderen
+
+        public IActionResult AddMovie() // Hier komt men op de pagina om een film toe te voegen.
         {
             return View();
         }
+
+        public async Task<List<ApiMovie>?> GetMoviesFromImdb(string movieTitle) // Hier zal een filmtitel in de zoekbalk getypt moeten worden en zal er op gezocht worden.
+        {
+            List<ApiMovie> result= new List<ApiMovie>();
+            List<Movie>? apiResult = await _apiService.GetMoviesByTitle(movieTitle);
+
+            foreach (Movie movie in apiResult)
+            {
+                result.Add(new ApiMovie { Title = movie.Title, IMDBId = movie.IMDBId, Year = movie.Year });
+            }
+
+            return result;
+        }
+
+        public async Task<IActionResult> AddMovieByImdbId(int imdbId) // De film, cast eb crew worden aan de hand van het IMDB-Id opgeslaan in de databank.
+        {
+            await _movieService.AddMovieByImdbId(imdbId);
+            return Redirect(nameof(AllMovies));
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _movieService.RemoveMovieByIdAsync(id);
+            return RedirectToAction("Index");
+        }
+
+        #endregion
 
         #region Mijn films acties
 
@@ -95,6 +146,35 @@ namespace CineVault.PresentationLayer.Website.Controllers
 
         #endregion
 
+        #region Filmstatus veranderen
+
+        // Zet een film op gezien of ongezien
+
+        [HttpPost]
+        public async Task<bool> ToggleSeen(int id)
+        {
+            try
+            {
+                Movie movie = _movieService.GetById(id);
+                await _movieService.SetMovieSeenStatusAsync(id, !movie.Seen);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Details van een film tonen
+
+        public IActionResult Details(int id)
+        {
+            return View(_movieService.GetById(id)); // Hier geef ik mee van welke film ik de details wil zien.
+        }
+
+        #endregion
     }
 
 }

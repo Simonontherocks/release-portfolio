@@ -7,8 +7,11 @@
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/CineVault.PresentationLayor.Website.styles.css" asp-append-version="true" />
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 </head>
-<body> @* style="background-image: url('@Url.Content("~/Images/Vintage_Vault.png")'); background-size: cover; background-position: center; background-repeat: no-repeat;"> *@
+<body>
+	@* style="background-image: url('@Url.Content("~/Images/Vintage_Vault.png")'); background-size: cover; background-position: center; background-repeat: no-repeat;"> *@
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 			<div class="container-fluid">
@@ -32,7 +35,7 @@
 							</a>
 							<ul class="dropdown-menu" aria-labelledby="mijnFilmsDropDown">
 								<li>
-									<a class="dropdown-item" asp-controller="Movie" asp-action="AllMovies"> 
+									<a class="dropdown-item" asp-controller="Movie" asp-action="AllMovies">
 										Mijn Filmlijst
 									</a>
 								</li>
@@ -47,7 +50,10 @@
 									</a>
 								</li>
 							</ul>
-						</li>						
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Movie" asp-action="AddMovie">Film toevoegen</a>
+						</li>
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link text-black dropdown-toggle"
 							   id="GegevensDropdown"
@@ -93,7 +99,6 @@
 			&copy; 2025 - CineVault - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 		</div>
 	</footer>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	@await RenderSectionAsync("Scripts", required: false)

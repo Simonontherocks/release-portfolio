@@ -7,6 +7,7 @@
 <input type="text" name="Movietitle" id="MovieTitle" value="" />
 
 <button id="searchbutton">
+    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
     Search movie
 </button>
 
@@ -31,11 +32,18 @@
     </tbody>
 </table>
 
-@*script is nodig om javascript in te laden*@
-<script> 
+<script>
     $(document).ready(function(){
         $("#searchbutton").click(function(){
             var title = $("#MovieTitle").val();
+
+            // Disable button + show spinner
+            $(this).prop("disabled", true);
+            $(this).find(".spinner-border").removeClass("d-none");
+
+            // Oude resultaten verwijderen
+            $("#MovieTable tbody").empty();
+
             $.ajax({
                 url:`/movie/GetMoviesFromImdb?movieTitle=${title}`,
                 type:"GET",
@@ -51,13 +59,19 @@
                 },
                 error: function(){
                     alert("Geen films gevonden");
+                },
+                complete: function(){
+                    // Na laden: enable button + hide spinner
+                    $("#searchbutton").prop("disabled", false);
+                    $("#searchbutton").find(".spinner-border").addClass("d-none");
                 }
             });
         });
-            $("#MovieTitle").keyup(function(event) {
-                if (event.keyCode === 13) {
-                    $("#searchbutton").click();
-                }
-            });
+
+        $("#MovieTitle").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#searchbutton").click();
+            }
+        });
     });
 </script>

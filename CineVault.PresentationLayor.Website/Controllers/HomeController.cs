@@ -1,5 +1,3 @@
-using CineVault.BusinessLogic.Service;
-using CineVault.DataAccessLayer;
 using CineVault.PresentationLayor.Website.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

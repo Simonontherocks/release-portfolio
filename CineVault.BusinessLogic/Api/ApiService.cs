@@ -100,11 +100,11 @@ namespace CineVault.BusinessLogic.Service
             // Controleer of er films zijn gevonden en toon het aantal in de console.
             if (allMovies.Any())
             {
-                Console.WriteLine($"Totaal aantal gevonden films: {allMovies.Count}");
+                Debug.WriteLine($"Totaal aantal gevonden films: {allMovies.Count}");
             }
             else
             {
-                Console.WriteLine("Geen films gevonden."); // Toon een bericht als er geen resultaten zijn.
+                Debug.WriteLine("Geen films gevonden."); // Toon een bericht als er geen resultaten zijn.
             }
 
             // Retourneer de lijst met films, of null als er geen resultaten zijn.

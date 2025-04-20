@@ -50,9 +50,14 @@
                     });
                 },
                 error: function(){
-                    alert("error");
+                    alert("Geen films gevonden");
                 }
             });
         });
+            $("#MovieTitle").keyup(function(event) {
+                if (event.keyCode === 13) {
+                    $("#searchbutton").click();
+                }
+            });
     });
 </script>

@@ -2,7 +2,6 @@
 using CineVault.BusinessLogic.Service;
 using CineVault.ModelLayer.ModelMovie;
 using CineVault.PresentationLayer.Website.ViewModels;
-using System.Drawing;
 
 namespace CineVault.PresentationLayer.Website.Controllers
 {
@@ -50,11 +49,18 @@ namespace CineVault.PresentationLayer.Website.Controllers
             List<ApiMovie> result= new List<ApiMovie>();
             List<Movie>? apiResult = await _apiService.GetMoviesByTitle(movieTitle);
 
-            foreach (Movie movie in apiResult)
+            if(apiResult is null)
             {
-                result.Add(new ApiMovie { Title = movie.Title, IMDBId = movie.IMDBId, Year = movie.Year });
+                throw new Exception("Geen films gevonden");
             }
-
+            else
+            {
+                foreach (Movie movie in apiResult)
+                {
+                    result.Add(new ApiMovie { Title = movie.Title, IMDBId = movie.IMDBId, Year = movie.Year });
+                }
+            }
+            
             return result;
         }
 
@@ -115,6 +121,7 @@ namespace CineVault.PresentationLayer.Website.Controllers
 
         public IActionResult SearchByDirector()
         {
+            // Ik vraag eerst een lijst van alle regisseurs die in de database zitten op.
             return View(_directorService.GetAll());
         }
 

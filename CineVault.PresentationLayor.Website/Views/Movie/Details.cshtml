@@ -10,91 +10,46 @@
     <h4>Movie</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IMDBId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IMDBId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Seen)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Seen)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Score)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Score)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Year)
-        </dd>
+        @foreach (var prop in new[] { "IMDBId", "Title", "Seen", "Score", "Year" })
+        {
+            <dt class="col-sm-2">@prop</dt>
+            <dd class="col-sm-10">@Model.GetType().GetProperty(prop).GetValue(Model)</dd>
+        }
     </dl>
-    <table class="table">
-        <thead>
-            <tr>
-                <td>
-                    Acteurs @*dit is de naam die ik zal zien staan*@
-                </td>
-                <td>
 
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var acteur in Model.MovieActors) @*hier zal er geloopt worden in de MovieActors*@
-            {
+    @foreach (var collection in new[] {
+    ("Acteurs", Model.MovieActors.Cast<object>(), "Actor", "ShowMoviesFromActor"),
+    ("Regisseurs", Model.MovieDirectors.Cast<object>(), "Director", "ShowMoviesFromDirector")
+    })
+    {
+        <h5>@collection.Item1</h5>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @acteur.Actor.Name @*Is hetgeen ik zal zien staan.*@
-                    </td>
-                    <td>
-                        <a asp-action="ShowMoviesFromActor" asp-route-id="@acteur.Actor.Id">Select</a>
-                    </td>
+                    <th>Naam</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <table class="table">
-        <thead>
-            <tr>
-                <td>
-                    Regisseurs @*dit is de naam die ik zal zien staan*@
-                </td>
-                <td>
+            </thead>
+            <tbody>
+                @foreach (var item in collection.Item2)
+                {
+                    var person = item.GetType().GetProperty(collection.Item3).GetValue(item);
+                    var personId = (int)person.GetType().GetProperty("Id").GetValue(person);
+                    var personName = person.GetType().GetProperty("Name").GetValue(person);
 
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var regisseur in Model.MovieDirectors) @*hier zal er geloopt worden in de MovieDirectors*@
-            {
-                <tr>
-                    <td>
-                        @regisseur.Director.Name @*Is hetgeen ik zal zien staan.*@
-                    </td>
-                    <td>
-                        <a asp-action="ShowMoviesFromActor" asp-route-id="@regisseur.Director.Id">Select</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    <tr>
+                        <td>@personName</td>
+                        <td>
+                            <a asp-action="@collection.Item4" asp-route-id="@personId">Select</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
+
 <div>
     <a asp-action="Index">Back to List</a>
-    <a asp-action="Delete" asp-route-id="@Model.Id">
-        Verwijder film
-    </a>
+    <a asp-action="Delete" asp-route-id="@Model.Id">Verwijder film</a>
 </div>

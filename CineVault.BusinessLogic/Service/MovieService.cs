@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using CineVault.BusinessLogic.ApiModels;
+﻿using System.Reflection;
 using CineVault.DataAccessLayer.Context;
 using CineVault.DataAccessLayer.Repositories;
 using CineVault.ModelLayer.ModelMovie;
@@ -300,7 +292,7 @@ namespace CineVault.BusinessLogic.Service
             }
             else
             {
-                Console.WriteLine("Film zit al in database");
+                throw new Exception("Film zit al in database");
             }
 
             Dictionary<int, Dictionary<string, List<string>>> castAndCrew = await _apiService.AddMovieWithActorsAndDirectorsToDatabase(imdbId);
@@ -813,7 +805,7 @@ namespace CineVault.BusinessLogic.Service
         /// <param name="entities">De lijst met entiteiten waaruit de gebruiker kan kiezen.</param>
         /// <param name="propertySelector">Een functie die de naam of beschrijving van de entiteit bepaalt.</param>
         /// <returns>De geselecteerde entiteit of null als de gebruiker teruggaat.</returns>
-
+        
         private async Task<T> SelectEntityByIdAsync<T>(List<T> entities, Func<T, string> propertySelector) where T : class
         {
             if (entities == null || !entities.Any()) // Controleert of de lijst leeg is

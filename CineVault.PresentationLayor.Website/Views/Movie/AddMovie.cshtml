@@ -1,77 +1,89 @@
-﻿
-@{
-    ViewData["Title"] = "AddMovie";
+﻿@{
+	ViewData["Title"] = "AddMovie";
 }
 
-<h1>Add Movie to database</h1>
-<input type="text" name="Movietitle" id="MovieTitle" value="" />
+<div class="content-column">
+	<h1>Add Movie to database</h1>
+	<input type="text" name="Movietitle" id="MovieTitle" value="" />
 
-<button id="searchbutton">
-    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-    Search movie
-</button>
+	<button id="searchbutton">
+		<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+		Search movie
+	</button>
 
-<br />
-<br />
-<table id="MovieTable">
-    <thead>
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                Year
-            </th>
-            <th>
-                
-            </th>
-        </tr>
-    </thead>
-    <tbody>
+	<br />
+	<br />
+	<table id="MovieTable">
+		<thead>
+			<tr>
+				<th>
+					Title
+				</th>
+				<th>
+					Year
+				</th>
+				<th>
 
-    </tbody>
-</table>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
 
 <script>
-    $(document).ready(function(){
-        $("#searchbutton").click(function(){
-            var title = $("#MovieTitle").val();
+	$(document).ready(function(){
+		function startSearch(){
+			var title = $("#MovieTitle").val();
 
-            // Disable button + show spinner
-            $(this).prop("disabled", true);
-            $(this).find(".spinner-border").removeClass("d-none");
+			// Spinner en disable inputs
+			$("#spinner").show();
+			$("#searchbutton").prop("disabled", true);
+			$("#MovieTitle").prop("disabled", true);
+			$("#searchbutton").find(".spinner-border").removeClass("d-none");
 
-            // Oude resultaten verwijderen
-            $("#MovieTable tbody").empty();
+			// Oude resultaten verwijderen
+			$("#MovieTable tbody").empty();
 
-            $.ajax({
-                url:`/movie/GetMoviesFromImdb?movieTitle=${title}`,
-                type:"GET",
-                dataType:"json",
-                success:function(data){
-                    data.forEach(function(movie) {
-                        $("#MovieTable tbody").append(
-                            `<tr> <td> ${movie.title}</td>
-                            <td> ${movie.year}</td>
-                            <td><a href="/Movie/AddMovieByImdbId?imdbId=${movie.imdbId}"> Voeg film toe aan database </a></td></tr>`
-                        );
-                    });
-                },
-                error: function(){
-                    alert("Geen films gevonden");
-                },
-                complete: function(){
-                    // Na laden: enable button + hide spinner
-                    $("#searchbutton").prop("disabled", false);
-                    $("#searchbutton").find(".spinner-border").addClass("d-none");
-                }
-            });
-        });
+			$.ajax({
+				url: `/movie/GetMoviesFromImdb?movieTitle=${title}`,
+				type: "GET",
+				dataType: "json",
+				success: function(data){
+					data.forEach(function(movie) {
+						$("#MovieTable tbody").append(
+							`<tr>
+								<td>${movie.title}</td>
+								<td>${movie.year}</td>
+								<td><a href="/Movie/AddMovieByImdbId?imdbId=${movie.imdbId}"> Voeg film toe aan database </a></td>
+							</tr>`
+						);
+					});
+				},
+				error: function(){
+					alert("Geen films gevonden");
+				},
+				complete: function(){
+					// Spinner verbergen en inputs weer inschakelen
+					$("#spinner").hide();
+					$("#searchbutton").prop("disabled", false);
+					$("#MovieTitle").prop("disabled", false);
+					$("#searchbutton").find(".spinner-border").addClass("d-none");
+				}
+			});
+		}
 
-        $("#MovieTitle").keyup(function(event) {
-            if (event.keyCode === 13) {
-                $("#searchbutton").click();
-            }
-        });
-    });
+		// Click handler
+		$("#searchbutton").off("click.spinnerHandler").on("click.spinnerHandler", function(){
+			startSearch();
+		});
+
+		// Enter-toets activeren
+		$("#MovieTitle").off("keyup.spinnerHandler").on("keyup.spinnerHandler", function(event){
+			if (event.keyCode === 13) {
+				startSearch();
+			}
+		});
+	});
 </script>

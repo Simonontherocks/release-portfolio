@@ -51,5 +51,6 @@
 
 <div>
     <a asp-action="Index">Back to List</a>
-    <a asp-action="Delete" asp-route-id="@Model.Id">Verwijder film</a>
+    @* <a asp-action="Delete" asp-route-id="@Model.Id">Verwijder film</a> *@
+    <a asp-action="Delete" asp-route-id="@Model.Id" onclick="return confirm('Weet je zeker dat je deze film wilt verwijderen?');">Verwijder film (met bevestiging)</a>
 </div>

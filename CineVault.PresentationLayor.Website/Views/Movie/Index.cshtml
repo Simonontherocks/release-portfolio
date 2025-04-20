@@ -31,29 +31,21 @@
 		@foreach (var item in Model)
 		{
 			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.IMDBId)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Title)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Seen)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Score)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Year)
-				</td>
+				<td>@Html.DisplayFor(modelItem => item.IMDBId)</td>
+				<td>@Html.DisplayFor(modelItem => item.Title)</td>
+				<td>@Html.DisplayFor(modelItem => item.Seen)</td>
+				<td>@Html.DisplayFor(modelItem => item.Score)</td>
+				<td>@Html.DisplayFor(modelItem => item.Year)</td>
 				<td>
 					@*action is de actie de we willen uitvoeren. Route is de naam in de URL.*@
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-					<a href="#" class="toggle-seen" data-id="@item.Id"> set as seen or unseen</a>
+					<a asp-action="Details" asp-route-id="@item.Id">Filmdetails</a>
+					<a href="#" class="toggle-seen" data-id="@item.Id">Gezien of niet gezien</a>
+					<a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Weet je zeker dat je deze film wilt verwijderen?');">Verwijder film</a>
 				</td>
 			</tr>
 		}
 	</tbody>
+
 </table>
 
 @*script is nodig om javascript in te laden*@

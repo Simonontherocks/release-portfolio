@@ -104,6 +104,7 @@ namespace CineVault.PresentationLayer.Website.Controllers
 
         public IActionResult SearchByActor()
         {
+            ViewData["BodyClass"] = "actor-bg";
             // Ik vraag eerst een lijst van alle acteurs die in de database zitten op.
             return View(_actorService.GetAll());
         }
@@ -121,6 +122,7 @@ namespace CineVault.PresentationLayer.Website.Controllers
 
         public IActionResult SearchByDirector()
         {
+            ViewData["BodyClass"] = "director-bg";
             // Ik vraag eerst een lijst van alle regisseurs die in de database zitten op.
             return View(_directorService.GetAll());
         }
@@ -138,6 +140,7 @@ namespace CineVault.PresentationLayer.Website.Controllers
 
         public IActionResult SearchByYear()
         {
+            ViewData["BodyClass"] = "year-bg";
             return View(_movieService.GetAllYears());
         }
 

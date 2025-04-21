@@ -37,13 +37,13 @@
 		function startSearch(){
 			var title = $("#MovieTitle").val();
 
-			// Spinner en disable inputs
+			// Spinner wordt getoond en wordt input geven uitgeschakeld.
 			$("#spinner").show();
 			$("#searchbutton").prop("disabled", true);
 			$("#MovieTitle").prop("disabled", true);
 			$("#searchbutton").find(".spinner-border").removeClass("d-none");
 
-			// Oude resultaten verwijderen
+			// Eerdere resultaten worden verwijderd.
 			$("#MovieTable tbody").empty();
 
 			$.ajax({
@@ -65,7 +65,7 @@
 					alert("Geen films gevonden");
 				},
 				complete: function(){
-					// Spinner verbergen en inputs weer inschakelen
+					// Spinner verbergen en input geven weer inschakelen
 					$("#spinner").hide();
 					$("#searchbutton").prop("disabled", false);
 					$("#MovieTitle").prop("disabled", false);
@@ -74,7 +74,7 @@
 			});
 		}
 
-		// Click handler
+		// Wanneer er geklikt of ge-entert wordt, dan wordt deze logica uitgevoerd.
 		$("#searchbutton").off("click.spinnerHandler").on("click.spinnerHandler", function(){
 			startSearch();
 		});

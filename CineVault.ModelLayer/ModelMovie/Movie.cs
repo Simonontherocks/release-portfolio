@@ -36,7 +36,7 @@ namespace CineVault.ModelLayer.ModelMovie
 
         // ToDO
         [JsonPropertyName("id")]
-        public int IMDBId {  get; set; }
+        public int TMDBId {  get; set; }
 
         [JsonPropertyName("title")]
         public string Title { get; set; }

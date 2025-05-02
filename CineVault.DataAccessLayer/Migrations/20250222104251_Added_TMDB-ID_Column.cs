@@ -5,13 +5,13 @@
 namespace CineVault.DataAccessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class Added_IMDBID_Column : Migration
+    public partial class Added_TMDBID_Column : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "IMDBId",
+                name: "TMDBId",
                 table: "Movies",
                 type: "int",
                 nullable: false,
@@ -21,42 +21,42 @@ namespace CineVault.DataAccessLayer.Migrations
                 table: "Movies",
                 keyColumn: "Id",
                 keyValue: 1,
-                column: "IMDBId",
+                column: "TMDBId",
                 value: 0);
 
             migrationBuilder.UpdateData(
                 table: "Movies",
                 keyColumn: "Id",
                 keyValue: 2,
-                column: "IMDBId",
+                column: "TMDBId",
                 value: 0);
 
             migrationBuilder.UpdateData(
                 table: "Movies",
                 keyColumn: "Id",
                 keyValue: 3,
-                column: "IMDBId",
+                column: "TMDBId",
                 value: 0);
 
             migrationBuilder.UpdateData(
                 table: "Movies",
                 keyColumn: "Id",
                 keyValue: 4,
-                column: "IMDBId",
+                column: "TMDBId",
                 value: 0);
 
             migrationBuilder.UpdateData(
                 table: "Movies",
                 keyColumn: "Id",
                 keyValue: 5,
-                column: "IMDBId",
+                column: "TMDBId",
                 value: 0);
 
             migrationBuilder.UpdateData(
                 table: "Movies",
                 keyColumn: "Id",
                 keyValue: 6,
-                column: "IMDBId",
+                column: "TMDBId",
                 value: 0);
         }
 
@@ -64,7 +64,7 @@ namespace CineVault.DataAccessLayer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IMDBId",
+                name: "TMDBId",
                 table: "Movies");
         }
     }

@@ -7,7 +7,7 @@ namespace CineVault.PresentationLayer.Website.ViewModels
     {
         #region Properties
 
-        public int IMDBId { get; set; }
+        public int TMDBId { get; set; }
 
         public string Title { get; set; }
 

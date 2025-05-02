@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CineVault.DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250322155716_Added_Imdb-Id_To_Person")]
-    partial class Added_ImdbId_To_Person
+    [Migration("20250322162557_Added_Tmdb-Ids_To_Directors_And_Actors_Mockdata")]
+    partial class Added_TmdbIds_To_Directors_And_Actors_Mockdata
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,7 @@ namespace CineVault.DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Imdb_ID")
+                    b.Property<int>("Tmdb_ID")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "id");
 
@@ -49,55 +49,55 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 6193,
                             Name = "Leonardo DiCaprio"
                         },
                         new
                         {
                             Id = 2,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 24045,
                             Name = "Joseph Gordon-Levitt"
                         },
                         new
                         {
                             Id = 3,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 27578,
                             Name = "Elliot Page"
                         },
                         new
                         {
                             Id = 4,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 8891,
                             Name = "John Travolta"
                         },
                         new
                         {
                             Id = 5,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 2231,
                             Name = "Samuel L. Jackson"
                         },
                         new
                         {
                             Id = 6,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 10297,
                             Name = "Matthew McConaughey"
                         },
                         new
                         {
                             Id = 7,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 1813,
                             Name = "Anne Hathaway"
                         },
                         new
                         {
                             Id = 8,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 204,
                             Name = "Kate Winslet"
                         },
                         new
                         {
                             Id = 9,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 138,
                             Name = "Quentin Tarantino"
                         });
                 });
@@ -110,7 +110,7 @@ namespace CineVault.DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Imdb_ID")
+                    b.Property<int>("Tmdb_ID")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "id");
 
@@ -127,31 +127,31 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 525,
                             Name = "Christopher Nolan"
                         },
                         new
                         {
                             Id = 2,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 138,
                             Name = "Quentin Tarantino"
                         },
                         new
                         {
                             Id = 3,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 2710,
                             Name = "James Cameron"
                         },
                         new
                         {
                             Id = 4,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 2294,
                             Name = "Robert Rodriguez"
                         },
                         new
                         {
                             Id = 5,
-                            Imdb_ID = 0,
+                            Tmdb_ID = 1,
                             Name = "George Lucas"
                         });
                 });
@@ -164,7 +164,7 @@ namespace CineVault.DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IMDBId")
+                    b.Property<int>("TMDBId")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "id");
 
@@ -191,7 +191,7 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            IMDBId = 0,
+                            TMDBId = 0,
                             Score = 9.0,
                             Seen = true,
                             Title = "Inception",
@@ -200,7 +200,7 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 2,
-                            IMDBId = 0,
+                            TMDBId = 0,
                             Score = 9.0,
                             Seen = false,
                             Title = "Pulp Fiction",
@@ -209,7 +209,7 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 3,
-                            IMDBId = 0,
+                            TMDBId = 0,
                             Score = 8.5,
                             Seen = true,
                             Title = "Interstellar",
@@ -218,7 +218,7 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 4,
-                            IMDBId = 0,
+                            TMDBId = 0,
                             Score = 8.0,
                             Seen = true,
                             Title = "Titanic",
@@ -227,7 +227,7 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 5,
-                            IMDBId = 0,
+                            TMDBId = 0,
                             Score = 7.0,
                             Seen = false,
                             Title = "Sin City",
@@ -236,7 +236,7 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 6,
-                            IMDBId = 0,
+                            TMDBId = 0,
                             Score = 7.5,
                             Seen = true,
                             Title = "Star Wars",

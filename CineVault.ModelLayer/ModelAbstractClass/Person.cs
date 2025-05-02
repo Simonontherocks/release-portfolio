@@ -26,7 +26,7 @@ namespace CineVault.ModelLayer.ModelAbstractClass
         public string Name { get; set; }
 
         [JsonPropertyName("id")]
-        public int Imdb_ID { get; set; } // Hier zal de imdb-id van de desbetreffende persoon opgeslaan worden
+        public int Tmdb_ID { get; set; } // Hier zal de tmdb-id van de desbetreffende persoon opgeslaan worden
 
         #endregion
 

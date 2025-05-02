@@ -3,6 +3,7 @@ using CineVault.DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,13 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CineVault.DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250222104251_Added_TMDB-ID_Column")]
+    partial class Added_TMDBID_Column
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,10 +37,6 @@ namespace CineVault.DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
-                    b.Property<int>("Tmdb_ID")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
-
                     b.HasKey("Id");
 
                     b.ToTable("Actors");
@@ -46,56 +45,47 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Leonardo DiCaprio",
-                            Tmdb_ID = 6193
+                            Name = "Leonardo DiCaprio"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Joseph Gordon-Levitt",
-                            Tmdb_ID = 24045
+                            Name = "Joseph Gordon-Levitt"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Elliot Page",
-                            Tmdb_ID = 27578
+                            Name = "Elliot Page"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "John Travolta",
-                            Tmdb_ID = 8891
+                            Name = "John Travolta"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Samuel L. Jackson",
-                            Tmdb_ID = 2231
+                            Name = "Samuel L. Jackson"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Matthew McConaughey",
-                            Tmdb_ID = 10297
+                            Name = "Matthew McConaughey"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Anne Hathaway",
-                            Tmdb_ID = 1813
+                            Name = "Anne Hathaway"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Kate Winslet",
-                            Tmdb_ID = 204
+                            Name = "Kate Winslet"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "Quentin Tarantino",
-                            Tmdb_ID = 138
+                            Name = "Quentin Tarantino"
                         });
                 });
 
@@ -112,10 +102,6 @@ namespace CineVault.DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
-                    b.Property<int>("Tmdb_ID")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
-
                     b.HasKey("Id");
 
                     b.ToTable("Directors");
@@ -124,32 +110,27 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Christopher Nolan",
-                            Tmdb_ID = 525
+                            Name = "Christopher Nolan"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Quentin Tarantino",
-                            Tmdb_ID = 138
+                            Name = "Quentin Tarantino"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "James Cameron",
-                            Tmdb_ID = 2710
+                            Name = "James Cameron"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Robert Rodriguez",
-                            Tmdb_ID = 2294
+                            Name = "Robert Rodriguez"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "George Lucas",
-                            Tmdb_ID = 1
+                            Name = "George Lucas"
                         });
                 });
 
@@ -161,16 +142,15 @@ namespace CineVault.DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double?>("Score")
-                        .HasColumnType("float")
-                        .HasAnnotation("Relational:JsonPropertyName", "vote_average");
-
-                    b.Property<bool>("Seen")
-                        .HasColumnType("bit");
-
                     b.Property<int>("TMDBId")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "id");
+
+                    b.Property<double?>("Score")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("Seen")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -189,55 +169,55 @@ namespace CineVault.DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
+                            TMDBId = 0,
                             Score = 9.0,
                             Seen = true,
-                            TMDBId = 27205,
                             Title = "Inception",
                             Year = "2010"
                         },
                         new
                         {
                             Id = 2,
+                            TMDBId = 0,
                             Score = 9.0,
                             Seen = false,
-                            TMDBId = 680,
                             Title = "Pulp Fiction",
                             Year = "1994"
                         },
                         new
                         {
                             Id = 3,
+                            TMDBId = 0,
                             Score = 8.5,
                             Seen = true,
-                            TMDBId = 157336,
                             Title = "Interstellar",
                             Year = "2014"
                         },
                         new
                         {
                             Id = 4,
+                            TMDBId = 0,
                             Score = 8.0,
                             Seen = true,
-                            TMDBId = 597,
                             Title = "Titanic",
                             Year = "1997"
                         },
                         new
                         {
                             Id = 5,
+                            TMDBId = 0,
                             Score = 7.0,
                             Seen = false,
-                            TMDBId = 187,
                             Title = "Sin City",
                             Year = "2005"
                         },
                         new
                         {
                             Id = 6,
+                            TMDBId = 0,
                             Score = 7.5,
                             Seen = true,
-                            TMDBId = 1893,
-                            Title = "Star Wars: The Phantom Menace",
+                            Title = "Star Wars",
                             Year = "2005"
                         });
                 });

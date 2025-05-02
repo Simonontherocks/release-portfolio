@@ -77,7 +77,7 @@ namespace CineVault.BusinessLogic.Service
                                 movie.Score = Math.Round(movie.Score.Value, 2);
                             }
 
-                            Debug.WriteLine($"ID: {movie.IMDBId}, Titel: {movie.Title}, Jaar: {movie.Year}, Score: {movie.Score}");
+                            Debug.WriteLine($"ID: {movie.TMDBId}, Titel: {movie.Title}, Jaar: {movie.Year}, Score: {movie.Score}");
                         }
 
                         allMovies.AddRange(movieResponse.Results); // Voeg de gevonden films toe aan de lijst.
@@ -129,7 +129,7 @@ namespace CineVault.BusinessLogic.Service
 
                 if (movieCreditsResponse != null) // Als de response succesvol is gedeserializeerd, wordt onderstaande code uitgevoerd.
                 {
-                    // dictionary = <int (imdb-id van persoon), dictionary<string(naam van persoon), List<string (functies in de film)>>>
+                    // dictionary = <int (tmdb-id van persoon), dictionary<string(naam van persoon), List<string (functies in de film)>>>
                     Dictionary<int, Dictionary<string, List<string>>> secondCastAndCrew = new Dictionary<int, Dictionary<string, List<string>>>();
 
                     // Toevoegen van acteurs
@@ -141,7 +141,7 @@ namespace CineVault.BusinessLogic.Service
                             { cast.Name, new List<string> { "actor" } }
                         };
 
-                        secondCastAndCrew[cast.Imdb_Id] = personDictionary;
+                        secondCastAndCrew[cast.Tmdb_Id] = personDictionary;
                     }
 
                     // Toevoegen van regisseurs
@@ -150,9 +150,9 @@ namespace CineVault.BusinessLogic.Service
                     {
                         if (crew.Job == "Director")
                         {
-                            if (secondCastAndCrew.ContainsKey(crew.Imdb_Id))
+                            if (secondCastAndCrew.ContainsKey(crew.Tmdb_Id))
                             {
-                                secondCastAndCrew[crew.Imdb_Id][crew.Name].Add("director");
+                                secondCastAndCrew[crew.Tmdb_Id][crew.Name].Add("director");
                             }
                             else
                             {
@@ -161,7 +161,7 @@ namespace CineVault.BusinessLogic.Service
                                     { crew.Name, new List<string> { "director" } }
                                 };
 
-                                secondCastAndCrew[crew.Imdb_Id] = personDictionary;
+                                secondCastAndCrew[crew.Tmdb_Id] = personDictionary;
                             }
 
                         }
@@ -178,13 +178,13 @@ namespace CineVault.BusinessLogic.Service
 
         }
 
-        public async Task<Movie?> GetMovieByImdbId(int imdbId)
+        public async Task<Movie?> GetMovieByTmdbId(int tmdbId)
         {
             // get the movie details from this url
             // https://api.themoviedb.org/3/movie/{movie_id}
             // details on how to use:
             // https://developer.themoviedb.org/reference/movie-details
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://api.themoviedb.org/3/movie/{imdbId}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://api.themoviedb.org/3/movie/{tmdbId}");
             request.Headers.Add("Authorization", headerApiKey);            
             HttpResponseMessage response = _httpClient.Send(request);
             if (response.IsSuccessStatusCode)

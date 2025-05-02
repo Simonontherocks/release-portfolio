@@ -31,7 +31,7 @@ namespace CineVault.DataAccessLayer.Repositories
 
         public bool CheckIfMovieExists (Movie movie)
         {
-            return _dbContext.Movies.Any(m => m.IMDBId.Equals(movie.IMDBId));
+            return _dbContext.Movies.Any(m => m.TMDBId.Equals(movie.TMDBId));
         }
 
         #endregion

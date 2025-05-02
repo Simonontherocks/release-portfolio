@@ -62,34 +62,34 @@ namespace CineVault.DataAccessLayer.Context
 
             // Voeg mock-acteurs toe
             modelBuilder.Entity<Actor>().HasData(
-                new Actor { Id = 1, Name = "Leonardo DiCaprio", Imdb_ID = 6193 },
-                new Actor { Id = 2, Name = "Joseph Gordon-Levitt", Imdb_ID = 24045 },
-                new Actor { Id = 3, Name = "Elliot Page", Imdb_ID = 27578 },
-                new Actor { Id = 4, Name = "John Travolta", Imdb_ID = 8891 },
-                new Actor { Id = 5, Name = "Samuel L. Jackson", Imdb_ID = 2231 },
-                new Actor { Id = 6, Name = "Matthew McConaughey", Imdb_ID = 10297 },
-                new Actor { Id = 7, Name = "Anne Hathaway", Imdb_ID = 1813 },
-                new Actor { Id = 8, Name = "Kate Winslet", Imdb_ID = 204 },
-                new Actor { Id = 9, Name = "Quentin Tarantino", Imdb_ID = 138 }
+                new Actor { Id = 1, Name = "Leonardo DiCaprio", Tmdb_ID = 6193 },
+                new Actor { Id = 2, Name = "Joseph Gordon-Levitt", Tmdb_ID = 24045 },
+                new Actor { Id = 3, Name = "Elliot Page", Tmdb_ID = 27578 },
+                new Actor { Id = 4, Name = "John Travolta", Tmdb_ID = 8891 },
+                new Actor { Id = 5, Name = "Samuel L. Jackson", Tmdb_ID = 2231 },
+                new Actor { Id = 6, Name = "Matthew McConaughey", Tmdb_ID = 10297 },
+                new Actor { Id = 7, Name = "Anne Hathaway", Tmdb_ID = 1813 },
+                new Actor { Id = 8, Name = "Kate Winslet", Tmdb_ID = 204 },
+                new Actor { Id = 9, Name = "Quentin Tarantino", Tmdb_ID = 138 }
             );
 
             // Voeg mock-regisseurs toe
             modelBuilder.Entity<Director>().HasData(
-                new Director { Id = 1, Name = "Christopher Nolan", Imdb_ID = 525 },
-                new Director { Id = 2, Name = "Quentin Tarantino", Imdb_ID = 138 },
-                new Director { Id = 3, Name = "James Cameron", Imdb_ID = 2710 },
-                new Director { Id = 4, Name = "Robert Rodriguez", Imdb_ID = 2294 },
-                new Director { Id = 5, Name = "George Lucas", Imdb_ID = 1 }
+                new Director { Id = 1, Name = "Christopher Nolan", Tmdb_ID = 525 },
+                new Director { Id = 2, Name = "Quentin Tarantino", Tmdb_ID = 138 },
+                new Director { Id = 3, Name = "James Cameron", Tmdb_ID = 2710 },
+                new Director { Id = 4, Name = "Robert Rodriguez", Tmdb_ID = 2294 },
+                new Director { Id = 5, Name = "George Lucas", Tmdb_ID = 1 }
             );
 
             // Voeg mock-films toe
             modelBuilder.Entity<Movie>().HasData(
-                new Movie { Id = 1, Title = "Inception", Seen = true, Score = 9.0, Year = "2010", IMDBId = 27205 },
-                new Movie { Id = 2, Title = "Pulp Fiction", Seen = false, Score = 9, Year = "1994", IMDBId = 680 },
-                new Movie { Id = 3, Title = "Interstellar", Seen = true, Score = 8.5, Year = "2014", IMDBId = 157336 },
-                new Movie { Id = 4, Title = "Titanic", Seen = true, Score = 8.0, Year = "1997", IMDBId = 597 },
-                new Movie { Id = 5, Title = "Sin City", Seen = false, Score = 7.0, Year = "2005", IMDBId = 187 },
-                new Movie { Id = 6, Title = "Star Wars: The Phantom Menace", Seen = true, Score = 7.5, Year = "2005", IMDBId = 1893 }
+                new Movie { Id = 1, Title = "Inception", Seen = true, Score = 9.0, Year = "2010", TMDBId = 27205 },
+                new Movie { Id = 2, Title = "Pulp Fiction", Seen = false, Score = 9, Year = "1994", TMDBId = 680 },
+                new Movie { Id = 3, Title = "Interstellar", Seen = true, Score = 8.5, Year = "2014", TMDBId = 157336 },
+                new Movie { Id = 4, Title = "Titanic", Seen = true, Score = 8.0, Year = "1997", TMDBId = 597 },
+                new Movie { Id = 5, Title = "Sin City", Seen = false, Score = 7.0, Year = "2005", TMDBId = 187 },
+                new Movie { Id = 6, Title = "Star Wars: The Phantom Menace", Seen = true, Score = 7.5, Year = "2005", TMDBId = 1893 }
             );
 
             // Relaties toevoegen in tussen-tabellen

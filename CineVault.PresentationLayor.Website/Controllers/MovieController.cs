@@ -2,6 +2,7 @@
 using CineVault.BusinessLogic.Service;
 using CineVault.ModelLayer.ModelMovie;
 using CineVault.PresentationLayer.Website.ViewModels;
+using CineVault.PresentationLayor.Website.Models;
 
 namespace CineVault.PresentationLayer.Website.Controllers
 {
@@ -44,7 +45,7 @@ namespace CineVault.PresentationLayer.Website.Controllers
             return View();
         }
 
-        public async Task<List<ApiMovie>?> GetMoviesFromImdb(string movieTitle) // Hier zal een filmtitel in de zoekbalk getypt moeten worden en zal er op gezocht worden.
+        public async Task<List<ApiMovie>?> GetMoviesFromTmdb(string movieTitle) // Hier zal een filmtitel in de zoekbalk getypt moeten worden en zal er op gezocht worden.
         {
             List<ApiMovie> result= new List<ApiMovie>();
             List<Movie>? apiResult = await _apiService.GetMoviesByTitle(movieTitle);
@@ -57,17 +58,26 @@ namespace CineVault.PresentationLayer.Website.Controllers
             {
                 foreach (Movie movie in apiResult)
                 {
-                    result.Add(new ApiMovie { Title = movie.Title, IMDBId = movie.IMDBId, Year = movie.Year });
+                    result.Add(new ApiMovie { Title = movie.Title, TMDBId = movie.TMDBId, Year = movie.Year });
                 }
             }
             
             return result;
         }
 
-        public async Task<IActionResult> AddMovieByImdbId(int imdbId) // De film, cast eb crew worden aan de hand van het IMDB-Id opgeslaan in de databank.
+        public async Task<IActionResult> AddMovieByTmdbId(int tmdbId) // De film, cast eb crew worden aan de hand van het TMDB-Id opgeslaan in de databank.
         {
-            await _movieService.AddMovieByImdbId(imdbId);
-            return Redirect(nameof(AllMovies));
+            try
+            {
+                await _movieService.AddMovieByTmdbId(tmdbId);
+                return Redirect(nameof(AllMovies));
+            }
+            catch (Exception exception)
+            {
+                ErrorViewModel error = new ErrorViewModel();
+                error.ErrorMessage = exception.Message;
+                return View("Error", error);
+            }
         }
 
         public async Task<IActionResult> Delete(int id)

@@ -16,6 +16,6 @@ namespace CineVault.BusinessLogic.ApiModels
         public string Character { get; set; }
 
         [JsonPropertyName("id")]
-        public int Imdb_Id { get; set; }
+        public int Tmdb_Id { get; set; }
     }
 }

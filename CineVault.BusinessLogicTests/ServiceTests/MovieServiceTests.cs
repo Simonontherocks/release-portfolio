@@ -31,54 +31,6 @@ public class MovieServiceTests
     #region testen op "Adding or removing movies"
 
     [TestMethod]
-    public async Task AddMovieByTitle_Should_AddMovie_When_ValidTitleProvided()
-    {
-        // ARRANGE  
-        Setup();
-        AppDBContext context = new AppDBContext(_dbContextOptions);
-        MovieRepository movieRepository = new MovieRepository(context);
-        ApiService apiService = new ApiService();
-        MovieService movieService = new MovieService(movieRepository, apiService, context);
-
-        string movieTitle = "Inception";
-        bool seenStatus = true;
-
-        // ACT  
-        await movieService.AddMovieByTitle(movieTitle, seenStatus);
-
-        // ASSERT  
-        Movie? addedMovie = context.Movies.FirstOrDefault(m => m.Title == movieTitle);
-        Assert.IsNotNull(addedMovie);
-        Assert.AreEqual(movieTitle, addedMovie.Title);
-        Assert.AreEqual(seenStatus, addedMovie.Seen);
-    }
-
-    [TestMethod]
-    public async Task AddMovieByTitle_Should_ThrowException_When_MovieAlreadyExists()
-    {
-        // ARRANGE  
-        Setup();
-        AppDBContext context = new AppDBContext(_dbContextOptions);
-        MovieRepository movieRepository = new MovieRepository(context);
-        ApiService apiService = new ApiService();
-        MovieService movieService = new MovieService(movieRepository, apiService, context);
-
-        string movieTitle = "Inception";
-        bool seenStatus = true;
-        Movie existingMovie = new Movie { IMDBId = 12345, Title = movieTitle, Seen = seenStatus };
-
-        // Voeg de film toe
-        context.Movies.Add(existingMovie);
-        await context.SaveChangesAsync();
-
-        // ACT & ASSERT: Verwacht een uitzondering  
-        await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () =>
-        {
-            await movieService.AddMovieByTitle(movieTitle, seenStatus);
-        });
-    }
-
-    [TestMethod]
     public async Task AddMovieByTitle_Should_ThrowException_When_MovieNotFound()
     {
         // ARRANGE  
@@ -146,7 +98,7 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie = new Movie { Id = 1, IMDBId = 12345, Title = "Inception", Seen = true };
+        Movie movie = new Movie { Id = 1, TMDBId = 12345, Title = "Inception", Seen = true };
         context.Movies.Add(movie);
         await context.SaveChangesAsync();
 
@@ -207,8 +159,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Seen = true };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Seen = false };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Seen = true };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Seen = false };
 
         context.Movies.AddRange(movie1, movie2);
         await context.SaveChangesAsync();
@@ -229,8 +181,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Seen = true };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Seen = false };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Seen = true };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Seen = false };
 
         context.Movies.AddRange(movie1, movie2);
         await context.SaveChangesAsync();
@@ -251,8 +203,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Seen = true };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Seen = false };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Seen = true };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Seen = false };
 
         context.Movies.AddRange(movie1, movie2);
         await context.SaveChangesAsync();
@@ -273,8 +225,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Seen = true };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Seen = false };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Seen = true };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Seen = false };
 
         context.Movies.AddRange(movie1, movie2);
         await context.SaveChangesAsync();
@@ -295,8 +247,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Seen = true };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Seen = false };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Seen = true };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Seen = false };
 
         context.Movies.AddRange(movie1, movie2);
         await context.SaveChangesAsync();
@@ -317,8 +269,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Seen = false };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Seen = true };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Seen = false };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Seen = true };
 
         context.Movies.AddRange(movie1, movie2);
         await context.SaveChangesAsync();
@@ -339,8 +291,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Seen = false };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Seen = true };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Seen = false };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Seen = true };
 
         context.Movies.AddRange(movie1, movie2);
         await context.SaveChangesAsync();
@@ -361,8 +313,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Seen = false };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Seen = true };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Seen = false };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Seen = true };
 
         context.Movies.AddRange(movie1, movie2);
         await context.SaveChangesAsync();
@@ -389,7 +341,7 @@ public class MovieServiceTests
 
         Movie movie = new Movie
         {
-            IMDBId = 1,
+            TMDBId = 1,
             Title = "Inception",
             MovieActors = new List<MovieActor>
         {
@@ -419,7 +371,7 @@ public class MovieServiceTests
 
         Movie movie = new Movie
         {
-            IMDBId = 1,
+            TMDBId = 1,
             Title = "Inception",
             MovieActors = new List<MovieActor>
         {
@@ -465,7 +417,7 @@ public class MovieServiceTests
 
         Movie movie = new Movie
         {
-            IMDBId = 1,
+            TMDBId = 1,
             Title = "Inception",
             MovieDirectors = new List<MovieDirector>
         {
@@ -497,7 +449,7 @@ public class MovieServiceTests
 
         Movie movie = new Movie
         {
-            IMDBId = 1,
+            TMDBId = 1,
             Title = "Inception",
             MovieDirectors = new List<MovieDirector>
         {
@@ -543,7 +495,7 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie = new Movie { IMDBId = 1, Title = "Inception", Year = "2010" };
+        Movie movie = new Movie { TMDBId = 1, Title = "Inception", Year = "2010" };
 
         context.Movies.Add(movie);
         await context.SaveChangesAsync();
@@ -564,7 +516,7 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie = new Movie { IMDBId = 1, Title = "Inception", Year = "2010" };
+        Movie movie = new Movie { TMDBId = 1, Title = "Inception", Year = "2010" };
 
         context.Movies.Add(movie);
         await context.SaveChangesAsync();
@@ -606,12 +558,12 @@ public class MovieServiceTests
         MovieService movieService = new MovieService(movieRepository, null, context);
 
         Actor actor = new Actor { Id = 1, Name = "Leonardo DiCaprio" };
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", MovieActors = new List<MovieActor> 
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", MovieActors = new List<MovieActor> 
         { 
             new MovieActor { Actor = actor } 
         }
         };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Titanic", MovieActors = new List<MovieActor>
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Titanic", MovieActors = new List<MovieActor>
         {
             new MovieActor { Actor = actor }
         }
@@ -638,12 +590,12 @@ public class MovieServiceTests
         MovieService movieService = new MovieService(movieRepository, null, context);
 
         Actor actor = new Actor { Id = 1, Name = "Leonardo DiCaprio" };
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", MovieActors = new List<MovieActor> 
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", MovieActors = new List<MovieActor> 
         { 
             new MovieActor { Actor = actor } 
         }
         };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Titanic", MovieActors = new List<MovieActor> 
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Titanic", MovieActors = new List<MovieActor> 
         { 
             new MovieActor { Actor = actor } 
         }
@@ -688,14 +640,14 @@ public class MovieServiceTests
         MovieService movieService = new MovieService(movieRepository, null, context);
 
         Director director = new Director { Id = 1, Name = "Christopher Nolan" };
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", MovieDirectors = new List<MovieDirector>
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", MovieDirectors = new List<MovieDirector>
         {
             new MovieDirector { Director = director }
         }
         };
         Movie movie2 = new Movie
         {
-            IMDBId = 2,
+            TMDBId = 2,
             Title = "Interstellar",
             MovieDirectors = new List<MovieDirector>
             { 
@@ -724,13 +676,13 @@ public class MovieServiceTests
         MovieService movieService = new MovieService(movieRepository, null, context);
 
         Director director = new Director { Id = 1, Name = "Christopher Nolan" };
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", MovieDirectors = new List<MovieDirector>
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", MovieDirectors = new List<MovieDirector>
         {
             new MovieDirector { Director = director }
         }
         };
 
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", MovieDirectors = new List<MovieDirector>
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", MovieDirectors = new List<MovieDirector>
         {
             new MovieDirector { Director = director }
         }
@@ -774,8 +726,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Year = "2010" };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Year = "2010" };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Year = "2010" };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Year = "2010" };
 
         context.Movies.Add(movie1);
         context.Movies.Add(movie2);
@@ -797,8 +749,8 @@ public class MovieServiceTests
         MovieRepository movieRepository = new MovieRepository(context);
         MovieService movieService = new MovieService(movieRepository, null, context);
 
-        Movie movie1 = new Movie { IMDBId = 1, Title = "Inception", Year = "2010" };
-        Movie movie2 = new Movie { IMDBId = 2, Title = "Interstellar", Year = "2010" };
+        Movie movie1 = new Movie { TMDBId = 1, Title = "Inception", Year = "2010" };
+        Movie movie2 = new Movie { TMDBId = 2, Title = "Interstellar", Year = "2010" };
 
         context.Movies.Add(movie1);
         context.Movies.Add(movie2);

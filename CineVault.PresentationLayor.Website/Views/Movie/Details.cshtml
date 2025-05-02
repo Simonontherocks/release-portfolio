@@ -10,7 +10,7 @@
     <h4>Movie</h4>
     <hr />
     <dl class="row">
-        @foreach (var prop in new[] { "IMDBId", "Title", "Seen", "Score", "Year" })
+        @foreach (var prop in new[] { "TMDBId", "Title", "Seen", "Score", "Year" })
         {
             <dt class="col-sm-2">@prop</dt>
             <dd class="col-sm-10">@Model.GetType().GetProperty(prop).GetValue(Model)</dd>

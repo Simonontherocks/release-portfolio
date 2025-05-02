@@ -47,7 +47,7 @@
 			$("#MovieTable tbody").empty();
 
 			$.ajax({
-				url: `/movie/GetMoviesFromImdb?movieTitle=${title}`,
+				url: `/movie/GetMoviesFromTmdb?movieTitle=${title}`,
 				type: "GET",
 				dataType: "json",
 				success: function(data){
@@ -56,7 +56,7 @@
 							`<tr>
 								<td>${movie.title}</td>
 								<td>${movie.year}</td>
-								<td><a href="/Movie/AddMovieByImdbId?imdbId=${movie.imdbId}"> Voeg film toe aan database </a></td>
+								<td><a href="/Movie/AddMovieByTmdbId?TmdbId=${movie.tmdbId}"> Voeg film toe aan database </a></td>
 							</tr>`
 						);
 					});

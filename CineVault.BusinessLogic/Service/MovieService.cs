@@ -89,12 +89,12 @@ namespace CineVault.BusinessLogic.Service
                 throw new InvalidOperationException("Er zijn geen films gevonden met opgegeven titel");
             }
 
-            // Nu wordt de film gekozen door middel van de IMDB-Id van de film.
+            // Nu wordt de film gekozen door middel van de TMDB-Id van de film.
 
             foreach (Movie CurrentMovie in MoviesFromApi)
             {
-                Console.WriteLine(CurrentMovie.Title + " " + CurrentMovie.Year + ": " + CurrentMovie.IMDBId);
-                ListWithReceivedIds.Add(CurrentMovie.IMDBId);
+                Console.WriteLine(CurrentMovie.Title + " " + CurrentMovie.Year + ": " + CurrentMovie.TMDBId);
+                ListWithReceivedIds.Add(CurrentMovie.TMDBId);
             }
 
             while (blCorrectyEnteredId.Equals(false)) // Zolang de ingegeven ID niet correct is, zal de lus opnieuw doorlopen worden.
@@ -131,7 +131,7 @@ namespace CineVault.BusinessLogic.Service
 
             for (int index = 0; index < MoviesFromApi.Count; index++)
             {
-                if (MoviesFromApi[index].IMDBId.Equals(intMovieId))
+                if (MoviesFromApi[index].TMDBId.Equals(intMovieId))
                 {
                     selectedMovie = MoviesFromApi[index];
                     index = MoviesFromApi.Count;
@@ -163,7 +163,7 @@ namespace CineVault.BusinessLogic.Service
 
             foreach (KeyValuePair<int, Dictionary<string, List<string>>> person in castAndCrew)
             {
-                int imdbId = person.Key;
+                int tmdbId = person.Key;
                 Dictionary<string, List<string>> personInfo = person.Value;
 
                 foreach (KeyValuePair<string, List<string>> nameAndRoles in personInfo)
@@ -177,7 +177,7 @@ namespace CineVault.BusinessLogic.Service
                         Actor existingActor = _appDBContext.Actors.FirstOrDefault(a => a.Name == personName);
                         if (existingActor == null)
                         {
-                            Actor newActor = new Actor { Name = personName, Imdb_ID = imdbId };
+                            Actor newActor = new Actor { Name = personName, Tmdb_ID = tmdbId };
                             _appDBContext.Actors.Add(newActor);
                         }
                     }
@@ -188,7 +188,7 @@ namespace CineVault.BusinessLogic.Service
                         Director existingDirector = _appDBContext.Directors.FirstOrDefault(d => d.Name == personName);
                         if (existingDirector == null)
                         {
-                            Director newDirector = new Director { Name = personName, Imdb_ID = imdbId };
+                            Director newDirector = new Director { Name = personName, Tmdb_ID = tmdbId };
                             _appDBContext.Directors.Add(newDirector);
                         }
 
@@ -204,7 +204,7 @@ namespace CineVault.BusinessLogic.Service
 
             // De relaties tussen Movie, Actor en Director worden gemaakt.
 
-            Movie movie = _appDBContext.Movies.FirstOrDefault(m => m.IMDBId == selectedMovie.IMDBId);
+            Movie movie = _appDBContext.Movies.FirstOrDefault(m => m.TMDBId == selectedMovie.TMDBId);
 
             if (movie == null)
             {
@@ -250,7 +250,7 @@ namespace CineVault.BusinessLogic.Service
 
         }
 
-        public async Task AddMovieByImdbId(int imdbId)
+        public async Task AddMovieByTmdbId(int tmdbId)
         {
             bool blCorrectyEnteredId;
             int intEnteredId;
@@ -266,15 +266,15 @@ namespace CineVault.BusinessLogic.Service
             intMovieId = 0;
             selectedMovie = new Movie();
 
-            if (imdbId == 0)
+            if (tmdbId == 0)
             {
-                throw new ArgumentNullException("imdb-ID mag niet null zijn", nameof(imdbId));
+                throw new ArgumentNullException("tmdb-ID mag niet null zijn", nameof(tmdbId));
             }
 
             // Eerst wordt de film opgezocht door de api.
 
-            //ToDO GetMovieByImdbId in apiService aanmaken
-            selectedMovie = await _apiService.GetMovieByImdbId(imdbId); // Het gevonden resultaat wordt in de property gestoken.
+            //ToDO GetMovieByTmdbId in apiService aanmaken
+            selectedMovie = await _apiService.GetMovieByTmdbId(tmdbId); // Het gevonden resultaat wordt in de property gestoken.
 
             if (selectedMovie is null) // Indien er geen film gevonden is, zal er een uitzondering getoont worden.
             {
@@ -292,10 +292,10 @@ namespace CineVault.BusinessLogic.Service
             }
             else
             {
-                throw new Exception("Film zit al in database");
+                throw new Exception("Film zit al in database.");
             }
 
-            Dictionary<int, Dictionary<string, List<string>>> castAndCrew = await _apiService.AddMovieWithActorsAndDirectorsToDatabase(imdbId);
+            Dictionary<int, Dictionary<string, List<string>>> castAndCrew = await _apiService.AddMovieWithActorsAndDirectorsToDatabase(tmdbId);
 
             if (castAndCrew == null)
             {
@@ -319,7 +319,7 @@ namespace CineVault.BusinessLogic.Service
                         Actor existingActor = _appDBContext.Actors.FirstOrDefault(a => a.Name == personName);
                         if (existingActor == null)
                         {
-                            Actor newActor = new Actor { Name = personName, Imdb_ID = person.Key };
+                            Actor newActor = new Actor { Name = personName, Tmdb_ID = person.Key };
                             _appDBContext.Actors.Add(newActor);
                         }
                     }
@@ -330,7 +330,7 @@ namespace CineVault.BusinessLogic.Service
                         Director existingDirector = _appDBContext.Directors.FirstOrDefault(d => d.Name == personName);
                         if (existingDirector == null)
                         {
-                            Director newDirector = new Director { Name = personName, Imdb_ID = person.Key };
+                            Director newDirector = new Director { Name = personName, Tmdb_ID = person.Key };
                             _appDBContext.Directors.Add(newDirector);
                         }
 
@@ -346,7 +346,7 @@ namespace CineVault.BusinessLogic.Service
 
             // De relaties tussen Movie, Actor en Director worden gemaakt.
 
-            Movie movie = _appDBContext.Movies.FirstOrDefault(m => m.IMDBId == selectedMovie.IMDBId);
+            Movie movie = _appDBContext.Movies.FirstOrDefault(m => m.TMDBId == selectedMovie.TMDBId);
 
             if (movie == null)
             {

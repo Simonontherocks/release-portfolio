@@ -30,7 +30,7 @@ namespace CineVault.MainProgram
 
             //movieService.AddMovieByTitle("die hard", false);
             //movieService.AddMovieByTitle("armageddon", false);
-            //movieService.AddMovieByImdbId(39);
+            //movieService.AddMovieByTmdbId(39);
             //movieService.RemoveMovieByIdAsync(39);
 
             #endregion

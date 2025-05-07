@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
+﻿using System.Diagnostics;
 using System.Text.Json;
-using System.Threading.Tasks;
 using CineVault.BusinessLogic.ApiModels;
-using CineVault.ModelLayer;
 using CineVault.ModelLayer.ModelMovie;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CineVault.BusinessLogic.Service
 {

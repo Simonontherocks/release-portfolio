@@ -3,7 +3,6 @@ using CineVault.DataAccessLayer.Context;
 using CineVault.DataAccessLayer.Repositories;
 using CineVault.ModelLayer.ModelMovie;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace CineVault.BusinessLogicTests;
 

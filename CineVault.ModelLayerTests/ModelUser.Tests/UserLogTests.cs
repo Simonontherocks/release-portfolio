@@ -6,7 +6,7 @@ namespace CineVault.ModelLayerTests.ModelLayer.Tests;
 public class UserLogTests
 {
     [TestMethod]
-    public void UserLog_CanBeInitialized()
+    public void UserLog_HasCorrectTimeOfDay()
     {
         // Arrange
         UserLog log = new UserLog();
@@ -14,11 +14,21 @@ public class UserLogTests
 
         // Act
         log.TimeOfDay = now;
-        log.AmountOfUsers = 100;
 
         // Assert
         Assert.AreEqual(now, log.TimeOfDay);
-        Assert.AreEqual(100, log.AmountOfUsers);
     }
 
+    [TestMethod]
+    public void UserLog_HasCorrectAmountOfUsers()
+    {
+        // Arrange
+        UserLog log = new UserLog();
+
+        // Act
+        log.AmountOfUsers = 100;
+
+        // Assert
+        Assert.AreEqual(100, log.AmountOfUsers);
+    }
 }

@@ -6,27 +6,54 @@ namespace CineVault.ModelLayerTests.ModelLayer.Model.Tests;
 public class MovieTests
 {
     [TestMethod]
-    public void Movie_CanBeInitialized()
+    public void Movie_HasCorrectTitle()
     {
         // Arrange
         Movie movie = new Movie();
-        Director director = new Director { Name = "Christopher Nolan" };
-        List<Actor> actors = new List<Actor>
-        {
-        new Actor { Name = "Leonardo DiCaprio" },
-        new Actor { Name = "Joseph Gordon-Levitt" }
-        };
 
         // Act
         movie.Title = "Inception";
-        movie.Seen = true;
-        movie.Score = 10;
-        movie.Year = "2010";
 
         // Assert
         Assert.AreEqual("Inception", movie.Title);
+    }
+
+    [TestMethod]
+    public void Movie_HasBeenSeen()
+    {
+        // Arrange
+        Movie movie = new Movie();
+
+        // Act
+        movie.Seen = true;
+
+        // Assert
         Assert.IsTrue(movie.Seen);
+    }
+
+    [TestMethod]
+    public void Movie_HasCorrectScore()
+    {
+        // Arrange
+        Movie movie = new Movie();
+
+        // Act
+        movie.Score = 10;
+
+        // Assert
         Assert.AreEqual(10, movie.Score);
+    }
+
+    [TestMethod]
+    public void Movie_HasCorrectYear()
+    {
+        // Arrange
+        Movie movie = new Movie();
+
+        // Act
+        movie.Year = "2010";
+
+        // Assert
         Assert.AreEqual("2010", movie.Year);
     }
 

@@ -1,12 +1,6 @@
 ﻿using CineVault.DataAccessLayer.Context;
 using CineVault.ModelLayer.ModelMovie;
-using CineVault.ModelLayer.ModelUser;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CineVault.DataAccessLayer.Repositories
 {

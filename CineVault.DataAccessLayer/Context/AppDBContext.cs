@@ -1,17 +1,8 @@
-﻿using CineVault.ModelLayer.ModelAbstractClass;
-using CineVault.ModelLayer.ModelMovie;
+﻿using CineVault.ModelLayer.ModelMovie;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CineVault.DataAccessLayer.Context
 {
-    // Add-Migration InitialCreate -Project Quest.Data -StartupProject Quest.UI
-    // Update-Database -Project Quest.Data -StartupProject Quest.UI
     public class AppDBContext : DbContext
     {
         #region Property        
@@ -23,7 +14,6 @@ namespace CineVault.DataAccessLayer.Context
         public DbSet<MovieDirector> MovieDirectors { get; set; }
 
         #endregion
-
 
         #region Constructor
 
@@ -60,6 +50,8 @@ namespace CineVault.DataAccessLayer.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            /*
+             * Dit is de oorspronkelijke mockdata die toegevoegd is geweest
             // Voeg mock-acteurs toe
             modelBuilder.Entity<Actor>().HasData(
                 new Actor { Id = 1, Name = "Leonardo DiCaprio", Tmdb_ID = 6193 },
@@ -128,7 +120,7 @@ namespace CineVault.DataAccessLayer.Context
                 new MovieDirector { Id = 6, MovieId = 5, DirectorId = 4 }, // Sin City - Robert Rodriguez
                 new MovieDirector { Id = 7, MovieId = 6, DirectorId = 5 } // Star Wars - George Lucas
             );
-
+            */
         }
 
 

@@ -2,7 +2,45 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4 hero-text">CineVault</h1>
-    <h2 class="hero-text">Your safe to store your movies</h2>
+<style>
+    /* Zorg dat de html- en body-elementen de volledige hoogte van het scherm hebben,
+           en verwijder standaardmarges en -opvulling om ongewenste ruimtes weg te nemen */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* De container van de hero-sectie: centreren van de tekst horizontaal */
+    .hero-container {
+        text-align: center; /* zet de tekst in het midden van de container */
+    }
+
+    /* Stijl voor de hoofdtitel (CineVault):
+           - groot en vet
+           - responsieve lettergrootte (10% van de breedte van het scherm)
+           - geen marge boven of onder
+           - witte kleur voor contrast op een donkere achtergrond */
+    .hero-title {
+        font-size: 10vw;
+        font-weight: bold;
+        margin: 0;
+        color: white;
+    }
+
+    /* Stijl voor de subtitel (Your safe to store your movies):
+           - kleiner dan de hoofdtitel, maar ook responsief
+           - kleine marge boven de titel voor wat ruimte
+           - witte kleur om consistent te blijven met de titel */
+    .hero-subtitle {
+        font-size: 3vw;
+        margin-top: 10px;
+        color: white;
+    }
+</style>
+
+<!-- Hero-container met de titel en subtitel -->
+<div class="hero-container">
+    <h1 class="hero-title">CineVault</h1>
+    <h2 class="hero-subtitle">Your safe to store your movies</h2>
 </div>

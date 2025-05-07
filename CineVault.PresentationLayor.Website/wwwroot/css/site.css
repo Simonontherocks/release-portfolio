@@ -25,3 +25,25 @@ body {
     color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
+
+.title-colored {
+    color: #ffffff; /* witte kleur */
+    font-weight: bold;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.container, main {
+    flex: 1;
+}
+
+.custom-green {
+    color: #4cff00; /*8IMportant zorgt ervoor dat deze kleur niet overschreden wordt door andere kleuren*/
+}

@@ -4,16 +4,13 @@
     ViewData["Title"] = "SearchByDirector";
 }
 
-<h1>SearchByDirector</h1>
+<h1 class="title-colored">SearchByDirector</h1>
 
-<table class="table">
+<table class="table" style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tmdb_ID)
             </th>
             <th></th>
         </tr>
@@ -23,9 +20,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tmdb_ID)
             </td>
             <td>
                     <a asp-action="ShowMoviesFromDirector" asp-route-id="@item.Id">Select</a>

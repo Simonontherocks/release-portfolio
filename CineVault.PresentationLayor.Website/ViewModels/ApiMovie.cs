@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-namespace CineVault.PresentationLayer.Website.ViewModels
+﻿namespace CineVault.PresentationLayer.Website.ViewModels
 {
     public class ApiMovie
     {

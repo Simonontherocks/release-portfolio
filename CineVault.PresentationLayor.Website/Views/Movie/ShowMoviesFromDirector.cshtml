@@ -4,14 +4,11 @@
 	ViewData["Title"] = "ShowMoviesFromDirector";
 }
 
-<h1>ShowMoviesFromDirector</h1>
+<h1 class="title-colored">ShowMoviesFromDirector</h1>
 
-<table class="table">
+<table class="table" style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
 	<thead>
 		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.TMDBId)
-			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.Title)
 			</th>
@@ -31,9 +28,6 @@
 		@foreach (var item in Model)
 		{
 			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.TMDBId)
-				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Title)
 				</td>

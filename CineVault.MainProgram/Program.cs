@@ -1,15 +1,5 @@
 ﻿using CineVault.BusinessLogic.Service;
-using CineVault.DataAccessLayer;
 using CineVault.DataAccessLayer.Repositories;
-using CineVault.ModelLayer.ModelAbstractClass;
-using CineVault.ModelLayer.ModelMovie;
-using CineVault.ModelLayer.ModelUser;
-using System.IO;
-using System.Reflection;
-using CineVault.BusinessLogic.ApiModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using CineVault.DataAccessLayer.Context;
 
 namespace CineVault.MainProgram
@@ -17,7 +7,7 @@ namespace CineVault.MainProgram
     internal class Program
     {
         private static AppDBContext _appDBContext;
-        static private ApiService _apiService = new ApiService();
+        private static ApiService _apiService = new ApiService();
 
         static async Task Main(string[] args)
         {

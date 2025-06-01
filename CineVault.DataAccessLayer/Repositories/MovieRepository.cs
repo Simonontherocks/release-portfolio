@@ -25,7 +25,15 @@ namespace CineVault.DataAccessLayer.Repositories
 
         public bool CheckIfMovieExists (Movie movie)
         {
-            return _dbContext.Movies.Any(m => m.TMDBId.Equals(movie.TMDBId));
+            try
+            {
+                return _dbContext.Movies.Any(m => m.TMDBId.Equals(movie.TMDBId));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in CheckIfMovieExists: {ex.Message}");
+                return false;
+            }
         }
 
         #endregion
@@ -34,15 +42,28 @@ namespace CineVault.DataAccessLayer.Repositories
 
         public void AddMovieByMovie(Movie movie)
         {
-
-            _dbContext.Add(movie);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Add(movie);
+                _dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in AddMovieByMovie: {ex.Message}");
+            }
         }
 
         public void RemoveMovieByMovie(Movie movie)
         {
-            _dbContext.Remove(movie);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Remove(movie);
+                _dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in RemoveMovieByMovie: {ex.Message}");
+            }
         }
 
         #endregion
@@ -51,17 +72,41 @@ namespace CineVault.DataAccessLayer.Repositories
 
         public IEnumerable<Movie> ShowAllMoviesAUserContains()
         {
-            return _dbContext.Movies.ToList();
+            try
+            {
+                return _dbContext.Movies.ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowAllMoviesAUserContains: {ex.Message}");
+                return Enumerable.Empty<Movie>();
+            }
         }
 
         public IEnumerable<Movie> ShowAllMoviesThatHaveBeenSeen()
         {
-            return _dbContext.Movies.Where(movie => movie.Seen == true).ToList();
+            try
+            {
+                return _dbContext.Movies.Where(movie => movie.Seen == true).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowAllMoviesThatHaveBeenSeen: {ex.Message}");
+                return Enumerable.Empty<Movie>();
+            }
         }
 
         public IEnumerable<Movie> ShowAllMoviesThatHaveNotBeenSeen()
         {
-            return _dbContext.Movies.Where(movie => movie.Seen == false).ToList();
+            try
+            {
+                return _dbContext.Movies.Where(movie => movie.Seen == false).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowAllMoviesThatHaveNotBeenSeen: {ex.Message}");
+                return Enumerable.Empty<Movie>();
+            }
         }
 
         #endregion
@@ -70,23 +115,47 @@ namespace CineVault.DataAccessLayer.Repositories
 
         public IEnumerable<Actor> ShowAllActorsFromMovie(Movie movie)
         {
-            return _dbContext.MovieActors
-            .Where(ma => ma.MovieId == movie.Id)
-            .Select(ma => ma.Actor)
-            .ToList();
+            try
+            {
+                return _dbContext.MovieActors
+                   .Where(ma => ma.MovieId == movie.Id)
+                   .Select(ma => ma.Actor)
+                   .ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowAllActorsFromMovie: {ex.Message}");
+                return Enumerable.Empty<Actor>();
+            }
         }
 
         public IEnumerable<Director> ShowDirectorFromMovie(Movie movie)
         {
-            return _dbContext.MovieDirectors
-           .Where(md => md.MovieId == movie.Id)
-           .Select(md => md.Director)
-           .ToList();
+            try
+            {
+                return _dbContext.MovieDirectors
+                  .Where(md => md.MovieId == movie.Id)
+                  .Select(md => md.Director)
+                  .ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowDirectorFromMovie: {ex.Message}");
+                return Enumerable.Empty<Director>();
+            }
         }
 
         public string ShowYearFromMovie(Movie movie)
         {
-            return movie.Year.ToString();
+            try
+            {
+                return movie.Year.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowYearFromMovie: {ex.Message}");
+                return string.Empty;
+            }
         }
 
         #endregion
@@ -95,30 +164,54 @@ namespace CineVault.DataAccessLayer.Repositories
 
         public IEnumerable<Movie> ShowMoviesFromTheSameActor(Actor actor)
         {
-            return _dbContext.MovieActors
-                .Where(movieActor => movieActor.Id == actor.Id)
-                .Select(movieActor => movieActor.Movie)
-                .ToList();
+            try
+            {
+                return _dbContext.MovieActors
+                        .Where(movieActor => movieActor.Id == actor.Id)
+                        .Select(movieActor => movieActor.Movie)
+                        .ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowMoviesFromTheSameActor: {ex.Message}");
+                return Enumerable.Empty<Movie>();
+            }
         }
 
         public IEnumerable<Movie> ShowMoviesFromTheSameDirector(Director director)
         {
-            return _dbContext.MovieDirectors
-                .Where(movieDirector => movieDirector.Id == director.Id)
-                .Select(movieDirector => movieDirector.movie)
-                .ToList();
+            try
+            {
+                return _dbContext.MovieDirectors
+                        .Where(movieDirector => movieDirector.Id == director.Id)
+                        .Select(movieDirector => movieDirector.movie)
+                        .ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowMoviesFromTheSameDirector: {ex.Message}");
+                return Enumerable.Empty<Movie>();
+            }
         }
 
         public IEnumerable<Movie> ShowAllMoviesFromTheSameYear(string strYear)
         {
-            if (int.TryParse(strYear, out int year))
+            try
             {
-                return _dbContext.Movies
-                    .Where(movie => movie.Year == strYear)
-                    .ToList();
-            }
+                if (int.TryParse(strYear, out int year))
+                {
+                    return _dbContext.Movies
+                        .Where(movie => movie.Year == strYear)
+                        .ToList();
+                }
 
-            return Enumerable.Empty<Movie>();
+                return Enumerable.Empty<Movie>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ShowAllMoviesFromTheSameYear: {ex.Message}");
+                return Enumerable.Empty<Movie>();
+            }
         }
 
         #endregion

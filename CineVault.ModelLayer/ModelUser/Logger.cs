@@ -1,26 +1,26 @@
 ﻿namespace CineVault.ModelLayer.ModelUser
 {
-    public class Logger
-    {
-        #region Properties
+    //public class Logger
+    //{
+    //    #region Properties
 
-        public int Id { get; private set; }
-        public DateTime TimeOfDay { get; set; }
-        public int? UserId { get; set; } // Nullable voor system logs
-        public string Description { get; set; }
-        public LogType Type { get; set; }
+    //    public int Id { get; private set; }
+    //    public DateTime TimeOfDay { get; set; }
+    //    public int? UserId { get; set; } // Nullable voor system logs
+    //    public string Description { get; set; }
+    //    public LogType Type { get; set; }
 
-        #endregion
+    //    #endregion
 
-        #region constructor
+    //    #region constructor
 
-        //public Logger()
-        //{
-        //    Id = IdGeneratorService.GenerateId();
-        //}
+    //    public Logger()
+    //    {
 
-        #endregion
+    //    }
 
-    }
+    //    #endregion
+
+    //}
 
 }

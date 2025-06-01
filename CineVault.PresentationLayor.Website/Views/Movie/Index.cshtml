@@ -6,6 +6,12 @@
 
 <h1 class="title-colored">Index</h1>
 
+<!-- Zoekveld waarin gebruiker tekst kan typen om te filteren -->
+<input type="text" id="searchInput" placeholder="Zoek..." class="form-control mb-3" />
+
+<!-- Verborgen paragraaf die getoond wordt als er geen resultaten zijn -->
+<p id="noResultsMessage" style="display:none; color:red;">Geen resultaten gevonden.</p>
+
 <table class="table" style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
 	<thead>
 		<tr>
@@ -46,22 +52,54 @@
 
 @*script is nodig om javascript in te laden*@
 <script>
-		$(document).ready(function(){
-		$(".toggle-seen").click(function (event) {
-		event.preventDefault();
-		var movieId = $(this).data("id");
 
-		$.ajax({
-			url: "/Movie/ToggleSeen",  // Your backend endpoint
-			type: "POST",
-			data: { id: movieId },
-			success: function (response) {
-				location.reload();
-			},
-			error: function () {
-				alert("Something went wrong!");
-			}
+	$(document).ready(function() {
+		// Wacht tot de volledige pagina is geladen voordat het script wordt uitgevoerd
+		$(".toggle-seen").click(function(event) {
+
+			event.preventDefault(); // Voorkomt dat de standaard linkactie wordt uitgevoerd
+
+			let movieId = $(this).data("id"); // Haalt het ID van de film op uit het data-attribuut van de klikbare link
+
+			// Start een AJAX-aanroep om de "Gezien" status van de film te wijzigen
+			$.ajax({
+				url: "/Movie/ToggleSeen", // Backend-endpoint dat de status van de film aanpast in de database
+				type: "POST", // Verzendt een POST-verzoek naar de server
+				data: { id: movieId }, // Stuurt het film-ID mee als request-data
+
+				success: function(response) {
+					location.reload(); // Vernieuwt de pagina om de bijgewerkte status zichtbaar te maken
+				},
+
+				error: function() {
+					alert("Something went wrong!"); // Toont een foutmelding als de aanvraag mislukt
+				}
+			});
 		});
 	});
+</script>
+
+
+<script>
+
+	$(document).ready(function () { // Zorgt ervoor dat dit script pas werkt nadat de volledige HTML is ingeladen
+
+		$("#searchInput").on("keyup", function () { // Voer deze functie uit telkens de gebruiker een toets loslaat in het zoekveld
+			let value = $(this).val().toLowerCase(); // Haal de huidige waarde van het zoekveld op en zet die om naar kleine letters
+			const rows = $("table tbody tr"); // Selecteer alle rijen in de <tbody> van de tabel
+			let visibleRows = 0; // Tel hoeveel rijen zichtbaar blijven na filtering
+
+			rows.each(function () { // Voor elke rij in de tabel:
+				let isVisible = $(this).text().toLowerCase().indexOf(value) > -1; // Bepaal of de rij de zoekterm bevat
+				$(this).toggle(isVisible); // Verberg of toon de rij op basis van of hij de zoekterm bevat
+				if (isVisible) visibleRows++; // Verhoog de teller als de rij zichtbaar is
+			});
+
+			if (visibleRows === 0) { // Toon of verberg de melding afhankelijk van of er zichtbare rijen zijn
+				$("#noResultsMessage").show();  // Toon melding
+			} else {
+				$("#noResultsMessage").hide();  // Verberg melding
+			}
+		});
 	});
 </script>

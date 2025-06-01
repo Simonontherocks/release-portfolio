@@ -1,5 +1,6 @@
 ﻿using CineVault.DataAccessLayer.Repositories;
 using CineVault.ModelLayer.ModelMovie;
+using System.IO;
 
 namespace CineVault.BusinessLogic.Service
 {
@@ -25,14 +26,17 @@ namespace CineVault.BusinessLogic.Service
 
         public void Insert(Actor actor)
         {
-            // add businessLogic
-
             if (actor == null)
             {
                 throw new ArgumentNullException(nameof(actor));
             }
 
-            // ToDo => nog aan te vullen.
+            Actor existingDirector = _actorRepository.GetById(actor.Id);
+            if (existingDirector != null)
+            {
+                // Director bestaat al, dus niets doen
+                return;
+            }
 
             _actorRepository.Insert(actor);
         }

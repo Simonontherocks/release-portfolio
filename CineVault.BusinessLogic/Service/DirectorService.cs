@@ -20,23 +20,19 @@ namespace CineVault.BusinessLogic.Service
 
         public void Insert(Director director)
         {
-            _directorRepository.GetById(director.Id); // via de repository wordt nagegaan of de director al niet reeds bestaat.
+            if (director == null)
+            {
+                throw new ArgumentNullException(nameof(director));
+            }
 
-            // Indien de director een null-waarde heeft, dan wordt er een uitzondering getoond.
-            //if (director == null)
-            //{
-            //    throw new ArgumentNullException(nameof(director));
-            //}
-            //if (director != null) // Indien de director wel al bestaat, dan dient er niets te gebeuren.
-            //{
-            //    //Do nothing
-            //}
-            //else
-            //{
-            //    _directorRepository.Insert(director);
-            //}
+            Director existingDirector = _directorRepository.GetById(director.Id);
+            if (existingDirector != null)
+            {
+                // Director bestaat al, dus niets doen
+                return;
+            }
+
             _directorRepository.Insert(director);
-        
         }
 
         public void Delete(Director director)

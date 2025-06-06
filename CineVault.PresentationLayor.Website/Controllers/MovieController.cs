@@ -65,18 +65,31 @@ namespace CineVault.PresentationLayer.Website.Controllers
             return result;
         }
 
-        public async Task<IActionResult> AddMovieByTmdbId(int tmdbId) // De film, cast eb crew worden aan de hand van het TMDB-Id opgeslaan in de databank.
+        //public async Task<IActionResult> AddMovieByTmdbId(int tmdbId) // De film, cast eb crew worden aan de hand van het TMDB-Id opgeslaan in de databank.
+        //{
+        //    try
+        //    {
+        //        await _movieService.AddMovieByTmdbId(tmdbId);
+        //        return Redirect(nameof(AllMovies));
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        ErrorViewModel error = new ErrorViewModel();
+        //        error.ErrorMessage = exception.Message;
+        //        return View("Error", error);
+        //    }
+        //}
+
+        public async Task<IActionResult> AddMovieByTmdbId(int tmdbId)
         {
             try
             {
                 await _movieService.AddMovieByTmdbId(tmdbId);
-                return Redirect(nameof(AllMovies));
+                return Json(new { success = true });
             }
             catch (Exception exception)
             {
-                ErrorViewModel error = new ErrorViewModel();
-                error.ErrorMessage = exception.Message;
-                return View("Error", error);
+                return Json(new { success = false, error = exception.Message });
             }
         }
 

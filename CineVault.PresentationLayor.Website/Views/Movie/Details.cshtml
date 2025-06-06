@@ -6,8 +6,10 @@
 
 <h1 class="title-colored">Details</h1>
 
+<partial name="/Views/Shared/SearchBox.cshtml"></partial>
+
 <div>
-    <h4>Movie</h4>
+    <h4 style="color: white;">Films</h4>
     <hr />
     <div style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
         <dl class="row">
@@ -25,7 +27,7 @@
     ("Regisseurs", Model.MovieDirectors.Cast<object>(), "Director", "ShowMoviesFromDirector")
     })
     {
-        <h5>@collection.Item1</h5>
+        <h5 class="white-title">@collection.Item1</h5>
         <table class="table table-striped" style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
             <thead>
                 <tr>
@@ -57,3 +59,5 @@
     @* <a asp-action="Delete" asp-route-id="@Model.Id">Verwijder film</a> *@
     <a asp-action="Delete" asp-route-id="@Model.Id" onclick="return confirm('Weet je zeker dat je deze film wilt verwijderen?');">Verwijder film (met bevestiging)</a>
 </div>
+
+<script src="~/js/SearchFilter.js" asp-append-version="true"></script>

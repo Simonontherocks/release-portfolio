@@ -6,11 +6,8 @@
 
 <h1 class="title-colored">Index</h1>
 
-<!-- Zoekveld waarin gebruiker tekst kan typen om te filteren -->
-<input type="text" id="searchInput" placeholder="Zoek..." class="form-control mb-3" />
-
-<!-- Verborgen paragraaf die getoond wordt als er geen resultaten zijn -->
-<p id="noResultsMessage" style="display:none; color:red;">Geen resultaten gevonden.</p>
+<input type="text" id="searchInput" placeholder="Zoek..." class="form-control mb-3" /> <!-- Zoekveld waarin gebruiker tekst kan typen om te filteren -->
+<p id="noResultsMessage" style="display:none; color:red;">Geen resultaten gevonden.</p><!-- Verborgen paragraaf die getoond wordt als er geen resultaten zijn -->
 
 <table class="table" style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
 	<thead>
@@ -81,7 +78,6 @@
 
 
 <script>
-
 	$(document).ready(function () { // Zorgt ervoor dat dit script pas werkt nadat de volledige HTML is ingeladen
 
 		$("#searchInput").on("keyup", function () { // Voer deze functie uit telkens de gebruiker een toets loslaat in het zoekveld

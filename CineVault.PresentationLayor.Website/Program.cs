@@ -24,8 +24,6 @@ namespace CineVault.PresentationLayor.Website
             builder.Services.AddScoped<IMovieRepository, MovieRepository>(); //<Is hetgeen ik vraag (interface), is hetgeen ik krijg (Klasse)>
             builder.Services.AddScoped<MovieService>();
             builder.Services.AddSingleton<ApiService>(); // het blijft dezelfde instantie zolang de applicatie blijft draaien.
-            // builder.Services.AddScoped<MovieService>();
-            // builder.Services.AddScoped<ApiService>();
             builder.Services.AddScoped<ActorService>();
             builder.Services.AddScoped<IActorRepository, ActorRepository>();
             builder.Services.AddScoped<IDirectorRepository, DirectorRepository>();

@@ -47,3 +47,7 @@ body {
 .custom-green {
     color: #4cff00; /*8IMportant zorgt ervoor dat deze kleur niet overschreden wordt door andere kleuren*/
 }
+
+.white-title {
+    color: white;
+}

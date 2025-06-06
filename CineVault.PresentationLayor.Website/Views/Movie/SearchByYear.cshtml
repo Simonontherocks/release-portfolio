@@ -6,11 +6,7 @@
 
 <h1 class="title-colored">SearchByYear</h1>
 
-<!-- Zoekveld waarin gebruiker tekst kan typen om te filteren -->
-<input type="text" id="searchInput" placeholder="Zoek..." class="form-control mb-3" />
-
-<!-- Verborgen paragraaf die getoond wordt als er geen resultaten zijn -->
-<p id="noResultsMessage" style="display:none; color:red;">Geen resultaten gevonden.</p>
+<partial name="/Views/Shared/SearchBox.cshtml"></partial>
 
 <table class="table" style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
     <thead>
@@ -35,28 +31,6 @@
     </tbody>
 </table>
 
-<script>
-
-    $(document).ready(function () { // Zorgt ervoor dat dit script pas werkt nadat de volledige HTML is ingeladen
-
-        $("#searchInput").on("keyup", function () { // Voer deze functie uit telkens de gebruiker een toets loslaat in het zoekveld
-            let value = $(this).val().toLowerCase(); // Haal de huidige waarde van het zoekveld op en zet die om naar kleine letters
-            const rows = $("table tbody tr"); // Selecteer alle rijen in de <tbody> van de tabel
-            let visibleRows = 0; // Tel hoeveel rijen zichtbaar blijven na filtering
-
-            rows.each(function () { // Voor elke rij in de tabel:
-                let isVisible = $(this).text().toLowerCase().indexOf(value) > -1; // Bepaal of de rij de zoekterm bevat
-                $(this).toggle(isVisible); // Verberg of toon de rij op basis van of hij de zoekterm bevat
-                if (isVisible) visibleRows++; // Verhoog de teller als de rij zichtbaar is
-            });
-
-            if (visibleRows === 0) { // Toon of verberg de melding afhankelijk van of er zichtbare rijen zijn
-                $("#noResultsMessage").show();  // Toon melding
-            } else {
-                $("#noResultsMessage").hide();  // Verberg melding
-            }
-        });
-    });
-</script>
+<script src="~/js/SearchFilter.js" asp-append-version="true"></script>
 
 

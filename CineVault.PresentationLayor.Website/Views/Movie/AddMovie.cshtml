@@ -33,40 +33,47 @@
 </div>
 
 <script>
-	$(document).ready(function(){
-		function startSearch(){
-			var title = $("#MovieTitle").val();
+	$(document).ready(function () {
+		// Deze functie voert de zoekactie uit op basis van de ingevoerde filmtitel
+		function startSearch() {
+			var title = $("#MovieTitle").val(); // Haalt de waarde (filmtitel) op uit het invoerveld
 
-			// Spinner wordt getoond en wordt input geven uitgeschakeld.
-			$("#spinner").show();
+			// Schakelt de zoekknop en invoerveld tijdelijk uit en toont een spinner
 			$("#searchbutton").prop("disabled", true);
 			$("#MovieTitle").prop("disabled", true);
 			$("#searchbutton").find(".spinner-border").removeClass("d-none");
 
-			// Eerdere resultaten worden verwijderd.
+			// Leegt de bestaande resultaten in de tabel
 			$("#MovieTable tbody").empty();
 
+			// Verstuurd een AJAX GET-verzoek naar de backend om films op te halen van TMDB
 			$.ajax({
-				url: `/movie/GetMoviesFromTmdb?movieTitle=${title}`,
+				url: `/movie/GetMoviesFromTmdb?movieTitle=${encodeURIComponent(title)}`, // backend endpoint
 				type: "GET",
 				dataType: "json",
-				success: function(data){
-					data.forEach(function(movie) {
-						$("#MovieTable tbody").append(
-							`<tr>
+				success: function (data) {
+					// Als er geen resultaten zijn
+					if (!data || data.length === 0) {
+						alert("Geen films gevonden.");
+						return;
+					}
+					// Voor elke film wordt een rij toegevoegd aan de tabel
+					data.forEach(function (movie) {
+						$("#MovieTable tbody").append(`
+							<tr>
 								<td>${movie.title}</td>
 								<td>${movie.year}</td>
-								<td><a href="/Movie/AddMovieByTmdbId?TmdbId=${movie.tmdbId}"> Voeg film toe aan database </a></td>
-							</tr>`
-						);
+								<td><button class="add-movie-btn" data-tmdbid="${movie.tmdbId}">Voeg film toe aan database</button></td>
+							</tr>
+						`);
 					});
 				},
-				error: function(){
-					alert("Geen films gevonden");
+				error: function () {
+					// Als er iets misgaat tijdens de AJAX-call
+					alert("De film is niet gevonden");
 				},
-				complete: function(){
-					// Spinner verbergen en input geven weer inschakelen
-					$("#spinner").hide();
+				complete: function () {
+					// Zet knoppen en invoerveld weer aan en verbergt de spinner
 					$("#searchbutton").prop("disabled", false);
 					$("#MovieTitle").prop("disabled", false);
 					$("#searchbutton").find(".spinner-border").addClass("d-none");
@@ -74,16 +81,39 @@
 			});
 		}
 
-		// Wanneer er geklikt of ge-entert wordt, dan wordt deze logica uitgevoerd.
-		$("#searchbutton").off("click.spinnerHandler").on("click.spinnerHandler", function(){
+		// Zoekknop activeert de zoekfunctie
+		$("#searchbutton").on("click", function () {
 			startSearch();
 		});
 
-		// Enter-toets activeren
-		$("#MovieTitle").off("keyup.spinnerHandler").on("keyup.spinnerHandler", function(event){
+		// Druk op Enter in het invoerveld activeert ook de zoekfunctie
+		$("#MovieTitle").on("keyup", function (event) {
 			if (event.keyCode === 13) {
 				startSearch();
 			}
 		});
+
+		// Event handler voor het toevoegen van een film aan de database
+		$(document).on("click", ".add-movie-btn", function () {
+			const tmdbId = $(this).data("tmdbid"); // Haalt het TMDB ID van de geklikte knop op
+
+			// Verstuurt een AJAX GET-verzoek naar de backend om de film toe te voegen
+			$.ajax({
+				url: `/Movie/AddMovieByTmdbId?tmdbId=${tmdbId}`, // backend endpoint
+				type: "GET",
+				success: function (response) {
+					if (response.success) {
+						alert("Film succesvol toegevoegd!");
+					} else {
+						alert("Fout: " + response.error);
+					}
+				},
+				error: function () {
+					// Foutafhandeling als de film niet toegevoegd kan worden
+					alert("Er is een fout opgetreden bij het toevoegen van de film.");
+				}
+			});
+		});
 	});
 </script>
+

@@ -1,24 +1,24 @@
-﻿using CineVault.ModelLayer.ModelAbstractClass;
-
+﻿// Is toegevoegd om later het project uit te breiden.
+// Momenteel nog niet van toepassing
 
 namespace CineVault.ModelLayer.ModelUser
 {
-    public class User : Person
-    {
-        #region Properties
+    //public class User : Person
+    //{
+    //    #region Properties
 
-        // Using the Id- and Name properties from the abstract class "Person"
+    //    // Using the Id- and Name properties from the abstract class "Person"
 
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
-        public DateTime DateOfCreation { get; set; }
+    //    public string Email { get; set; }
+    //    public string PasswordHash { get; set; }
+    //    public DateTime DateOfCreation { get; set; }
 
-        #endregion
+    //    #endregion
 
-        #region constructor
+    //    #region constructor
 
-        #endregion
+    //    #endregion
 
-    }
+    //}
 
 }

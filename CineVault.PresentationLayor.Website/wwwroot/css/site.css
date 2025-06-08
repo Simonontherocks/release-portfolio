@@ -51,3 +51,8 @@ body {
 .white-title {
     color: white;
 }
+
+.klick-link {
+    color: blue !important; /* Zorgt ervoor dat de tekst zwart wordt */
+    text-decoration: none !important; /* Verwijdert de onderlijning */
+}

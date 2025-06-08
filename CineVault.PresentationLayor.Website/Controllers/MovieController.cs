@@ -65,21 +65,6 @@ namespace CineVault.PresentationLayer.Website.Controllers
             return result;
         }
 
-        //public async Task<IActionResult> AddMovieByTmdbId(int tmdbId) // De film, cast eb crew worden aan de hand van het TMDB-Id opgeslaan in de databank.
-        //{
-        //    try
-        //    {
-        //        await _movieService.AddMovieByTmdbId(tmdbId);
-        //        return Redirect(nameof(AllMovies));
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        ErrorViewModel error = new ErrorViewModel();
-        //        error.ErrorMessage = exception.Message;
-        //        return View("Error", error);
-        //    }
-        //}
-
         public async Task<IActionResult> AddMovieByTmdbId(int tmdbId)
         {
             try
@@ -140,7 +125,11 @@ namespace CineVault.PresentationLayer.Website.Controllers
         public async Task<IActionResult> ShowMoviesFromActor(int id)
         {
             Actor searchedActor = _actorService.GetById(id);
-            return View(await _movieService.ShowMoviesFromTheSameActorAsync(searchedActor));
+            IEnumerable<Movie> movies = await _movieService.ShowMoviesFromTheSameActorAsync(searchedActor);
+
+            ViewBag.ActorName = searchedActor.Name;
+
+            return View(movies);
         }
 
         public IActionResult SearchByDirector()
@@ -158,7 +147,11 @@ namespace CineVault.PresentationLayer.Website.Controllers
         public async Task<IActionResult> ShowMoviesFromDirector(int id)
         {
             Director searchedDirector = _directorService.GetById(id);
-            return View(await _movieService.ShowMoviesFromTheSameDirectorAsync(searchedDirector));
+            IEnumerable<Movie> movies = await _movieService.ShowMoviesFromTheSameDirectorAsync(searchedDirector);
+
+            ViewBag.DirectorName = searchedDirector.Name;
+
+            return View(movies);
         }
 
         public IActionResult SearchByYear()

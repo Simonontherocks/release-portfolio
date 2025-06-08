@@ -4,7 +4,7 @@
     ViewData["Title"] = "SearchByYear";
 }
 
-<h1 class="title-colored">SearchByYear</h1>
+<h1 class="title-colored">Zoeken op jaartal</h1>
 
 <partial name="/Views/Shared/SearchBox.cshtml"></partial>
 
@@ -20,12 +20,12 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item)
-            </td>
-            <td>
-                    <a asp-action="ShowMoviesFromYear" asp-route-year="@item">Select</a> @*asp-route-year => year is de variabele naam, moet hetzelfde zijn als de methode-action*@
-            </td>
+                <td colspan="2">
+                    <a asp-action="ShowMoviesFromYear" asp-route-year="@item" class="klick-link">
+                        @Html.DisplayFor(modelItem => item)
+                    </a>
+                </td>
+
         </tr>
 }
     </tbody>

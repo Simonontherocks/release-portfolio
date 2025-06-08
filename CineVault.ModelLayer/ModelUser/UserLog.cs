@@ -1,24 +1,27 @@
-﻿namespace CineVault.ModelLayer.ModelUser
+﻿// Is toegevoegd om later het project uit te breiden.
+// Momenteel nog niet van toepassing
+
+namespace CineVault.ModelLayer.ModelUser
 {
-    public class UserLog
-    {
-        #region Properties
+    //public class UserLog
+    //{
+    //    #region Properties
 
-        public int Id { get; private set; }
-        public DateTime TimeOfDay { get; set; }
-        public int AmountOfUsers { get; set; }
+    //    public int Id { get; private set; }
+    //    public DateTime TimeOfDay { get; set; }
+    //    public int AmountOfUsers { get; set; }
 
-        #endregion
+    //    #endregion
 
-        #region constructor
+    //    #region constructor
 
-        //public UserLog()
-        //{
-        //    Id = IdGeneratorService.GenerateId();
-        //}
+    //    //public UserLog()
+    //    //{
+    //    //    Id = IdGeneratorService.GenerateId();
+    //    //}
 
-        #endregion
+    //    #endregion
 
-    }
+    //}
 
 }

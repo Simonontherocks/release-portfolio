@@ -17,6 +17,7 @@ namespace CineVault.ModelLayer.ModelAbstractClass
         public int Id { get; set; }
 
         [JsonPropertyName("name")]
+        [Display(Name = "Naam")]
         public string Name { get; set; }
 
         [JsonPropertyName("id")]

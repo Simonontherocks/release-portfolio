@@ -4,7 +4,7 @@
 	ViewData["Title"] = "ShowMoviesFromActor";
 }
 
-<h1 class="title-colored">ShowMoviesFromActor</h1>
+<h1 class="title-colored">Toon films van acteur:  @ViewBag.ActorName</h1>
 
 <partial name="/Views/Shared/SearchBox.cshtml"></partial>
 
@@ -23,15 +23,17 @@
 			<th>
 				@Html.DisplayNameFor(model => model.Year)
 			</th>
-			<th></th>
 		</tr>
 	</thead>
+
 	<tbody>
 		@foreach (var item in Model)
 		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.Title)
+					<a asp-action="Details" asp-route-id="@item.Id" class="klick-link">
+						@Html.DisplayFor(modelItem => item.Title)
+					</a>
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Seen)
@@ -42,12 +44,10 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.Year)
 				</td>
-				<td>
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a>
-				</td>
 			</tr>
 		}
 	</tbody>
+
 </table>
 
 <script src="~/js/SearchFilter.js" asp-append-version="true"></script>

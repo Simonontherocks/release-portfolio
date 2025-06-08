@@ -4,7 +4,7 @@
 	ViewData["Title"] = "ShowMoviesFromDirector";
 }
 
-<h1 class="title-colored">ShowMoviesFromDirector</h1>
+<h1 class="title-colored">Toon films van regisseur: @ViewBag.DirectorName</h1>
 
 <partial name="/Views/Shared/SearchBox.cshtml"></partial>
 
@@ -23,7 +23,6 @@
 			<th>
 				@Html.DisplayNameFor(model => model.Year)
 			</th>
-			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -31,8 +30,11 @@
 		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.Title)
+					<a asp-action="Details" asp-route-id="@item.Id" class="klick-link">
+						@Html.DisplayFor(modelItem => item.Title)
+					</a>
 				</td>
+
 				<td>
 					@Html.DisplayFor(modelItem => item.Seen)
 				</td>
@@ -41,9 +43,6 @@
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Year)
-				</td>
-				<td>
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a>
 				</td>
 			</tr>
 		}

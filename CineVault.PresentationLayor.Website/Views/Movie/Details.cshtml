@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1 class="title-colored">Details</h1>
+<h1 class="title-colored">Filmdetails: @Model.Title</h1>
 
 <partial name="/Views/Shared/SearchBox.cshtml"></partial>
 
@@ -32,7 +32,6 @@
             <thead>
                 <tr>
                     <th style="width: 100%;">Naam</th>
-                    @* <th style="width: 20%; text-align: right;">Actie</th> *@
                 </tr>
             </thead>
             <tbody>
@@ -43,21 +42,20 @@
                     var personName = person.GetType().GetProperty("Name").GetValue(person);
 
                     <tr>
-                        <td>@personName</td>
                         <td>
-                            <a asp-action="@collection.Item4" asp-route-id="@personId">Select</a>
+                            <a asp-action="@collection.Item4" asp-route-id="@personId" class="klick-link">@personName</a>
                         </td>
                     </tr>
                 }
             </tbody>
+
         </table>
     }
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
-    @* <a asp-action="Delete" asp-route-id="@Model.Id">Verwijder film</a> *@
-    <a asp-action="Delete" asp-route-id="@Model.Id" onclick="return confirm('Weet je zeker dat je deze film wilt verwijderen?');">Verwijder film (met bevestiging)</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" onclick="return confirm('Weet je zeker dat je deze film wilt verwijderen?');">Verwijder film</a>
 </div>
 
 <script src="~/js/SearchFilter.js" asp-append-version="true"></script>

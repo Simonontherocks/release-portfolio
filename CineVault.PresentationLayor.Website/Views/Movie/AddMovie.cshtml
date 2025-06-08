@@ -3,17 +3,17 @@
 }
 
 <div class="content-column">
-	<h1 class="title-colored">Add Movie to database</h1>
+	<h1 class="title-colored">Voeg film toe aan database</h1>
 	<input type="text" name="Movietitle" id="MovieTitle" value="" />
 
 	<button id="searchbutton">
 		<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-		Search movie
+		Zoek film
 	</button>
 
 	<br />
 	<br />
-	<table id="MovieTable" style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
+	<table id="MovieTable" style="display: none; background-color: beige; color: black; border-radius: 10px; padding: 10px;">
 		<thead>
 			<tr>
 				<th>
@@ -59,12 +59,15 @@
 					data.forEach(function (movie) {
 						$("#MovieTable tbody").append(`
 							<tr>
-								<td>${movie.title}</td>
+								<td><a href="#" class="add-movie-link" data-tmdbid="${movie.tmdbId}">${movie.title}</a></td>
 								<td>${movie.year}</td>
-								<td><button class="add-movie-btn" data-tmdbid="${movie.tmdbId}">Voeg film toe aan database</button></td>
+								<td></td>
 							</tr>
 						`);
 					});
+
+					// Toon de tabel nu de data beschikbaar is
+					$("#MovieTable").show();
 				},
 				error: function () {
 					alert("De film is niet gevonden");
@@ -90,24 +93,27 @@
 		});
 
 		// Film toevoegen
-		$(document).on("click", ".add-movie-btn", function () {
-			const tmdbId = $(this).data("tmdbid");
+		$(document).on("click", ".add-movie-link", function (e) {
+		e.preventDefault(); // voorkomt dat de pagina naar boven scrollt
 
-			$.ajax({
-				url: `/Movie/AddMovieByTmdbId?tmdbId=${tmdbId}`,
-				type: "GET",
-				success: function (response) {
-					if (response.success) {
-						alert("Film succesvol toegevoegd!");
-						window.location.href = "/Movie"; // Doorverwijzing naar index
-					} else {
-						alert("Fout: " + response.error);
-					}
-				},
-				error: function () {
-					alert("Er is een fout opgetreden bij het toevoegen van de film.");
+		const tmdbId = $(this).data("tmdbid");
+
+		$.ajax({
+			url: `/Movie/AddMovieByTmdbId?tmdbId=${tmdbId}`,
+			type: "GET",
+			success: function (response) {
+				if (response.success) {
+					alert("Film succesvol toegevoegd!");
+					window.location.href = "/Movie";
+				} else {
+					alert("Fout: " + response.error);
 				}
-			});
+			},
+			error: function () {
+				alert("Er is een fout opgetreden bij het toevoegen van de film.");
+			}
 		});
+	});
+
 	});
 </script>

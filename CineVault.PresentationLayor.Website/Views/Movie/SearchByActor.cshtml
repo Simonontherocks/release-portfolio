@@ -4,7 +4,7 @@
     ViewData["Title"] = "SearchByActor";
 }
 
-<h1 class="title-colored">SearchByActor</h1>
+<h1 class="title-colored">Zoeken op acteursnaam</h1>
 
 <partial name="/Views/Shared/SearchBox.cshtml"></partial>
 
@@ -20,12 +20,12 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                    <a asp-action="ShowMoviesFromActor" asp-route-id="@item.Id">Select</a> @*Action is nu ShowMovies... omdat in de URL select stond en dit daarom niet werkte.*@
-            </td>
+                <td colspan="2">
+                    <a asp-action="ShowMoviesFromActor" asp-route-id="@item.Id" class="klick-link">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </a>
+                </td>
+
         </tr>
 }
     </tbody>

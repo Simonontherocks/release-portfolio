@@ -4,27 +4,23 @@
 
 <div class="content-column">
 	<h1 class="title-colored">Voeg film toe aan database</h1>
-	<input type="text" name="Movietitle" id="MovieTitle" value="" />
+	<input type="text" name="Movietitle" id="MovieTitle" value="" /> <!-- Invoerveld voor de titel -->
 
 	<button id="searchbutton">
-		<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+		<!-- Zoekknop -->
+		<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span> <!-- Laadindicator -->
 		Zoek film
 	</button>
 
-	<br />
-	<br />
+	<br /><br />
+
 	<table id="MovieTable" style="display: none; background-color: beige; color: black; border-radius: 10px; padding: 10px;">
+		<!-- Resultatentabel -->
 		<thead>
 			<tr>
-				<th>
-					Title
-				</th>
-				<th>
-					Year
-				</th>
-				<th>
-
-				</th>
+				<th id="sort-title" style="cursor: pointer;">Title ▲</th> <!-- Sorteerbare kolom Titel met standaard ▲ -->
+				<th id="sort-year" style="cursor: pointer;">Year ▲</th>  <!-- Sorteerbare kolom Jaar met standaard ▲ -->
+				<th></th> <!-- Lege kolom voor knop/actie -->
 			</tr>
 		</thead>
 		<tbody>
@@ -34,86 +30,108 @@
 
 <script>
 	$(document).ready(function () {
-		// Deze functie voert de zoekactie uit op basis van de ingevoerde filmtitel
+
+		let movies = []; // Opslag van opgehaalde films
+		let sortOrder = {
+			title: 'asc', // Initiële sorteerrichting voor titel
+			year: 'asc'   // Initiële sorteerrichting voor jaar
+		};
+
+		function updateSortIndicators(activeKey) {
+			$("#sort-title").html("Title"); // Reset titel header
+			$("#sort-year").html("Year");   // Reset jaar header
+
+			const arrow = sortOrder[activeKey] === 'asc' ? ' ▲' : ' ▼'; // Bepaal pijlrichting
+			if (activeKey === 'title') { $("#sort-title").html("Title" + arrow); } // Toon pijl bij titel
+			else if (activeKey === 'year') { $("#sort-year").html("Year" + arrow); } // Toon pijl bij jaar
+		}
+
+		function renderTable(data) {
+			const tbody = $("#MovieTable tbody"); tbody.empty(); // Maak tabel leeg
+			data.forEach(function (movie) {
+				tbody.append(`
+					<tr>
+						<td><a href="#" class="add-movie-link" data-tmdbid="${movie.tmdbId}">${movie.title}</a></td> <!-- Klikbare titel -->
+						<td>${movie.year}</td> <!-- Jaar -->
+						<td></td> <!-- Lege actiecel -->
+					</tr>
+				`);
+			});
+		}
+
+		function sortMoviesBy(key) {
+			const order = sortOrder[key]; // Huidige sorteerrichting
+			movies.sort((a, b) => {
+				if (key === 'title') { return order === 'asc' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title); } // Titel sorteren
+				else if (key === 'year') { return order === 'asc' ? a.year - b.year : b.year - a.year; } // Jaar sorteren
+			});
+			sortOrder[key] = order === 'asc' ? 'desc' : 'asc'; // Draai richting om
+			updateSortIndicators(key); // Update pijl
+			renderTable(movies); // Herteken tabel
+		}
+
 		function startSearch() {
-			var title = $("#MovieTitle").val(); // Haalt de waarde (filmtitel) op uit het invoerveld
+			var title = $("#MovieTitle").val(); // Haalt de invoer op
 
-			// Schakelt de zoekknop en invoerveld tijdelijk uit en toont een spinner
-			$("#searchbutton").prop("disabled", true);
-			$("#MovieTitle").prop("disabled", true);
-			$("#searchbutton").find(".spinner-border").removeClass("d-none");
+			$("#searchbutton").prop("disabled", true); // Schakelt zoekknop uit.
+			$("#MovieTitle").prop("disabled", true); // Schakelt input uit.
+			$("#searchbutton").find(".spinner-border").removeClass("d-none"); // Toont de spinner.
 
-			// Leegt de bestaande resultaten in de tabel
-			$("#MovieTable tbody").empty();
+			$("#MovieTable tbody").empty(); // Leegt de tabel.
 
-			// Verstuurd een AJAX GET-verzoek naar de backend om films op te halen van TMDB
 			$.ajax({
-				url: `/movie/GetMoviesFromTmdb?movieTitle=${encodeURIComponent(title)}`,
+				url: `/movie/GetMoviesFromTmdb?movieTitle=${encodeURIComponent(title)}`, // Vraagt de films op.
 				type: "GET",
 				dataType: "json",
 				success: function (data) {
 					if (!data || data.length === 0) {
-						alert("Geen films gevonden.");
-						return;
+						alert("Geen films gevonden."); return;
 					}
-					data.forEach(function (movie) {
-						$("#MovieTable tbody").append(`
-							<tr>
-								<td><a href="#" class="add-movie-link" data-tmdbid="${movie.tmdbId}">${movie.title}</a></td>
-								<td>${movie.year}</td>
-								<td></td>
-							</tr>
-						`);
-					});
+					movies = data; // Sla op
 
-					// Toon de tabel nu de data beschikbaar is
-					$("#MovieTable").show();
+					sortOrder.title = 'asc'; // Reset sorteerstatus naar standaard
+					sortOrder.year = 'asc'; // Reset sorteerstatus naar standaard
+					sortMoviesBy("title"); // Sorteer standaard op titel (toont ook meteen pijltje)
+
+					$("#MovieTable").show(); // Toon tabel
 				},
 				error: function () {
-					alert("De film is niet gevonden");
+					alert("De film is niet gevonden"); // Foutmelding als de film niet is gevonden
 				},
 				complete: function () {
-					$("#searchbutton").prop("disabled", false);
-					$("#MovieTitle").prop("disabled", false);
-					$("#searchbutton").find(".spinner-border").addClass("d-none");
+					$("#searchbutton").prop("disabled", false); // Activeer zoekknop
+					$("#MovieTitle").prop("disabled", false); // Activeer input
+					$("#searchbutton").find(".spinner-border").addClass("d-none"); // Verberg spinner
 				}
 			});
 		}
 
-		// Zoekknop activeert de zoekfunctie
-		$("#searchbutton").on("click", function () {
-			startSearch();
-		});
-
-		// Enter in input activeert ook de zoekfunctie
+		$("#searchbutton").on("click", function () { startSearch(); }); // Klik = zoeken
 		$("#MovieTitle").on("keyup", function (event) {
-			if (event.keyCode === 13) {
-				startSearch();
-			}
+			if (event.keyCode === 13) { startSearch(); } // Enter = zoeken
 		});
 
-		// Film toevoegen
 		$(document).on("click", ".add-movie-link", function (e) {
-		e.preventDefault(); // voorkomt dat de pagina naar boven scrollt
+			e.preventDefault(); // Voorkom standaardactie
+			const tmdbId = $(this).data("tmdbid"); // Haal ID op
 
-		const tmdbId = $(this).data("tmdbid");
-
-		$.ajax({
-			url: `/Movie/AddMovieByTmdbId?tmdbId=${tmdbId}`,
-			type: "GET",
-			success: function (response) {
-				if (response.success) {
-					alert("Film succesvol toegevoegd!");
-					window.location.href = "/Movie";
-				} else {
-					alert("Fout: " + response.error);
+			$.ajax({
+				url: `/Movie/AddMovieByTmdbId?tmdbId=${tmdbId}`, // Voeg toe via backend
+				type: "GET",
+				success: function (response) {
+					if (response.success) {
+						alert("Film succesvol toegevoegd!"); window.location.href = "/Movie"; // Navigeer naar lijst
+					} else {
+						alert("Fout: " + response.error); // Backendfout tonen
+					}
+				},
+				error: function () {
+					alert("Er is een fout opgetreden bij het toevoegen van de film."); // Fout indien er een probleem is bij het toevoegen van de film.
 				}
-			},
-			error: function () {
-				alert("Er is een fout opgetreden bij het toevoegen van de film.");
-			}
+			});
 		});
-	});
 
+		$("#sort-title").on("click", function () { sortMoviesBy("title"); }); // Sorteer op titel
+		$("#sort-year").on("click", function () { sortMoviesBy("year"); });   // Sorteer op jaar
 	});
 </script>

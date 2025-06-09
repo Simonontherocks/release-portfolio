@@ -2,6 +2,12 @@
 
 namespace CineVault.ModelLayer.ModelMovie
 {
+    /// <summary> 
+    /// - `Director` **erft van `Person`**, zodat het alle basis eigenschappen zoals `Id` en `Name` bevat.  
+    /// - Een regisseur moet geïnstantieerd kunnen worden.  
+    /// - NavigationProperty is toegevoegd naar "MovieDirector", zodat regisseurs gekoppeld kunnen worden aan films.  
+    /// - **Hiermee kunnen regisseurs worden opgeslagen en opgehaald uit de database**.
+    /// </summary>
     public class Director : Person
     {
         #region Properties

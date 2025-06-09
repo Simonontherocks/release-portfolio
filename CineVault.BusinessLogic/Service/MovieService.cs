@@ -8,10 +8,10 @@ using Microsoft.IdentityModel.Tokens;
 namespace CineVault.BusinessLogic.Service
 {
     /// <summary>
-    /// Deze klasse zal contact maken met de DAL.
-    /// Deze zal via de methodes hier, data gaan ophalen uit de database.
-    /// De methodes in deze klasse hebben dezelfde signatuur als in de DAL, om het leesbaar en eenvoudig te houden.
-    /// Er wordt gebruik gemaakt van Dependency Injection in het field, namelijk van deIMovieRepository
+    /// De MovieService klasse vormt de brug tussen de businesslogica en de Data Access Layer (DAL).
+    /// Via dependency injection wordt gebruik gemaakt van een repository-pattern (IMovieRepository) en een ApiService.
+    /// Deze klasse haalt filmgegevens op uit een externe API en beheert de opslag en verwijdering van films, acteurs en regisseurs in de lokale database.
+    /// De methoden hebben bewust een vergelijkbare signatuur als in de DAL om consistentie en leesbaarheid te behouden.
     /// </summary>
 
     public class MovieService
@@ -55,28 +55,16 @@ namespace CineVault.BusinessLogic.Service
                 
         public async Task AddMovieByTmdbId(int tmdbId)
         {
-            bool blCorrectyEnteredId;
-            int intEnteredId;
-            int intResultId;
-            int intMovieId;
-            string strEnteredId;
-            string strMovieToSearchFor;
-            string strSelectedMovieBasedOnId;
             Movie selectedMovie;
-
-            blCorrectyEnteredId = false;
-            intResultId = 0;
-            intMovieId = 0;
             selectedMovie = new Movie();
 
-            if (tmdbId == 0)
+            if (tmdbId == 0) // Controleer of het ID niet nul is, anders is het ongeldig.
             {
                 throw new ArgumentNullException("tmdb-ID mag niet null zijn", nameof(tmdbId));
             }
 
-            // Eerst wordt de film opgezocht door de api.
+            // Zoek de film op via de externe API.
 
-            //ToDO GetMovieByTmdbId in apiService aanmaken
             selectedMovie = await _apiService.GetMovieByTmdbId(tmdbId); // Het gevonden resultaat wordt in de property gestoken.
 
             if (selectedMovie is null) // Indien er geen film gevonden is, zal er een uitzondering getoont worden.
@@ -122,7 +110,7 @@ namespace CineVault.BusinessLogic.Service
                         Actor existingActor = _appDBContext.Actors.FirstOrDefault(a => a.Name == personName);
                         if (existingActor == null)
                         {
-                            Actor newActor = new Actor { Name = personName, Tmdb_ID = person.Key };
+                            Actor newActor = new Actor { Name = personName, Tmdb_ID = person.Key }; // Voeg toe als nieuwe acteur als deze nog niet bestaat
                             _appDBContext.Actors.Add(newActor);
                         }
                     }
@@ -133,7 +121,7 @@ namespace CineVault.BusinessLogic.Service
                         Director existingDirector = _appDBContext.Directors.FirstOrDefault(d => d.Name == personName);
                         if (existingDirector == null)
                         {
-                            Director newDirector = new Director { Name = personName, Tmdb_ID = person.Key };
+                            Director newDirector = new Director { Name = personName, Tmdb_ID = person.Key }; // Voeg toe als nieuwe regisseur indien niet aanwezig
                             _appDBContext.Directors.Add(newDirector);
                         }
 
@@ -143,7 +131,7 @@ namespace CineVault.BusinessLogic.Service
 
             }
 
-            // Wijzigingen opslaan
+            // Sla wijzigingen op (acteurs en regisseurs)
 
             _appDBContext.SaveChanges();
 
@@ -156,6 +144,7 @@ namespace CineVault.BusinessLogic.Service
                 throw new InvalidOperationException("Film bestaat niet in de database.");
             }
 
+            // Leg de relaties vast tussen de film en de betrokken acteurs/regisseurs
             foreach (KeyValuePair<int, Dictionary<string, List<string>>> person in castAndCrew)
             {
                 Dictionary<string, List<string>> personInfo = person.Value;
@@ -189,13 +178,12 @@ namespace CineVault.BusinessLogic.Service
                 }
             }
 
-            // Relaties opslaan
+            // Sla alle relaties op in de database.
 
             _appDBContext.SaveChanges();
 
         }
 
-        // Getest in MainProgram => works
         public async Task RemoveMovieByIdAsync(int movieId)
         {
             // Controle of het ID geldig is
@@ -274,7 +262,7 @@ namespace CineVault.BusinessLogic.Service
 
         #region Retrieve movies by status
 
-        // Getest in MainProgram => works
+        // Haalt alle films op, gesorteerd op titel
         public async Task<IEnumerable<Movie>> ShowAllMovies()
         {
             return await _appDBContext.Movies
@@ -282,7 +270,7 @@ namespace CineVault.BusinessLogic.Service
                 .ToListAsync();
         }
 
-        // Getest in MainProgram => works
+        // Haalt alleen de films op die gezien zijn (Seen == true)
         public async Task <IEnumerable<Movie>> ShowAllMoviesThatHaveBeenSeen()
         {
             return await _appDBContext.Movies
@@ -291,7 +279,7 @@ namespace CineVault.BusinessLogic.Service
                 .ToListAsync();
         }
 
-        // Getest in MainProgram => works
+        // Haalt alleen de films op die nog niet gezien zijn (Seen == false)
         public async Task <IEnumerable<Movie>> ShowAllMoviesThatHaveNotBeenSeen()
         {
             return await _appDBContext.Movies
@@ -304,7 +292,7 @@ namespace CineVault.BusinessLogic.Service
 
         #region Filter by movie data
 
-        // Getest in MainProgram => works
+        // Zoek de film op basis van gedeeltelijke titel
         public async Task<IEnumerable<Actor>> ShowAllActorsFromMovieAsync(string partialMovieTitle)
         {
             Movie selectedMovie = await GetMovieByPartialTitleAsync(partialMovieTitle);
@@ -314,13 +302,14 @@ namespace CineVault.BusinessLogic.Service
                 throw new ArgumentNullException(nameof(partialMovieTitle), "De film mag niet null zijn.");
             }
 
+            // Haalt alle acteurs op die verbonden zijn met de gevonden film
             return await _appDBContext.MovieActors
                 .Where(ma => ma.MovieId == selectedMovie.Id)
                 .Select(ma => ma.Actor)
                 .ToListAsync();
         }
 
-        // Getest in MainProgram => works
+        // Zoek de film op basis van gedeeltelijke titel
         public async Task<IEnumerable<Director>> ShowDirectorFromMovieAsync(string partialMovieTitle)
         {
             Movie selectedMovie = await GetMovieByPartialTitleAsync(partialMovieTitle);
@@ -330,13 +319,14 @@ namespace CineVault.BusinessLogic.Service
                 throw new ArgumentNullException(nameof(partialMovieTitle), "De film mag niet null zijn.");
             }
 
+            // Haalt de regisseurs op die verbonden zijn met de gevonden film
             return await _appDBContext.MovieDirectors
                 .Where(md => md.MovieId == selectedMovie.Id)
                 .Select(md => md.Director)
                 .ToListAsync();
         }
 
-        // Getest in MainProgram => works
+        // Zoek de film op basis van gedeeltelijke titel
         public async Task<string> ShowYearFromMovieAsync(string partialMovieTitle)
         {
             Movie selectedMovie = await GetMovieByPartialTitleAsync(partialMovieTitle);
@@ -351,6 +341,7 @@ namespace CineVault.BusinessLogic.Service
                 throw new ArgumentException($"geen film gevonden met titel: {partialMovieTitle}");
             }
 
+            // Retourneer het jaar van de film
             return selectedMovie.Year;
         }
 
@@ -358,7 +349,6 @@ namespace CineVault.BusinessLogic.Service
 
         #region Filter by model
 
-        // Getest in MainProgram => works
         public async Task<IEnumerable<Movie>> ShowMoviesFromTheSameActorAsync(Actor actor)
         {
             if (actor == null || string.IsNullOrWhiteSpace(actor.Name))
@@ -366,18 +356,21 @@ namespace CineVault.BusinessLogic.Service
                 throw new ArgumentNullException(nameof(actor), "De acteur mag niet null zijn.");
             }
 
+            // Zoek naar een acteur met een vergelijkbare naam
             Actor matchedActor = await GetActorByPartialNameAsync(actor.Name);
             if (matchedActor == null)
             {
                 throw new InvalidOperationException($"Geen acteur gevonden met de naam {actor.Name}.");
-            }                
+            }
 
+            // Controleer of de acteur bestaat in de database
             bool actorExists = await _appDBContext.Actors.AnyAsync(d => d.Id == actor.Id);
             if (!actorExists)
             {
                 throw new InvalidOperationException("De opgegeven acteur bestaat niet in de database.");
             }
 
+            // Haalt alle films op waarin de acteur speelt
             return await _appDBContext.MovieActors
                 .Where(ma => ma.ActorId == actor.Id)
                 .Select(ma => ma.Movie)
@@ -385,7 +378,6 @@ namespace CineVault.BusinessLogic.Service
                 .ToListAsync();
         }
 
-        // Getest in MainProgram => works
         public async Task<IEnumerable<Movie>> ShowMoviesFromTheSameDirectorAsync(Director director)
         {
             if (director == null || string.IsNullOrWhiteSpace(director.Name))
@@ -393,18 +385,21 @@ namespace CineVault.BusinessLogic.Service
                 throw new ArgumentNullException(nameof(director), "De regisseur mag niet null zijn.");
             }
 
+            // Zoek naar een regisseur met een vergelijkbare naam
             Director matchedDirector = await GetDirectorByPartialNameAsync(director.Name);
             if (matchedDirector == null)
             {
                 throw new InvalidOperationException($"Geen acteur gevonden met de naam {director.Name}.");
             }
-            
+
+            // Controleer of de regisseur bestaat in de database
             bool directorExists = await _appDBContext.Directors.AnyAsync(d => d.Id == director.Id);
             if (!directorExists)
             {
                 throw new InvalidOperationException("De opgegeven regisseur bestaat niet in de database.");
             }
 
+            // Haalt alle films op geregisseerd door deze regisseur
             return await _appDBContext.MovieDirectors
                 .Where(md => md.DirectorId == director.Id)
                 .Select(md => md.movie)
@@ -412,7 +407,6 @@ namespace CineVault.BusinessLogic.Service
                 .ToListAsync();
         }
 
-        // Getest in MainProgram => works
         public async Task<IEnumerable<Movie>> ShowAllMoviesFromTheSameYearAsync(string strYear)
         {
             if (string.IsNullOrWhiteSpace(strYear))
@@ -430,13 +424,14 @@ namespace CineVault.BusinessLogic.Service
                 throw new ArgumentException("Het jaartal moet uit 4 cijfers bestaan.", nameof(strYear));
             }
 
+            // Haalt alle films op uit hetzelfde jaar
             return await _appDBContext.Movies
                 .Where(m => m.Year == strYear)
                 .OrderBy(m => m.Title)
                 .ToListAsync();
         }
 
-        // Added as extra
+        // Haalt een lijst op van unieke jaren waarin films zijn uitgebracht
         public List<string?> GetAllYears()
         {
             return _appDBContext.Movies.Select(m => m.Year)
@@ -472,7 +467,7 @@ namespace CineVault.BusinessLogic.Service
         #region Changing status
 
         /// <summary>
-        /// Stelt de 'Seen'-status in voor een film op basis van het film-ID.
+        /// - Stelt de 'Seen'-status in voor een film op basis van het film-ID.
         /// </summary>
         /// <param name="movieId">Het unieke ID van de film.</param>
         /// <param name="seen">De nieuwe waarde voor de 'Seen'-status (true = gezien, false = niet gezien).</param>
@@ -500,7 +495,7 @@ namespace CineVault.BusinessLogic.Service
 
         // Gemaakt om later mogelijke uitbreiding te doen. Zal nu niet gebruikt worden.
         /// <summary>
-        /// Stelt de 'Seen'-status in voor een film op basis van een (gedeeltelijke) titel.
+        /// - Stelt de 'Seen'-status in voor een film op basis van een (gedeeltelijke) titel.
         /// </summary>
         /// <param name="partialTitle">Een (gedeeltelijke) titel van de film.</param>
         /// <param name="seen">De nieuwe waarde voor de 'Seen'-status (true = gezien, false = niet gezien).</param>
@@ -529,8 +524,8 @@ namespace CineVault.BusinessLogic.Service
         #region Methods to avoid duplicat code
 
         /// <summary>
-        /// Converteert een lijst van namen (opgeslagen in een dictionary) naar een lijst van entiteiten van type T.  
-        /// Dit wordt gedaan door een nieuwe instantie van T te maken en de eigenschap "Name" in te vullen met de gevonden waarden.  
+        /// - Converteert een lijst van namen (opgeslagen in een dictionary) naar een lijst van entiteiten van type T.  
+        /// - Dit wordt gedaan door een nieuwe instantie van T te maken en de eigenschap "Name" in te vullen met de gevonden waarden.  
         /// </summary>
         /// <typeparam name="T">Het type entiteit dat wordt gemaakt. Moet een parameterloze constructor hebben.</typeparam>
         /// <param name="data">Een dictionary waarin de sleutel een categorie is en de waarde een lijst van namen.</param>
@@ -562,8 +557,8 @@ namespace CineVault.BusinessLogic.Service
         }
 
         /// <summary>
-        /// Zoekt een entiteit op basis van een gedeeltelijke string-match in de opgegeven DbSet.
-        /// Indien er meerdere matches zijn, krijgt de gebruiker de mogelijkheid om een specifieke entiteit te kiezen.
+        /// - Zoekt een entiteit op basis van een gedeeltelijke string-match in de opgegeven DbSet.
+        /// - Indien er meerdere matches zijn, krijgt de gebruiker de mogelijkheid om een specifieke entiteit te kiezen.
         /// </summary>
         /// <typeparam name="T">Het type entiteit dat wordt opgehaald.</typeparam>
         /// <param name="dbSetSelector">Een functie die de juiste DbSet uit de databasecontext selecteert.</param>
@@ -601,8 +596,8 @@ namespace CineVault.BusinessLogic.Service
         }
 
         /// <summary>
-        /// Laat de gebruiker een entiteit kiezen uit een lijst op basis van ID.
-        /// De gebruiker kan een geldig ID invoeren, 'terug' typen om opnieuw te zoeken, of 'exit' om het programma af te sluiten.
+        /// - Laat de gebruiker een entiteit kiezen uit een lijst op basis van ID.
+        /// - De gebruiker kan een geldig ID invoeren, 'terug' typen om opnieuw te zoeken, of 'exit' om het programma af te sluiten.
         /// </summary>
         /// <typeparam name="T">Het type entiteit in de lijst.</typeparam>
         /// <param name="entities">De lijst met entiteiten waaruit de gebruiker kan kiezen.</param>

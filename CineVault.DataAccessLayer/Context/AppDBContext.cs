@@ -3,6 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CineVault.DataAccessLayer.Context
 {
+    /// <summary>
+    /// - AppDBContext - Database Context Klasse
+    /// - Deze klasse beheert de verbinding met de database via Entity Framework Core.
+    /// - Definieert DbSet-properties die overeenkomen met tabellen in de database.
+    /// - Waarom DbContext? Omdat Entity Framework een database-object nodig heeft om CRUD-operaties uit te voeren.
+    /// - Waarom gebruik van `DbSet<>`? Dit stelt EF in staat om automatisch tabellen te genereren en er queries op uit te voeren.
+
     public class AppDBContext : DbContext
     {
         #region Property        
@@ -16,29 +23,42 @@ namespace CineVault.DataAccessLayer.Context
         #endregion
 
         #region Constructor
-
+                
+        // - Laat het mogelijk om configuraties via Dependency Injection door te geven.
+        // - Wordt automatisch aangeroepen bij het opstarten van de applicatie.
+        
         public AppDBContext(DbContextOptions<AppDBContext> options) //, IConfiguration configuration)
             : base(options)
         {
-
+            // Default constructor
         }
+
+        // - Parameterloze constructor
+        // - Alleen nodig om handmatig een instantie van `AppDBContext` te kunnen maken.
 
         public AppDBContext() { }
         #endregion
 
         #region OnConfiguring
 
-        // Deze toevoeging zorgt ervoor dat je AppDBContext weet waar de migraties zich bevinden.
-
+        /// <summary>
+        /// - Configureert de databaseverbinding
+        /// - Controleert of de databaseconfiguratie is doorgegeven via Dependency Injection.
+        /// - Waarom controleren met `IsConfigured`?
+        ///   - Om te voorkomen dat de databaseconfiguratie twee keer wordt ingesteld.
+        ///   - Biedt flexibiliteit om configuratie via `appsettings.json` of andere methoden te laten verlopen.
+        /// - UseSqlServer(), Omdat er van een SQL Server-database gebruik wordt gemaakt.
+        /// </summary>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Dit controleert eerst of de opties voor de databaseconfiguratie al zijn ingesteld.
             // Dit is handig als de configuratie via Dependency Injection wordt doorgegeven.
             if (!optionsBuilder.IsConfigured)
             {
-                // Stelt de database in die Entity Framework moet gebruiken.
+                // Stelt de databaseconnectie in op de SQL-server
                 // Hier wordt een SQL Server-database gebruikt.
-                optionsBuilder.UseSqlServer("server=SIMON\\SQLEXPRESS;Database=CineVault; Trusted_Connection=true; TrustServerCertificate=True");
+                optionsBuilder.UseSqlServer("server=SIMON\\SQLEXPRESS;Database=CineVault; Trusted_Connection=true; TrustServerCertificate=True"); // `Trusted_Connection=true` → Gebruikt Windows Authenticatie & `TrustServerCertificate=True` → Voorkomt SSL-issues bij verbinding
+                                 
             }
         }
 
@@ -46,12 +66,18 @@ namespace CineVault.DataAccessLayer.Context
 
         #region Toevoegen van mockdata
 
+        /// <summary>
+        /// - Definieert modelconfiguraties en seed data
+        /// - Hier kun je databasemigraties configureren
+        /// - Mockdata toevoegen zodat de applicatie altijd start met een aantal records.
+        /// - OnModelCreating()` om speciale instellingen per model te kunnen doorvoeren, zoals relaties en primaire sleutels en voegt testdata toe die je bij het opstarten kunt gebruiken.
+        /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            // Dit is de oorspronkelijke mockdata die toegevoegd is geweest bij de start van het project
 
             /*
-             * Dit is de oorspronkelijke mockdata die toegevoegd is geweest
             // Voeg mock-acteurs toe
             modelBuilder.Entity<Actor>().HasData(
                 new Actor { Id = 1, Name = "Leonardo DiCaprio", Tmdb_ID = 6193 },

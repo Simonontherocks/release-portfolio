@@ -3,76 +3,74 @@ using CineVault.ModelLayer.ModelMovie;
 
 namespace CineVault.BusinessLogic.Service
 {
+    /// <summary>
+    /// - Serviceklasse verantwoordelijk voor het beheren van Director-objecten,
+    /// - inclusief CRUD-operaties via de repositorylaag.
+    /// </summary>
+
     public class DirectorService
     {
         // ToDo = nog af te werken
-        private IDirectorRepository _directorRepository;
+        private IDirectorRepository _directorRepository; // Interface voor toegang tot regisseur-data.
 
         public DirectorService(IDirectorRepository directorRepository)
         {
-            _directorRepository = directorRepository;
+            _directorRepository = directorRepository; // Injectie van de director repository.
         }
 
         public List<Director> GetAll()
         {
-            return _directorRepository.GetAll();
+            return _directorRepository.GetAll(); // Haal alle regisseurs op uit de repository.
         }
 
         public void Insert(Director director)
         {
             if (director == null)
             {
-                throw new ArgumentNullException(nameof(director));
+                throw new ArgumentNullException(nameof(director)); // Controle op null input.
             }
 
-            Director existingDirector = _directorRepository.GetById(director.Id);
+            Director existingDirector = _directorRepository.GetById(director.Id); // Controle of regisseur al bestaat.
             if (existingDirector != null)
             {
-                // Director bestaat al, dus niets doen
-                return;
+                return; // Reeds bestaand, niets invoegen.
             }
 
-            _directorRepository.Insert(director);
+            _directorRepository.Insert(director); // Voeg regisseur toe via repository.
         }
 
         public void Delete(Director director)
         {
-            _directorRepository.GetById(director.Id); // via de repository wordt nagegaan of de director al niet reeds bestaat.
+            _directorRepository.GetById(director.Id); // Controle of regisseur bestaat via ID.
 
-            // Indien de director een null-waarde heeft, dan wordt er een uitzondering getoond.
             if (director == null)
             {
-                throw new ArgumentNullException("Director does not exist in database and therefore cannot be deleted.");
+                throw new ArgumentNullException("Director does not exist in database and therefore cannot be deleted."); // Indien null, gooi fout.
             }
 
-            _directorRepository.Delete(director);
+            _directorRepository.Delete(director); // Verwijder regisseur via repository.
         }
 
         public void SaveChanges()
         {
-            _directorRepository.SaveChanges();
+            _directorRepository.SaveChanges(); // Sla wijzigingen op in de databank.
         }
 
         public Director GetById(int id)
         {
-            // Eerste controle is om te kijken of de Id een geldige waarde heeft.
-            // Indien de waarde 0 is, dan wordt er een uitzondering getoont.
             if (id.Equals(0))
             {
-                throw new ArgumentException("ongeldige id");
+                throw new ArgumentException("ongeldige id"); // Controle op ongeldige ID.
             }
 
             Director requestedDirector = _directorRepository.GetById(id); // hier wordt de director opgehaald via de repository uit de database.
 
-            // Hier gebeurd de controle op de opgevraagde director, om na te gaan of die niet null is.
-            // Indien deze null is, dan wordt er een uitzondering getoond.
             if (requestedDirector == null)
             {
-                throw new ArgumentNullException(nameof(requestedDirector));
+                throw new ArgumentNullException(nameof(requestedDirector)); // Controle of regisseur niet null is.
             }
 
-            // De opgevraagde director wordt teruggegeven.
-            return requestedDirector;
+            return requestedDirector; // Retourneer gevonden regisseur.
         }
     }
 }

@@ -3,6 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace CineVault.ModelLayer.ModelMovie
 {
+    /// <summary>  
+    /// - Dit model vertegenwoordigt een film (Movie) binnen de applicatie.  
+    /// - Bevat eigenschappen zoals titel, jaar, score, en gezien-status.  
+    /// - Een film is een instantie die zal worden opgeslagen in en opgehaald uit de database.   
+    /// </summary>
     public class Movie
     {
         #region Field
@@ -49,6 +54,7 @@ namespace CineVault.ModelLayer.ModelMovie
 
         #region navigationProperty
 
+        // Zorgen ervoor dat een film gekoppeld kan worden aan regisseurs en acteurs via tussen-tabellen.
         public ICollection<MovieDirector> MovieDirectors { get; set; }
         public ICollection<MovieActor> MovieActors { get; set; }
 

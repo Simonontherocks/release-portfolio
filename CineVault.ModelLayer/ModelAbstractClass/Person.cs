@@ -5,11 +5,14 @@ namespace CineVault.ModelLayer.ModelAbstractClass
 {
     public abstract class Person
     {
-        /*
-         * Hier wordt de abstracte klasse gemaakt.
-         * Dit zal dienen als een sjabloon voor de andere klassen.
-         * Het voordeel is dat het in de toekomst herbruikbaar is.
-         */
+        /// <summary>
+        /// - Dit is een **sjabloon** voor andere klassen zoals `Actor` en `Director`.  
+        /// - Zal niet direct geïnstantieerd worden, maar biedt gemeenschappelijke eigenschappen.  
+        /// - Voorkomt duplicatie van code door gedeelde eigenschappen centraal te beheren.  
+        /// - Waarom abstract? 
+        /// Omdat alle personen (acteurs, regisseurs, castingdirectors) dezelfde basis hebben,  
+        /// maar hun eigen specifieke eigenschappen en functionaliteiten nodig hebben.
+        /// </summary>
 
         #region Properties
 

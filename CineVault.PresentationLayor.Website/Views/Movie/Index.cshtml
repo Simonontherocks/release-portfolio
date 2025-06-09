@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CineVault.ModelLayer.ModelMovie.Movie>
 
 @{
-	ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index";
 }
 
 <h1 class="title-colored">Overzicht</h1>
@@ -30,7 +30,8 @@
 }
 else
 {
-    <table class="table" style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
+    <table id="movieTable" class="table" style="background-color: beige; color: black; border-radius: 10px; padding: 10px;">
+        <!-- id toegevoegd zodat we de tabel kunnen verbergen bij geen resultaten -->
         <thead>
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Title)</th>
@@ -66,52 +67,46 @@ else
 @*script is nodig om javascript in te laden*@
 <script>
 
-	$(document).ready(function() {
-		// Wacht tot de volledige pagina is geladen voordat het script wordt uitgevoerd
-		$(".toggle-seen").click(function(event) {
+    $(document).ready(function() {
+        $(".toggle-seen").click(function(event) {
+            event.preventDefault(); // Voorkomt dat de standaard linkactie wordt uitgevoerd
+            let movieId = $(this).data("id"); // Haalt het ID van de film op
 
-			event.preventDefault(); // Voorkomt dat de standaard linkactie wordt uitgevoerd
-
-			let movieId = $(this).data("id"); // Haalt het ID van de film op uit het data-attribuut van de klikbare link
-
-			// Start een AJAX-aanroep om de "Gezien" status van de film te wijzigen
-			$.ajax({
-				url: "/Movie/ToggleSeen", // Backend-endpoint dat de status van de film aanpast in de database
-				type: "POST", // Verzendt een POST-verzoek naar de server
-				data: { id: movieId }, // Stuurt het film-ID mee als request-data
-
-				success: function(response) {
-					location.reload(); // Vernieuwt de pagina om de bijgewerkte status zichtbaar te maken
-				},
-
-				error: function() {
-					alert("Something went wrong!"); // Toont een foutmelding als de aanvraag mislukt
-				}
-			});
-		});
-	});
+            $.ajax({
+                url: "/Movie/ToggleSeen", // Endpoint dat de status aanpast
+                type: "POST", // POST-verzoek
+                data: { id: movieId }, // Film-ID meesturen
+                success: function(response) {
+                    location.reload(); // Pagina verversen bij succes
+                },
+                error: function() {
+                    alert("Something went wrong!"); // Foutmelding bij falen
+                }
+            });
+        });
+    });
 </script>
 
-
 <script>
-	$(document).ready(function () { // Zorgt ervoor dat dit script pas werkt nadat de volledige HTML is ingeladen
+    $(document).ready(function () {
+        $("#searchInput").on("keyup", function () {
+            let value = $(this).val().toLowerCase(); // Zoekterm ophalen
+            const rows = $("table tbody tr"); // Alle rijen ophalen
+            let visibleRows = 0; // Teller voor zichtbare rijen
 
-		$("#searchInput").on("keyup", function () { // Voer deze functie uit telkens de gebruiker een toets loslaat in het zoekveld
-			let value = $(this).val().toLowerCase(); // Haal de huidige waarde van het zoekveld op en zet die om naar kleine letters
-			const rows = $("table tbody tr"); // Selecteer alle rijen in de <tbody> van de tabel
-			let visibleRows = 0; // Tel hoeveel rijen zichtbaar blijven na filtering
+            rows.each(function () {
+                let isVisible = $(this).text().toLowerCase().indexOf(value) > -1; // Check of rij zoekterm bevat
+                $(this).toggle(isVisible); // Toon/verberg rij
+                if (isVisible) visibleRows++; // Tel zichtbare rijen
+            });
 
-			rows.each(function () { // Voor elke rij in de tabel:
-				let isVisible = $(this).text().toLowerCase().indexOf(value) > -1; // Bepaal of de rij de zoekterm bevat
-				$(this).toggle(isVisible); // Verberg of toon de rij op basis van of hij de zoekterm bevat
-				if (isVisible) visibleRows++; // Verhoog de teller als de rij zichtbaar is
-			});
-
-			if (visibleRows === 0) { // Toon of verberg de melding afhankelijk van of er zichtbare rijen zijn
-				$("#noResultsMessage").show();  // Toon melding
-			} else {
-				$("#noResultsMessage").hide();  // Verberg melding
-			}
-		});
-	});
+            if (visibleRows === 0) {
+                $("#noResultsMessage").show(); // Toon melding bij 0 resultaten
+                $("#movieTable").hide(); // Verberg hele tabel incl. header
+            } else {
+                $("#noResultsMessage").hide(); // Verberg melding
+                $("#movieTable").show(); // Toon tabel terug
+            }
+        });
+    });
 </script>

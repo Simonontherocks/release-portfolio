@@ -21,3 +21,33 @@
 			}
 		});
 	});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const table = document.getElementById("resultTable");
+    const noResultsMessage = document.getElementById("noResultsMessage");
+
+    if (!searchInput || !table) return; // Als componenten ontbreken, stop script
+
+    const rows = table.querySelectorAll("tbody tr");
+
+    searchInput.addEventListener("keyup", function () {
+        const filter = searchInput.value.toLowerCase();
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const rowText = row.textContent.toLowerCase();
+            const isMatch = rowText.includes(filter);
+            row.style.display = isMatch ? "" : "none"; // Verberg of toon rij
+            if (isMatch) visibleCount++;
+        });
+
+        if (visibleCount === 0) {
+            table.style.display = "none";        // Verberg hele tabel incl. thead
+            if (noResultsMessage) noResultsMessage.style.display = "block"; // Toon melding
+        } else {
+            table.style.display = "";            // Tabel terug tonen
+            if (noResultsMessage) noResultsMessage.style.display = "none"; // Verberg melding
+        }
+    });
+});

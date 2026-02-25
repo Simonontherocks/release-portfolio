@@ -18,7 +18,7 @@ namespace CineVault.PresentationLayor.Website
             var builder = WebApplication.CreateBuilder(args); // Maakt een nieuwe webapplicatie en configureert deze
 
             // Voeg controllers en views toe aan de services-container
-            builder.Services.AddControllersWithViews(); // Nodig voor MVC-architectuur
+            builder.Services.AddControllersWithViews(); // Nodig voor MVC-architectuur 
 
             // Laad de databaseconfiguratie uit appsettings.json
             IConfigurationBuilder configBuilder = new ConfigurationBuilder()

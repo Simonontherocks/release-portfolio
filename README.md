@@ -91,8 +91,14 @@ Daarnaast werden formele unit tests geïmplementeerd.
 
 ## 🗄 Database
 
-De applicatie maakt gebruik van een lokale Microsoft SQL Server database.  
-Een geldige connection string is vereist in de configuratie.
+De applicatie maakt gebruik van een lokale Microsoft SQL Server database.
+In de map Database bevindt zich een SQL-script waarmee de benodigde database en tabellen kunnen worden aangemaakt via SQL Server Management Studio.
+Een geldige connection string is vereist in appsettings.json.
+Pas deze aan naar jouw lokale SQL Server instantie indien nodig.
+
+Standaardvoorbeeld:
+
+Server=.\SQLEXPRESS;Database=CineVault;Trusted_Connection=True;TrustServerCertificate=True;
 
 ---
 
@@ -202,8 +208,16 @@ Formal unit tests were implemented for critical components.
 
 ## 🗄 Database
 
-The application uses a local Microsoft SQL Server database.  
-A valid connection string is required in the configuration.
+🗄 Database
+
+The application uses a local Microsoft SQL Server database.
+The Database folder contains a SQL script to create the required database and tables using SQL Server Management Studio.
+A valid connection string must be configured in appsettings.json.
+Adjust it to match your local SQL Server instance if necessary.
+
+Default example:
+
+Server=.\SQLEXPRESS;Database=CineVault;Trusted_Connection=True;TrustServerCertificate=True;
 
 ---
 

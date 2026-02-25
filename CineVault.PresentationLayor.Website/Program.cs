@@ -73,7 +73,7 @@ namespace CineVault.PresentationLayor.Website
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"); // Stelt de standaard controller en actie in
 
-            app.Run(); // Start de webapplicatie
+            app.Run(); // Start de webapplicatie 
         }
     }
 }
